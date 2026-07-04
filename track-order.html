@@ -54,7 +54,6 @@
     </div>
 
     <div class="container">
-        <!-- 手动查询区 -->
         <div class="search-box">
             <input type="number" id="order-search-input" class="search-input" placeholder="N. Ordine (es. 001)">
             <button class="search-btn" onclick="searchOrder()"><i class="fa-solid fa-magnifying-glass"></i> Cerca</button>
@@ -70,7 +69,6 @@
     <script>
         const supabaseClient = supabase.createClient("https://thulheyvwmfwfhhfjktk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ");
 
-        // 状态字典映射
         const statusMap = {
             'pending': { text: 'In attesa', class: 'status-pending', icon: 'fa-clock' },
             'preparing': { text: 'In preparazione', class: 'status-preparing', icon: 'fa-fire' },
@@ -138,7 +136,7 @@
                     <div class="empty-state">
                         <i class="fa-solid fa-circle-exclamation" style="color:#ff4d4f;"></i>
                         <p>Ordine #${formattedSearchNum} non trovato.</p>
-                        <small>Assicurati di aver inserito il numero corretto e che l'ordine sia di oggi.</small>
+                        <small>Assicurati di aver进入了正确的号码并且订单是今天的。</small>
                     </div>`;
                 return;
             }
@@ -168,10 +166,26 @@
                     const items = orderData.items || [];
                     
                     itemsHtml = items.map(item => {
-                        // 核心修复：多字段兼容读取。无论新老订单的字段名叫什么都能抓取到
-                        const itemName = item.name || item.name_it || item.name_zh || item.name_en || item.product_name || 'Prodotto';
-                        const itemQty = item.qty || item.quantity || 1;
-                        const itemPrice = item.price || 0;
+                        // === 终极深度识别逻辑：扫描所有可能的属性层级 ===
+                        let itemName = 'Prodotto';
+
+                        // 1. 直查第一层
+                        if (item.name) itemName = item.name;
+                        else if (item.name_it) itemName = item.name_it;
+                        else if (item.name_zh) itemName = item.name_zh;
+                        else if (item.name_en) itemName = item.name_en;
+                        else if (item.product_name) itemName = item.product_name;
+                        else if (item.title) itemName = item.title;
+                        
+                        // 2. 如果第一层依然没有，检查是否包裹在更深嵌套里 (如：item.product.name 或 item.info.name)
+                        else if (item.product && typeof item.product === 'object') {
+                            itemName = item.product.name || item.product.name_it || item.product.name_zh || item.product.title || itemName;
+                        } else if (item.info && typeof item.info === 'object') {
+                            itemName = item.info.name || item.info.name_it || item.info.title || itemName;
+                        }
+
+                        const itemQty = item.qty || item.quantity || item.count || 1;
+                        const itemPrice = item.price || item.product_price || 0;
 
                         return `
                         <div class="item-row">
