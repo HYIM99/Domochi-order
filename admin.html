@@ -73,7 +73,7 @@
     <div class="admin-header">
         <div class="admin-title">
             <i class="fa-solid fa-bell"></i> Dōmochi 接单看板
-            <button class="audio-test-btn" onclick="playAlertSound()"><i class="fa-solid fa-volume-high"></i> 测试铃声</button>
+            <button class="audio-test-btn" onclick="playAlertSound()"><i class="fa-solid fa-volume-high"></i> 测试语音</button>
         </div>
         <div class="stats-badge" id="pending-count">Ordini: 0</div>
     </div>
@@ -93,15 +93,29 @@
 
         let activeOrders = [];
 
-        // 铃声控制：这里使用的是一个干净好听的公共 CDN 叮咚音频。上线后你可以换成自己的 mp3 地址。
-        const alertAudio = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
-// 如果上面这个在iPad上还不响，可以试试下面这个更常用的标准叮咚声
-// const alertAudio = new Audio("https://tunes.desidime.com/notifications/bell.mp3");
+        // ================= 智能语音播报系统 =================
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                // 如果当前正在播报，先强制停止，防止声音重叠
+                window.speechSynthesis.cancel();
 
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // 设定为中文发音
+                utterance.lang = 'zh-CN'; 
+                utterance.rate = 1.0;  // 语速正常
+                utterance.pitch = 1.0; // 音高正常
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.error("Il browser non supporta la sintesi vocale. (当前浏览器不支持语音播报)");
+            }
+        }
 
         function playAlertSound() {
-            alertAudio.play().catch(e => console.log("音频播放受浏览器拦截，需要点击页面激活:", e));
+            speakText("系统测试：多莫奇接单系统已就绪。");
         }
+        // ====================================================
 
         // 请求系统通知权限
         if (Notification.permission === "default") {
@@ -145,8 +159,8 @@
                 
                 // 智能格式化就餐选项，以适配前端 CSS 的类名
                 let cssClass = 'eat_in';
-                if(rawOption.includes('asporto')) cssClass = 'takeaway';
-                if(rawOption.includes('Ritiro') || rawOption.includes('Pickup')) cssClass = 'pickup';
+                if(rawOption.toLowerCase().includes('asporto')) cssClass = 'takeaway';
+                if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
 
                 const items = order.order_data.items || [];
                 const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -202,11 +216,27 @@
                     activeOrders.push(payload.new);
                     renderOrders();
 
-                    // 触发声音和系统通知
-                    playAlertSound();
+                    // ================= 动态提取信息并播报 =================
+                    const orderNum = payload.new.order_number || '';
+                    const rawOption = payload.new.order_data.dining_option || '堂食'; 
+                    
+                    // 转换成中文播报词
+                    let modeZh = "堂食";
+                    if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) modeZh = "打包";
+                    if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) modeZh = "自提";
+
+                    // 把订单号拆开读（例如把 "005" 变成 "0 0 5"），发音更清晰
+                    const spacedNum = orderNum.split('').join(' ');
+                    const alertMessage = `您有新的${modeZh}订单，订单号 ${spacedNum}`; 
+                    
+                    // 触发语音
+                    speakText(alertMessage);
+                    // ========================================================
+
+                    // 系统通知保持不变
                     if (Notification.permission === "granted") {
-                        new Notification(`新订单 #${payload.new.order_number}`, {
-                            body: `类型: ${payload.new.order_data.dining_option} | 顾客: ${payload.new.order_data.customer_info.name}`
+                        new Notification(`新订单 #${orderNum}`, {
+                            body: `类型: ${rawOption} | 顾客: ${payload.new.order_data.customer_info.name}`
                         });
                     }
                 })
