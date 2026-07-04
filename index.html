@@ -84,24 +84,28 @@
         .form-input:focus { border-color: var(--brand-primary); }
         .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; }
         .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--brand-primary); cursor: pointer; flex-shrink: 0; }
-        .checkbox-group label { font-size: 0.85rem; color: #777; font-weight: 500; line-height: 1.4; margin-bottom: 0; cursor: pointer; display: inline-block; }
+        .checkbox-group label { font-size: 0.85rem; color: #777; font-weight: 500; line-height: 1.4; cursor: pointer; }
 
-        .checkout-summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #555; }
-        .checkout-summary-total { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #eee; font-size: 1.2rem; font-weight: 800; color: var(--brand-primary); }
-        .pay-method-btn { width: 100%; padding: 15px; border: 2px solid var(--brand-primary); background: rgba(223, 79, 83, 0.05); color: var(--brand-primary); border-radius: 12px; font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
-        .bottom-action-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px; background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 100; }
-        .btn-final-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); cursor: pointer; }
-
-        /* VIEW 4: 电子小票与进度页 */
+        /* VIEW 4: 电子小票 */
         .ticket-box { background: white; border: 2px dashed #ccc; padding: 25px 20px; border-radius: 15px; margin: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .ticket-title { text-align: center; font-size: 1.4rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         .status-banner { text-align: center; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .status-banner.status-pending { background: #fffbe6; color: #faad14; animation: pulse 2s infinite; }
         .status-banner.status-completed { background: #f6ffed; color: #52c41a; border: 2px solid #b7eb8f; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
         .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
+
+        /* VIEW 5: 详细历史列表 (新增/保持样式) */
+        .history-list-container { padding: 15px; }
+        .history-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--brand-primary); }
+        .history-info { flex: 1; }
+        .history-meta { font-size: 0.85rem; color: #888; margin-bottom: 4px; }
+        .history-title { font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+        .history-status-tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; display: inline-block; margin-top: 5px; }
+        .status-tag-pending { background: #fffbe6; color: #faad14; }
+        .status-tag-completed { background: #f6ffed; color: #52c41a; }
+        .history-price { font-weight: 800; color: var(--brand-primary); font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -112,9 +116,9 @@
         <span class="lang-btn" id="l-en" onclick="setLang('en')">EN</span>
     </div>
 
-    <!-- ================= VIEW 1: 欢迎页 ================= -->
+    <!-- VIEW 1: 欢迎页 -->
     <div id="view-welcome" class="view active">
-        <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Dōmochi" class="welcome-logo">
+        <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="welcome-logo">
         <h1 class="welcome-title">Dōmochi</h1>
         <button class="big-btn" onclick="startOrder('eat_in')"><i class="fa-solid fa-utensils"></i> <span data-i18n="eat_in">堂食</span></button>
         <button class="big-btn" onclick="startOrder('takeaway')"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="takeaway">打包</span></button>
@@ -122,7 +126,7 @@
         <button class="big-btn query-btn" onclick="promptQueryOrder()"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
     </div>
 
-    <!-- ================= VIEW 2: 菜单页 ================= -->
+    <!-- VIEW 2: 菜单页 -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area"><img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small"><span class="brand-name">Dōmochi</span></div>
@@ -145,7 +149,7 @@
         </div>
     </div>
 
-    <!-- ================= VIEW 3: 结算页 ================= -->
+    <!-- VIEW 3: 结算页 -->
     <div id="view-checkout" class="view">
         <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
         <div class="checkout-section">
@@ -155,18 +159,18 @@
         </div>
         <div class="checkout-section">
             <div class="section-title"><i class="fa-solid fa-user"></i> <span data-i18n="your_details">填写信息</span></div>
-            <div class="form-group"><label data-i18n="name">姓名</label><input type="text" id="cust-name" class="form-input" placeholder="张三"></div>
+            <div class="form-group"><label data-i18n="name">姓名</label><input type="text" id="cust-name" class="form-input" placeholder="例：张三"></div>
             <div class="form-group"><label><span data-i18n="phone">电话</span> <b style="color:var(--brand-primary)">*</b></label><input type="tel" id="cust-phone" class="form-input" placeholder="必须填写电话号码"></div>
-            <div class="form-group"><label data-i18n="notes">备注</label><input type="text" id="cust-notes" class="form-input" placeholder="备注..."></div>
+            <div class="form-group"><label data-i18n="notes">备注</label><input type="text" id="cust-notes" class="form-input" placeholder="去冰，少糖..."></div>
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="cust-privacy">
-                <label for="cust-privacy" data-i18n="privacy_agree">同意收集信息用于管理此订单</label>
+                <label for="cust-privacy" data-i18n="privacy_agree">同意收集信息用于追踪订单状态。</label>
             </div>
         </div>
         <div class="bottom-action-bar"><button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button></div>
     </div>
 
-    <!-- ================= VIEW 4: 电子小票页 ================= -->
+    <!-- VIEW 4: 详情小票页 -->
     <div id="view-receipt" class="view">
         <div class="nav-back" onclick="switchView('view-welcome')"><i class="fa-solid fa-house"></i> <span data-i18n="back_home">返回首页</span></div>
         <div class="ticket-box">
@@ -176,10 +180,17 @@
             <div class="ticket-row"><strong>就餐选择：</strong><span id="rec-mode">--</span></div>
             <div class="ticket-row"><strong>顾客姓名：</strong><span id="rec-name">--</span></div>
             <div class="ticket-row"><strong>联系电话：</strong><span id="rec-phone">--</span></div>
-            <div style="margin: 20px 0 10px 0; font-weight:bold; border-bottom:2px solid #333;" data-i18n="receipt_items">商品明细：</div>
+            <div style="margin: 15px 0 10px 0; font-weight:bold; border-bottom:2px solid #333;" data-i18n="receipt_items">商品明细：</div>
             <div id="receipt-items-list"></div>
             <div class="ticket-total"><span data-i18n="total">总计</span><span id="rec-total">€ 0.00</span></div>
         </div>
+    </div>
+
+    <!-- VIEW 5: 历史订单记录页 -->
+    <div id="view-history" class="view">
+        <div class="nav-back" onclick="switchView('view-welcome')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_home">返回首页</span></div>
+        <div style="padding: 15px 20px;"><h2 style="font-size:1.4rem; font-weight:900;" data-i18n="today_orders">今日订单</h2><p style="color:#888; font-size:0.9rem;" data-i18n="history_desc">点击订单查看详细小票</p></div>
+        <div class="history-list-container" id="history-list"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -190,31 +201,34 @@
 
         const i18n = {
             zh: {
-                eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "返回首页", receipt_items: "商品明细：", find_order: "手机号查进度", prompt_phone: "请输入电话查询今日订单：", status_making: "⏳ 制作中...", status_done: "✅ 已出餐！", no_order_found: "今日暂无此号订单", privacy_agree: "同意收集信息用于管理此订单", err_privacy: "请同意隐私条款", err_phone: "请填写电话", err_name: "请填写姓名"
+                eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "返回首页", receipt_items: "商品明细：",
+                find_order: "手机号查进度", prompt_phone: "请输入电话查询今日单：", status_making: "⏳ 正在制作...", status_done: "✅ 已出餐，请取餐", no_order_found: "今日暂无记录", today_orders: "今日记录", history_desc: "点击下方单据查看详情", privacy_agree: "同意收集信息追踪订单", err_privacy: "请同意隐私条款", err_phone: "请填写电话", err_name: "请填写姓名"
             },
             it: {
-                eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", receipt_items: "Dettagli:", find_order: "Stato Ordine", prompt_phone: "Inserisci cellulare per ordini di oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto al banco!", no_order_found: "Nessun ordine oggi", privacy_agree: "Acconsento al trattamento dati", err_privacy: "Accetta la privacy", err_phone: "Manca cellulare", err_name: "Manca nome"
+                eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", receipt_items: "Dettagli:",
+                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto! Ritira al banco", no_order_found: "Nessun ordine oggi", today_orders: "Ordini di Oggi", history_desc: "Tocca per i dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome"
             },
             en: {
-                eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", receipt_items: "Items:", find_order: "Track Order", prompt_phone: "Enter phone for today's orders:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders today", privacy_agree: "Agree to track order", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req."
+                eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", receipt_items: "Items:",
+                find_order: "Track Order", prompt_phone: "Enter phone for today:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders today", today_orders: "Today's Orders", history_desc: "Tap to view detail", privacy_agree: "Agree to track order", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req."
             }
         };
 
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = ''; 
-        let liveOrderId = null; let liveOrderStatus = 'pending';
+        let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = [];
 
-        window.setLang = function(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'l-' + lang));
+        function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); }
+        
+        window.setLang = (lang) => {
+            currentLang = lang; document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'l-' + lang));
             document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(i18n[lang][k]) el.innerText = i18n[lang][k]; });
             if(diningOptionKey) { document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey]; document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey]; }
             renderMenu();
-            // 关键：切换语言时如果正在看小票，立即更新状态文字
-            if(liveOrderId) renderStatusBanner(liveOrderStatus);
-        }
+            if(liveOrderId) renderStatusBanner(liveOrderStatus); // 自动更新详情页状态
+            if(lastQueriedOrders.length > 0) renderHistoryList(lastQueriedOrders); // 自动更新列表页状态
+        };
 
-        function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); if(viewId !== 'view-receipt') { liveOrderId = null; } }
-        window.startOrder = function(m) { diningOptionKey = m; setLang(currentLang); switchView('view-menu'); }
+        window.startOrder = (m) => { diningOptionKey=m; switchView('view-menu'); setLang(currentLang); };
         window.goBackToWelcome = () => switchView('view-welcome');
         window.goBackToMenu = () => switchView('view-menu');
 
@@ -224,7 +238,7 @@
             allProducts = data || []; renderMenu(); setupRealtime();
         }
 
-        window.switchCategory = function(c) { currentCat = c; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + c)); renderMenu(); }
+        window.switchCategory = (c) => { currentCat = c; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + c)); renderMenu(); }
 
         function renderMenu() {
             const list = document.getElementById('menu-list'); const items = allProducts.filter(p => p.category === currentCat);
@@ -235,96 +249,112 @@
             }).join('');
         }
 
-        window.updateCart = function(pid, chg) {
-            const p = allProducts.find(x => x.id === pid); if(!p) return;
+        window.updateCart = (pid, chg) => {
+            const p = allProducts.find(x=>x.id===pid); if(!p) return;
             if(!cart[pid]) cart[pid] = { id: p.id, name: p[`name_${currentLang}`]||p.name, price: parseFloat(p.price||4), qty: 0 };
-            cart[pid].qty += chg; if(cart[pid].qty <= 0) delete cart[pid];
-            renderMenu(); updateUI(); renderCartModal();
+            cart[pid].qty += chg; if(cart[pid].qty<=0) delete cart[pid];
+            renderMenu(); updateUI(); renderCart();
         }
 
         function updateUI() {
-            const bar = document.getElementById('cart-bar'); let q=0, t=0; Object.values(cart).forEach(i => { q+=i.qty; t+=i.price*i.qty; });
-            document.getElementById('cart-qty').innerText = q; document.getElementById('cart-price').innerText = `€ ${t.toFixed(2)}`;
-            bar.classList.toggle('hidden', q <= 0);
+            const bar = document.getElementById('cart-bar'); let q=0, t=0; Object.values(cart).forEach(i=>{ q+=i.qty; t+=i.price*i.qty; });
+            document.getElementById('cart-qty').innerText=q; document.getElementById('cart-price').innerText=`€ ${t.toFixed(2)}`;
+            bar.classList.toggle('hidden', q<=0);
         }
 
         window.toggleCartModal = () => { document.getElementById('cart-modal').classList.toggle('show'); document.getElementById('cart-overlay').classList.toggle('show'); };
-        function renderCartModal() { document.getElementById('cart-modal-list').innerHTML = Object.values(cart).map(i => `<div class="modal-item"><div class="modal-item-info"><b>${i.name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${i.id},-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCart(${i.id},1)">+</button></div></div>`).join(''); }
+        function renderCart() { document.getElementById('cart-modal-list').innerHTML = Object.values(cart).map(i => `<div class="modal-item"><div class="modal-item-info"><b>${i.name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${i.id},-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCart(${i.id},1)">+</button></div></div>`).join(''); }
 
-        window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i => { t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>` }).join(''); document.getElementById('chk-total-price').innerText = `€ ${t.toFixed(2)}`; switchView('view-checkout'); };
+        window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`}).join(''); document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; switchView('view-checkout'); };
 
-        window.submitFinalOrder = async function() {
+        window.submitFinalOrder = async () => {
             const n=document.getElementById('cust-name').value, p=document.getElementById('cust-phone').value, privacy=document.getElementById('cust-privacy').checked;
             if(!n){alert(i18n[currentLang].err_name); return;} if(!p){alert(i18n[currentLang].err_phone); return;} if(!privacy){alert(i18n[currentLang].err_privacy); return;}
-            const btn=document.getElementById('btn-submit'); btn.disabled = true;
+            const btn=document.getElementById('btn-submit'); btn.disabled=true;
             try {
                 const today = new Date().toISOString().split('T')[0];
                 const { count } = await supabaseClient.from('domochi_orders').select('*', { count: 'exact', head: true }).gte('created_at', today);
                 const orderData = {
                     order_number: (count+1).toString().padStart(3,'0'),
                     order_data: { customer_info:{name:n, phone:p, notes:document.getElementById('cust-notes').value}, dining_option:i18n.it[diningOptionKey], items:Object.values(cart) },
-                    total_amount: Object.values(cart).reduce((s,i) => s + i.price*i.qty, 0),
+                    total_amount: Object.values(cart).reduce((s,i)=>s+i.price*i.qty, 0),
                     status: 'pending'
                 };
                 const { data } = await supabaseClient.from('domochi_orders').insert([orderData]).select();
-                cart={}; updateUI(); if(data) showReceipt(data[0]);
-            } catch(e) { alert(e.message); btn.disabled = false; }
+                cart={}; updateUI(); switchView('view-welcome'); if(data) showReceipt(data[0]);
+            } catch(e) { alert(e.message); btn.disabled=false; }
         };
 
         function showReceipt(o) {
             liveOrderId = o.id; liveOrderStatus = o.status;
-            document.getElementById('rec-num').innerText = `#${o.order_number}`;
-            document.getElementById('rec-mode').innerText = o.order_data.dining_option;
-            document.getElementById('rec-name').innerText = o.order_data.customer_info.name;
-            document.getElementById('rec-phone').innerText = o.order_data.customer_info.phone;
-            document.getElementById('rec-total').innerText = `€ ${parseFloat(o.total_amount).toFixed(2)}`;
-            document.getElementById('receipt-items-list').innerHTML = o.order_data.items.map(i => `<div class="ticket-row"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`).join('');
+            document.getElementById('rec-num').innerText=`#${o.order_number}`;
+            document.getElementById('rec-mode').innerText=o.order_data.dining_option; document.getElementById('rec-name').innerText=o.order_data.customer_info.name;
+            document.getElementById('rec-phone').innerText=o.order_data.customer_info.phone; document.getElementById('rec-total').innerText=`€ ${parseFloat(o.total_amount).toFixed(2)}`;
+            document.getElementById('receipt-items-list').innerHTML = o.order_data.items.map(i=>`<div class="ticket-row"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`).join('');
             renderStatusBanner(o.status); switchView('view-receipt');
         }
 
         function renderStatusBanner(s) {
-            liveOrderStatus = s; // 更新全局状态变量
-            const b = document.getElementById('receipt-status-banner');
-            if(s === 'pending') {
-                b.className = "status-banner status-pending";
-                b.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`;
-            } else {
-                b.className = "status-banner status-completed";
-                b.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`;
-            }
+            liveOrderStatus = s; const b=document.getElementById('receipt-status-banner');
+            if(s==='pending'){ b.className="status-banner status-pending"; b.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`; }
+            else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-check"></i> ${i18n[currentLang].status_done}`; }
         }
 
-        // --- 核心优化：自动切换语言的今日订单查询 ---
-        window.promptQueryOrder = async function() {
+        // --- 核心修复：详细列表查询与下单时间校准 ---
+        window.promptQueryOrder = async () => {
             const phone = prompt(i18n[currentLang].prompt_phone); if(!phone) return;
             const todayStart = new Date(); todayStart.setHours(0,0,0,0);
             
             const { data, error } = await supabaseClient.from('domochi_orders')
                 .select('*')
                 .contains('order_data->customer_info', { phone: phone.trim() })
-                .gte('created_at', todayStart.toISOString())
-                .order('id', { ascending: false });
+                .gte('created_at', todayStart.toISOString()) // 确保只查今天
+                .order('id', {ascending: false});
 
             if(error || !data || data.length === 0) { alert(i18n[currentLang].no_order_found); return; }
 
+            lastQueriedOrders = data;
             if(data.length === 1) {
                 showReceipt(data[0]);
             } else {
-                // 如果有多个单，弹窗列表供选择
-                let msg = i18n[currentLang].find_order + " (" + data.length + "):\n";
-                data.forEach((o, index) => {
-                    const time = new Date(o.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    msg += `${index + 1}. #${o.order_number} (${time}) - €${o.total_amount}\n`;
-                });
-                const choice = prompt(msg + "\n输入序号查看 (Inserisci numero):");
-                const idx = parseInt(choice) - 1;
-                if(!isNaN(idx) && data[idx]) showReceipt(data[idx]);
+                renderHistoryList(data);
+                switchView('view-history');
             }
+        };
+
+        function renderHistoryList(orders) {
+            const container = document.getElementById('history-list');
+            container.innerHTML = orders.map(o => {
+                // 修复：下单时间校准。使用 Date 对象解析服务器 UTC 时间，然后转为本地格式
+                const dateObj = new Date(o.created_at);
+                const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const sLabel = o.status==='pending' ? i18n[currentLang].status_making : i18n[currentLang].status_done;
+                const sClass = o.status==='pending' ? 'status-tag-pending' : 'status-tag-completed';
+                
+                return `
+                <div class="history-card" onclick='viewOrderDetail(${JSON.stringify(o)})'>
+                    <div class="history-info">
+                        <div class="history-meta">${timeStr} | ${o.order_data.dining_option}</div>
+                        <div class="history-title">Ordine #${o.order_number}</div>
+                        <div class="history-status-tag ${sClass}">${sLabel}</div>
+                    </div>
+                    <div class="history-price">€ ${parseFloat(o.total_amount).toFixed(2)}</div>
+                    <div style="margin-left:10px; color:#ccc;"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>`;
+            }).join('');
         }
+
+        window.viewOrderDetail = (order) => { showReceipt(order); };
 
         function setupRealtime() {
             supabaseClient.channel('sync').on('postgres_changes', {event:'UPDATE', schema:'public', table:'domochi_orders'}, p => {
-                if(liveOrderId && p.new.id === liveOrderId) renderStatusBanner(p.new.status);
+                if(liveOrderId && p.new.id===liveOrderId) renderStatusBanner(p.new.status);
+                // 同时也刷新一下历史列表里的状态（如果存在）
+                if(lastQueriedOrders.length > 0) {
+                    lastQueriedOrders = lastQueriedOrders.map(o => o.id === p.new.id ? p.new : o);
+                    if(document.getElementById('view-history').classList.contains('active')) renderHistoryList(lastQueriedOrders);
+                }
             }).subscribe();
         }
 
