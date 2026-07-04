@@ -54,6 +54,7 @@
     </div>
 
     <div class="container">
+        <!-- 手动查询区 -->
         <div class="search-box">
             <input type="number" id="order-search-input" class="search-input" placeholder="N. Ordine (es. 001)">
             <button class="search-btn" onclick="searchOrder()"><i class="fa-solid fa-magnifying-glass"></i> Cerca</button>
@@ -76,7 +77,19 @@
             'completed': { text: 'Completato', class: 'status-ready', icon: 'fa-check-double' }
         };
 
-        window.addEventListener('DOMContentLoaded', loadLocalOrders);
+        // 新增：保存所有商品的列表，用于反查名字
+        let allProducts = [];
+
+        async function init() {
+            // 先去数据库拉取所有商品信息，把真实名字记下来
+            const { data } = await supabaseClient.from('domochi_products').select('id, name_it, name_en');
+            if (data) allProducts = data;
+            
+            // 然后再去加载订单
+            loadLocalOrders();
+        }
+        
+        window.addEventListener('DOMContentLoaded', init);
 
         function getTodayStart() {
             const now = new Date();
@@ -136,7 +149,7 @@
                     <div class="empty-state">
                         <i class="fa-solid fa-circle-exclamation" style="color:#ff4d4f;"></i>
                         <p>Ordine #${formattedSearchNum} non trovato.</p>
-                        <small>Assicurati di aver进入了正确的号码并且订单是今天的。</small>
+                        <small>Assicurati di aver inserito il numero corretto e che l'ordine sia di oggi.</small>
                     </div>`;
                 return;
             }
@@ -166,22 +179,16 @@
                     const items = orderData.items || [];
                     
                     itemsHtml = items.map(item => {
-                        // === 终极深度识别逻辑：扫描所有可能的属性层级 ===
                         let itemName = 'Prodotto';
 
-                        // 1. 直查第一层
-                        if (item.name) itemName = item.name;
-                        else if (item.name_it) itemName = item.name_it;
-                        else if (item.name_zh) itemName = item.name_zh;
-                        else if (item.name_en) itemName = item.name_en;
-                        else if (item.product_name) itemName = item.product_name;
-                        else if (item.title) itemName = item.title;
-                        
-                        // 2. 如果第一层依然没有，检查是否包裹在更深嵌套里 (如：item.product.name 或 item.info.name)
-                        else if (item.product && typeof item.product === 'object') {
-                            itemName = item.product.name || item.product.name_it || item.product.name_zh || item.product.title || itemName;
-                        } else if (item.info && typeof item.info === 'object') {
-                            itemName = item.info.name || item.info.name_it || item.info.title || itemName;
+                        // 核心修复：直接通过商品 ID，从刚刚拉取的产品总表里反查意大利语原名！
+                        const realProduct = allProducts.find(p => p.id == item.id);
+                        if (realProduct) {
+                            itemName = realProduct.name_it || realProduct.name_en || 'Prodotto';
+                        } else {
+                            // 如果产品被删除了，启用降级兼容
+                            if (item.name) itemName = item.name;
+                            else if (item.name_it) itemName = item.name_it;
                         }
 
                         const itemQty = item.qty || item.quantity || item.count || 1;
