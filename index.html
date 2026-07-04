@@ -18,7 +18,6 @@
         /* 顶部导航与 Logo */
         .header { background: var(--brand-primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
-        /* Logo 图片样式：建议换成你真实的图床链接 */
         .brand-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
         .brand-name { font-size: 1.2rem; font-weight: 800; }
         .table-badge { background: white; color: var(--brand-primary); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -50,16 +49,23 @@
         .cart-total strong { font-size: 1.3rem; color: var(--brand-primary); }
         .checkout-btn { background: var(--brand-primary); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(223, 79, 83, 0.3); cursor: pointer; }
         .checkout-btn:disabled { background: #ccc; box-shadow: none; }
-        .cart-bar.hidden { transform: translateY(150%); } /* 滑动隐藏动画 */
+        .cart-bar.hidden { transform: translateY(150%); } 
 
         /* 购物车详情弹窗 (Modal) */
         .cart-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .cart-modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .cart-modal { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 999; padding: 20px; padding-bottom: 100px; max-height: 70vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
+        .cart-modal { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 999; padding: 20px; padding-bottom: 100px; max-height: 85vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
         .cart-modal.show { transform: translateY(0); }
         .cart-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
         .cart-modal-header h3 { font-size: 1.2rem; color: var(--text-main); }
         .close-modal-btn { background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; }
+        
+        /* 新增：就餐方式选择按钮样式 */
+        .dining-options { display: flex; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .dining-btn { flex: 1; padding: 12px 5px; border-radius: 12px; border: 2px solid #eee; background: white; color: var(--text-main); font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .dining-btn.active { border-color: var(--brand-primary); background: rgba(223, 79, 83, 0.05); color: var(--brand-primary); }
+        .dining-btn i { font-size: 1.2rem; }
+
         .modal-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #eee; }
         .modal-item-info { flex: 1; }
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
@@ -71,11 +77,11 @@
     <!-- 顶部导航 -->
     <div class="header">
         <div class="logo-area">
-            <!-- 这里的 Logo 图片你可以换成你的图床地址 -->
             <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Logo" class="brand-logo">
             <span class="brand-name">Dōmochi</span>
         </div>
-        <div class="table-badge" id="table-display">Asporto</div>
+        <!-- 这里会动态显示当前的就餐方式 -->
+        <div class="table-badge" id="table-display">Mangia qui</div>
     </div>
 
     <!-- 分类标签 -->
@@ -100,9 +106,23 @@
     <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
     <div class="cart-modal" id="cart-modal">
         <div class="cart-modal-header">
-            <h3>Il tuo ordine (Carrello)</h3>
+            <h3>Conferma Ordine</h3>
             <button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        
+        <!-- 新增：就餐方式选择区 -->
+        <div class="dining-options">
+            <button class="dining-btn active" id="btn-mangia" onclick="setDiningOption('Mangia qui', 'btn-mangia')">
+                <i class="fa-solid fa-utensils"></i> 马上吃
+            </button>
+            <button class="dining-btn" id="btn-asporto" onclick="setDiningOption('Da asporto', 'btn-asporto')">
+                <i class="fa-solid fa-bag-shopping"></i> 打包
+            </button>
+            <button class="dining-btn" id="btn-ritiro" onclick="setDiningOption('Ritiro', 'btn-ritiro')">
+                <i class="fa-solid fa-store"></i> 自提
+            </button>
+        </div>
+
         <div id="cart-modal-list">
             <!-- 购物车内的物品将渲染在这里 -->
         </div>
@@ -126,15 +146,11 @@
         let allProducts = [];
         let currentCat = 'mochi';
         let cart = {}; 
-        let tableNumber = 'Takeaway'; 
+        let diningOption = 'Mangia qui'; // 默认就餐方式
 
         // 初始化
         async function init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('table')) {
-                tableNumber = urlParams.get('table');
-            }
-            document.getElementById('table-display').innerText = tableNumber === 'Takeaway' ? 'Asporto' : `Tavolo: ${tableNumber}`;
+            document.getElementById('table-display').innerText = diningOption;
 
             const { data } = await supabaseClient.from('domochi_products')
                 .select('*')
@@ -143,6 +159,16 @@
             
             allProducts = data || [];
             renderMenu();
+        }
+
+        // 设置就餐方式
+        window.setDiningOption = function(type, btnId) {
+            diningOption = type;
+            // 更新按钮样式
+            document.querySelectorAll('.dining-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(btnId).classList.add('active');
+            // 更新顶部右上角的角标显示
+            document.getElementById('table-display').innerText = type;
         }
 
         // 切换分类
@@ -206,7 +232,7 @@
 
             renderMenu(); 
             updateCartUI(); 
-            renderCartModal(); // 同步刷新弹窗内的数据
+            renderCartModal(); 
         }
 
         // 刷新底部总价和数量
@@ -227,7 +253,6 @@
                 bar.classList.remove('hidden');
             } else {
                 bar.classList.add('hidden');
-                // 如果购物车清空了，自动关闭弹窗
                 document.getElementById('cart-modal').classList.remove('show');
                 document.getElementById('cart-overlay').classList.remove('show');
             }
@@ -238,7 +263,6 @@
             const modal = document.getElementById('cart-modal');
             const overlay = document.getElementById('cart-overlay');
             
-            // 如果购物车为空，不允许打开
             if (Object.keys(cart).length === 0) return;
 
             if (modal.classList.contains('show')) {
@@ -271,7 +295,7 @@
             `).join('');
         }
 
-        // 提交订单 (新增流水号逻辑)
+        // 提交订单
         window.submitOrder = async function() {
             const btn = document.getElementById('btn-submit');
             btn.innerText = "Inviando...";
@@ -282,20 +306,23 @@
             orderItems.forEach(i => totalPrice += i.price * i.qty);
 
             try {
-                // 1. 获取当前数据库里的订单数量，生成流水号 (例如 001, 002)
+                // 1. 获取现有订单数生成客单号
                 const { count } = await supabaseClient
                     .from('domochi_orders')
                     .select('*', { count: 'exact', head: true });
                 
                 const nextOrderNumber = (count + 1).toString().padStart(3, '0');
 
-                // 2. 构造数据
+                // 2. 构造数据 (巧妙地将就餐方式存入 order_data 的 JSON 结构中)
                 const payload = {
-    order_number: nextOrderNumber,
-    order_data: orderItems,
-    total_amount: totalPrice,
-    status: 'pending'
-};
+                    order_number: nextOrderNumber,
+                    order_data: {
+                        dining_option: diningOption, // 包含：Mangia qui, Da asporto, Ritiro
+                        items: orderItems            // 包含：具体的商品数组
+                    },
+                    total_amount: totalPrice,
+                    status: 'pending'
+                };
 
                 // 3. 写入数据库
                 const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
@@ -303,7 +330,7 @@
                 
                 alert(`✅ Ordine inviato!\nIl tuo numero: #${nextOrderNumber}`);
                 
-                // 4. 成功后清空购物车并关闭弹窗
+                // 4. 清空状态
                 cart = {}; 
                 updateCartUI();
                 renderMenu();
