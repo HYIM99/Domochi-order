@@ -94,7 +94,10 @@
         let activeOrders = [];
 
         // 铃声控制：这里使用的是一个干净好听的公共 CDN 叮咚音频。上线后你可以换成自己的 mp3 地址。
-        const alertAudio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav");
+        const alertAudio = new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
+// 如果上面这个在iPad上还不响，可以试试下面这个更常用的标准叮咚声
+// const alertAudio = new Audio("https://tunes.desidime.com/notifications/bell.mp3");
+
 
         function playAlertSound() {
             alertAudio.play().catch(e => console.log("音频播放受浏览器拦截，需要点击页面激活:", e));
