@@ -10,39 +10,36 @@
             --brand-primary: #DF4F53; 
             --bg-admin: #F0F2F5;
             --text-main: #333;
-            --color-eat-in: #52c41a;   /* 堂食绿色 */
-            --color-takeaway: #1890ff; /* 打包蓝色 */
-            --color-pickup: #faad14;   /* 自提橙色 */
+            --color-eat-in: #52c41a;   
+            --color-takeaway: #1890ff; 
+            --color-pickup: #faad14;   
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background-color: var(--bg-admin); color: var(--text-main); padding: 20px; margin: 0; }
 
-        /* ================= 登录密码层样式 ================= */
+        /* 密码登录层 */
         .auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--brand-primary); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .auth-box { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; color: var(--text-main); box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 90%; max-width: 380px; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .auth-box { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; color: var(--text-main); box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 90%; max-width: 380px; }
         .auth-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; color: var(--brand-primary); }
         .auth-subtitle { font-size: 0.95rem; color: #666; margin-bottom: 25px; }
-        .auth-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1.5rem; text-align: center; margin-bottom: 15px; outline: none; letter-spacing: 5px; font-weight: 800; color: var(--brand-primary); transition: border-color 0.2s; }
-        .auth-input:focus { border-color: var(--brand-primary); }
-        .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); transition: transform 0.1s; }
-        .auth-btn:active { transform: scale(0.98); }
+        .auth-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1.5rem; text-align: center; margin-bottom: 15px; outline: none; letter-spacing: 5px; font-weight: 800; color: var(--brand-primary); }
+        .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
         .auth-error { color: #DF4F53; font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; display: none; background: #fee8e8; padding: 10px; border-radius: 8px; }
-        /* ================================================== */
 
-        /* 顶部导航 */
+        /* 看板界面 */
         .admin-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
         .admin-title { font-size: 1.5rem; font-weight: 800; color: var(--brand-primary); display: flex; align-items: center; gap: 10px; }
         .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 1rem; }
         .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
 
-        /* 订单网格布局 */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: white; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .order-card { background: white; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
         .order-card.eat_in { border-top: 6px solid var(--color-eat-in); }
         .order-card.takeaway { border-top: 6px solid var(--color-takeaway); }
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
+        .order-card.error_card { border-top: 6px solid #ff4d4f; } /* 容错错误卡片 */
 
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
@@ -51,6 +48,7 @@
         .mode-badge.eat_in { background: var(--color-eat-in); }
         .mode-badge.takeaway { background: var(--color-takeaway); }
         .mode-badge.pickup { background: var(--color-pickup); }
+        .mode-badge.error_badge { background: #ff4d4f; }
 
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
         .cust-row { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
@@ -64,7 +62,7 @@
         .card-footer { padding: 15px; border-top: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 12px; }
         .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
         .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(47, 84, 235, 0.2); }
-        .btn-done:active { transform: scale(0.98); }
+        .btn-error-done { background: #ff4d4f; }
 
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px; color: #aaa; font-size: 1.2rem; font-weight: 600; }
         .empty-state i { font-size: 4rem; color: #ddd; margin-bottom: 15px; display: block; }
@@ -72,24 +70,18 @@
 </head>
 <body>
 
-    <!-- ================= 密码登录层 ================= -->
+    <!-- 密码登录层 -->
     <div id="auth-overlay" class="auth-overlay">
         <div class="auth-box">
             <h2 class="auth-title"><i class="fa-solid fa-lock"></i> Dōmochi Admin</h2>
             <p class="auth-subtitle">Inserisci la password (请输入管理密码)</p>
-            
-            <div id="auth-error" class="auth-error">
-                <i class="fa-solid fa-circle-exclamation"></i> Password errata! (密码错误)
-            </div>
-            
-            <!-- 回车键支持 -->
+            <div id="auth-error" class="auth-error">Password errata! (密码错误)</div>
             <input type="password" id="auth-pwd" class="auth-input" placeholder="••••" onkeypress="if(event.key === 'Enter') verifyPassword()">
-            
             <button class="auth-btn" onclick="verifyPassword()">Accedi (进入系统)</button>
         </div>
     </div>
-    <!-- ============================================== -->
 
+    <!-- 看板主界面 -->
     <div class="admin-header">
         <div class="admin-title">
             <i class="fa-solid fa-bell"></i> Dōmochi 接单看板
@@ -107,213 +99,148 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ================= 密码设置区 =================
-        // 你可以在这里把 "8888" 修改为你想要的任何数字或字母组合
-        const ADMIN_PASSWORD = "8888";
-        // ==============================================
-
+        const ADMIN_PASSWORD = "8888"; 
         const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeOrders = [];
 
-        // --- 密码验证逻辑 ---
+        // 密码验证
         function verifyPassword() {
-            const inputPwd = document.getElementById('auth-pwd').value;
-            if (inputPwd === ADMIN_PASSWORD) {
-                // 密码正确，保存登录状态到当前会话
+            if (document.getElementById('auth-pwd').value === ADMIN_PASSWORD) {
                 sessionStorage.setItem('domochi_admin_logged_in', 'true');
-                // 隐藏遮罩层
                 document.getElementById('auth-overlay').style.display = 'none';
-                // 启动后台系统
                 initAdminSystem();
             } else {
-                // 密码错误，显示错误提示并清空输入框
                 document.getElementById('auth-error').style.display = 'block';
                 document.getElementById('auth-pwd').value = '';
-                document.getElementById('auth-pwd').focus();
             }
         }
 
-        // --- 语音播报 ---
+        // 语音播报
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'zh-CN'; 
-                utterance.rate = 1.0; 
-                utterance.pitch = 1.0; 
                 window.speechSynthesis.speak(utterance);
-            } else {
-                console.error("Il browser non supporta la sintesi vocale.");
             }
         }
 
-        function playAlertSound() {
-            speakText("系统测试: 接单系统已就绪。");
-        }
+        function playAlertSound() { speakText("系统测试：多莫奇接单系统已就绪。"); }
 
-        // --- 初始化数据获取 ---
+        // 获取初始订单
         async function fetchInitialOrders() {
-            const { data, error } = await supabaseClient
-                .from('domochi_orders')
-                .select('*')
-                .eq('status', 'pending')
-                .order('id', { ascending: true });
-
-            if (error) {
-                console.error("加载订单失败:", error);
-                return;
-            }
+            const { data, error } = await supabaseClient.from('domochi_orders').select('*').eq('status', 'pending').order('id', { ascending: true });
+            if (error) { console.error("加载失败:", error); return; }
             activeOrders = data || [];
             renderOrders();
         }
 
-        // --- 渲染订单 ---
+        // 容错渲染核心 (防卡死机制)
         function renderOrders() {
             const container = document.getElementById('orders-container');
             document.getElementById('pending-count').innerText = `Ordini: ${activeOrders.length}`;
 
             if (activeOrders.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-mug-saucer"></i>
-                        Nessun ordine in attesa (当前没有待处理订单)
-                    </div>`;
+                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-mug-saucer"></i>Nessun ordine in attesa (当前没有待处理订单)</div>`;
                 return;
             }
 
-            container.innerHTML = activeOrders.map(order => {
-                const info = order.order_data.customer_info || { name: 'Anonimo', phone: '', notes: '' };
-                const rawOption = order.order_data.dining_option || 'Consuma qui';
-                
-                let cssClass = 'eat_in';
-                if(rawOption.toLowerCase().includes('asporto')) cssClass = 'takeaway';
-                if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
-
-                const items = order.order_data.items || [];
-                const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                return `
-                <div class="order-card ${cssClass}" id="card-${order.id}">
-                    <div class="card-header">
-                        <span class="order-num">#${order.order_number}</span>
-                        <span class="mode-badge ${cssClass}">${rawOption}</span>
-                    </div>
+            let htmlString = '';
+            
+            activeOrders.forEach(order => {
+                try {
+                    // 安全解析数据，防止崩溃
+                    const rawData = order.order_data || {};
+                    const info = rawData.customer_info || { name: 'Sconosciuto (未知)', phone: '', notes: '' };
+                    const rawOption = String(rawData.dining_option || 'Consuma qui');
                     
-                    <div class="customer-box">
-                        <div class="cust-row"><i class="fa-solid fa-user"></i> <span class="cust-name">${info.name}</span> ${info.phone ? `(${info.phone})` : ''}</div>
-                        <div class="cust-row" style="color: #888;"><i class="fa-solid fa-clock"></i> Ora: ${time}</div>
-                        ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment-dots"></i> 备注: ${info.notes}</div>` : ''}
-                    </div>
+                    let cssClass = 'eat_in';
+                    if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) cssClass = 'takeaway';
+                    if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
 
-                    <div class="items-box">
-                        ${items.map(item => `
-                            <div class="item-row">
-                                <span><span class="item-qty">${item.qty}x</span> ${item.name}</span>
-                                <span style="color:#999; font-size:0.9rem;">€ ${(item.price * item.qty).toFixed(2)}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                    // 兼容旧版纯数组格式和新版对象格式
+                    let items = [];
+                    if (Array.isArray(rawData)) items = rawData; 
+                    else if (rawData.items && Array.isArray(rawData.items)) items = rawData.items;
 
-                    <div class="card-footer">
-                        <div class="total-row">
-                            <span>Totale:</span>
-                            <span style="color:var(--brand-primary)">€ ${parseFloat(order.total_amount).toFixed(2)}</span>
+                    const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    htmlString += `
+                    <div class="order-card ${cssClass}" id="card-${order.id}">
+                        <div class="card-header">
+                            <span class="order-num">#${order.order_number || order.id}</span>
+                            <span class="mode-badge ${cssClass}">${rawOption}</span>
                         </div>
-                        <button class="btn-done" onclick="completeOrder(${order.id})">
-                            <i class="fa-solid fa-check"></i> Completato (完成)
-                        </button>
-                    </div>
-                </div>
-                `;
-            }).join('');
+                        <div class="customer-box">
+                            <div class="cust-row"><i class="fa-solid fa-user"></i> <span class="cust-name">${info.name}</span> ${info.phone ? `(${info.phone})` : ''}</div>
+                            <div class="cust-row" style="color: #888;"><i class="fa-solid fa-clock"></i> Ora: ${time}</div>
+                            ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment-dots"></i> 备注: ${info.notes}</div>` : ''}
+                        </div>
+                        <div class="items-box">
+                            ${items.map(item => `
+                                <div class="item-row">
+                                    <span><span class="item-qty">${item.qty || 1}x</span> ${item.name || 'Prodotto'}</span>
+                                    <span style="color:#999; font-size:0.9rem;">€ ${((item.price || 0) * (item.qty || 1)).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="card-footer">
+                            <div class="total-row"><span>Totale:</span><span style="color:var(--brand-primary)">€ ${parseFloat(order.total_amount || 0).toFixed(2)}</span></div>
+                            <button class="btn-done" onclick="completeOrder(${order.id})"><i class="fa-solid fa-check"></i> Completato (完成)</button>
+                        </div>
+                    </div>`;
+                } catch (err) {
+                    console.error("订单渲染错误:", err);
+                    htmlString += `
+                    <div class="order-card error_card" id="card-${order.id}">
+                        <div class="card-header"><span class="order-num">#${order.id}</span><span class="mode-badge error_badge">Errore</span></div>
+                        <div style="padding: 15px; color: #ff4d4f; font-weight: bold;">⚠️ 订单数据格式不兼容，旧版遗留数据。<br><br>错误信息: ${err.message}</div>
+                        <div class="card-footer"><button class="btn-done btn-error-done" onclick="completeOrder(${order.id})"><i class="fa-solid fa-trash"></i> Rimuovi (删除无效订单)</button></div>
+                    </div>`;
+                }
+            });
+
+            container.innerHTML = htmlString;
         }
 
-        // --- 实时监听 ---
+        // 实时监听
         function setupRealtimeSubscription() {
-            supabaseClient
-                .channel('realtime-orders')
-                .on('postgres_changes', { 
-                    event: 'INSERT', 
-                    schema: 'public', 
-                    table: 'domochi_orders' 
-                }, (payload) => {
-                    activeOrders.push(payload.new);
-                    renderOrders();
+            supabaseClient.channel('realtime-orders').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'domochi_orders' }, (payload) => {
+                activeOrders.push(payload.new);
+                renderOrders();
 
+                try {
                     const orderNum = payload.new.order_number || '';
-                    const rawOption = payload.new.order_data.dining_option || '堂食'; 
-                    
+                    const rawOption = String(payload.new.order_data.dining_option || '堂食'); 
                     let modeZh = "堂食";
                     if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) modeZh = "打包";
                     if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) modeZh = "自提";
-
-                    const spacedNum = orderNum.split('').join(' ');
-                    const alertMessage = `您有新的${modeZh}订单，订单号 ${spacedNum}`; 
-                    
-                    speakText(alertMessage);
-
-                    if (Notification.permission === "granted") {
-                        new Notification(`新订单 #${orderNum}`, {
-                            body: `类型: ${rawOption} | 顾客: ${payload.new.order_data.customer_info.name}`
-                        });
-                    }
-                })
-                .on('postgres_changes', {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'domochi_orders'
-                }, (payload) => {
-                    if (payload.new.status !== 'pending') {
-                        activeOrders = activeOrders.filter(o => o.id !== payload.new.id);
-                        renderOrders();
-                    }
-                })
-                .subscribe();
+                    speakText(`您有新的${modeZh}订单，订单号 ${orderNum.split('').join(' ')}`);
+                } catch(e) { console.log("播报错误", e); }
+            }).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'domochi_orders' }, (payload) => {
+                if (payload.new.status !== 'pending') { activeOrders = activeOrders.filter(o => o.id !== payload.new.id); renderOrders(); }
+            }).subscribe();
         }
 
-        // --- 完成订单 ---
+        // 完成订单
         window.completeOrder = async function(orderId) {
             const card = document.getElementById(`card-${orderId}`);
             if(card) card.style.transform = "scale(0.8)"; 
-
-            const { error } = await supabaseClient
-                .from('domochi_orders')
-                .update({ status: 'completed' })
-                .eq('id', orderId);
-
-            if (error) {
-                alert("操作失败: " + error.message);
-                return;
-            }
-
+            await supabaseClient.from('domochi_orders').update({ status: 'completed' }).eq('id', orderId);
             activeOrders = activeOrders.filter(o => o.id !== orderId);
             renderOrders();
         }
 
-        // --- 核心启动逻辑 ---
-        function initAdminSystem() {
-            // 请求系统通知权限
-            if (Notification.permission === "default") {
-                Notification.requestPermission();
-            }
-            fetchInitialOrders();
-            setupRealtimeSubscription();
-        }
+        function initAdminSystem() { fetchInitialOrders(); setupRealtimeSubscription(); }
 
-        // --- 页面加载检测 ---
         window.onload = function() {
-            // 检查之前是否已经登录过（仅在当前浏览器标签页有效）
-            const isLoggedIn = sessionStorage.getItem('domochi_admin_logged_in');
-            
-            if (isLoggedIn === 'true') {
-                // 已登录：直接隐藏遮罩并启动系统
+            if (sessionStorage.getItem('domochi_admin_logged_in') === 'true') {
                 document.getElementById('auth-overlay').style.display = 'none';
                 initAdminSystem();
             } else {
-                // 未登录：聚焦到密码输入框
                 document.getElementById('auth-pwd').focus();
             }
         }
