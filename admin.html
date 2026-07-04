@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Ordini | Dōmochi Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-primary: #DF4F53; 
+            --bg-admin: #F0F2F5;
+            --text-main: #333;
+            --color-eat-in: #52c41a;   /* 堂食绿色 */
+            --color-takeaway: #1890ff; /* 打包蓝色 */
+            --color-pickup: #faad14;   /* 自提橙色 */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background-color: var(--bg-admin); color: var(--text-main); padding: 20px; }
+
+        /* 顶部导航 */
+        .admin-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .admin-title { font-size: 1.5rem; font-weight: 800; color: var(--brand-primary); display: flex; align-items: center; gap: 10px; }
+        .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 1rem; }
+        
+        /* 声音测试按钮 */
+        .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+
+        /* 订单网格布局 */
+        .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        
+        /* 订单卡片样式 */
+        .order-card { background: white; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        /* 根据就餐方式顶部边框变色 */
+        .order-card.eat_in { border-top: 6px solid var(--color-eat-in); }
+        .order-card.takeaway { border-top: 6px solid var(--color-takeaway); }
+        .order-card.pickup { border-top: 6px solid var(--color-pickup); }
+
+        .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
+        
+        /* 就餐类型标签 */
+        .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; }
+        .mode-badge.eat_in { background: var(--color-eat-in); }
+        .mode-badge.takeaway { background: var(--color-takeaway); }
+        .mode-badge.pickup { background: var(--color-pickup); }
+
+        /* 客户信息区 */
+        .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
+        .cust-row { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .cust-name { font-weight: 700; color: #333; }
+        .cust-notes { background: #feebeb; color: var(--brand-primary); padding: 3px 8px; border-radius: 6px; font-weight: 600; margin-top: 5px; display: inline-block; width: 100%; }
+
+        /* 商品清单区 */
+        .items-box { padding: 15px; flex: 1; }
+        .item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.05rem; font-weight: 500; }
+        .item-qty { font-weight: 800; color: var(--brand-primary); margin-right: 8px; }
+
+        /* 底部汇总与动作 */
+        .card-footer { padding: 15px; border-top: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 12px; }
+        .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
+        .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(47, 84, 235, 0.2); }
+        .btn-done:active { transform: scale(0.98); }
+
+        /* 无订单空状态 */
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px; color: #aaa; font-size: 1.2rem; font-weight: 600; }
+        .empty-state i { font-size: 4rem; color: #ddd; margin-bottom: 15px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-header">
+        <div class="admin-title">
+            <i class="fa-solid fa-bell"></i> Dōmochi 接单看板
+            <button class="audio-test-btn" onclick="playAlertSound()"><i class="fa-solid fa-volume-high"></i> 测试铃声</button>
+        </div>
+        <div class="stats-badge" id="pending-count">Ordini: 0</div>
+    </div>
+
+    <div class="orders-grid" id="orders-container">
+        <div class="empty-state">
+            <i class="fa-solid fa-inbox"></i>
+            Caricamento ordini in corso... (正在加载订单...)
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let activeOrders = [];
+
+        // 铃声控制：这里使用的是一个干净好听的公共 CDN 叮咚音频。上线后你可以换成自己的 mp3 地址。
+        const alertAudio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav");
+
+        function playAlertSound() {
+            alertAudio.play().catch(e => console.log("音频播放受浏览器拦截，需要点击页面激活:", e));
+        }
+
+        // 请求系统通知权限
+        if (Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+
+        // 1. 初始化：从数据库拉取所有 pending (待处理) 订单
+        async function fetchInitialOrders() {
+            const { data, error } = await supabaseClient
+                .from('domochi_orders')
+                .select('*')
+                .eq('status', 'pending')
+                .order('id', { ascending: true });
+
+            if (error) {
+                console.error("加载订单失败:", error);
+                return;
+            }
+
+            activeOrders = data || [];
+            renderOrders();
+        }
+
+        // 2. 渲染订单列表
+        function renderOrders() {
+            const container = document.getElementById('orders-container');
+            document.getElementById('pending-count').innerText = `Ordini: ${activeOrders.length}`;
+
+            if (activeOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-mug-saucer"></i>
+                        Nessun ordine in attesa (当前没有待处理订单)
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = activeOrders.map(order => {
+                const info = order.order_data.customer_info || { name: 'Anonimo', phone: '', notes: '' };
+                const rawOption = order.order_data.dining_option || 'Consuma qui';
+                
+                // 智能格式化就餐选项，以适配前端 CSS 的类名
+                let cssClass = 'eat_in';
+                if(rawOption.includes('asporto')) cssClass = 'takeaway';
+                if(rawOption.includes('Ritiro') || rawOption.includes('Pickup')) cssClass = 'pickup';
+
+                const items = order.order_data.items || [];
+                const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                <div class="order-card ${cssClass}" id="card-${order.id}">
+                    <div class="card-header">
+                        <span class="order-num">#${order.order_number}</span>
+                        <span class="mode-badge ${cssClass}">${rawOption}</span>
+                    </div>
+                    
+                    <div class="customer-box">
+                        <div class="cust-row"><i class="fa-solid fa-user"></i> <span class="cust-name">${info.name}</span> ${info.phone ? `(${info.phone})` : ''}</div>
+                        <div class="cust-row" style="color: #888;"><i class="fa-solid fa-clock"></i> Ora: ${time}</div>
+                        ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment-dots"></i> 备注: ${info.notes}</div>` : ''}
+                    </div>
+
+                    <div class="items-box">
+                        ${items.map(item => `
+                            <div class="item-row">
+                                <span><span class="item-qty">${item.qty}x</span> ${item.name}</span>
+                                <span style="color:#999; font-size:0.9rem;">€ ${(item.price * item.qty).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="total-row">
+                            <span>Totale:</span>
+                            <span style="color:var(--brand-primary)">€ ${parseFloat(order.total_amount).toFixed(2)}</span>
+                        </div>
+                        <button class="btn-done" onclick="completeOrder(${order.id})">
+                            <i class="fa-solid fa-check"></i> Completato (完成)
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // 3. 实时监听 (Supabase Realtime)
+        function setupRealtimeSubscription() {
+            supabaseClient
+                .channel('realtime-orders')
+                .on('postgres_changes', { 
+                    event: 'INSERT', 
+                    schema: 'public', 
+                    table: 'domochi_orders' 
+                }, (payload) => {
+                    console.log('检测到新订单!', payload.new);
+                    
+                    // 将新订单加入到本地数组
+                    activeOrders.push(payload.new);
+                    renderOrders();
+
+                    // 触发声音和系统通知
+                    playAlertSound();
+                    if (Notification.permission === "granted") {
+                        new Notification(`新订单 #${payload.new.order_number}`, {
+                            body: `类型: ${payload.new.order_data.dining_option} | 顾客: ${payload.new.order_data.customer_info.name}`
+                        });
+                    }
+                })
+                .on('postgres_changes', {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'domochi_orders'
+                }, (payload) => {
+                    // 如果在其他设备上把订单改为了 completed，当前屏幕同步移除它
+                    if (payload.new.status !== 'pending') {
+                        activeOrders = activeOrders.filter(o => o.id !== payload.new.id);
+                        renderOrders();
+                    }
+                })
+                .subscribe();
+        }
+
+        // 4. 点击完成订单：更新状态为 'completed'
+        window.completeOrder = async function(orderId) {
+            const card = document.getElementById(`card-${orderId}`);
+            if(card) card.style.transform = "scale(0.8)"; // 动效反馈
+
+            const { error } = await supabaseClient
+                .from('domochi_orders')
+                .update({ status: 'completed' })
+                .eq('id', orderId);
+
+            if (error) {
+                alert("操作失败: " + error.message);
+                return;
+            }
+
+            // 从本地数组中移除并刷新 UI
+            activeOrders = activeOrders.filter(o => o.id !== orderId);
+            renderOrders();
+        }
+
+        // 启动看板
+        window.onload = function() {
+            fetchInitialOrders();
+            setupRealtimeSubscription();
+        }
+    </script>
+</body>
+</html>
