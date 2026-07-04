@@ -22,7 +22,7 @@
         .search-btn { background: var(--brand-primary); color: white; border: none; padding: 0 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
         /* 订单卡片 */
-        .order-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); margin-bottom: 15px; border: 2px solid transparent; }
+        .order-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); margin-bottom: 15px; border: 2px solid transparent; transition: all 0.3s; }
         .order-card.active { border-color: #E2B29A; }
         
         .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #eee; padding-bottom: 15px; margin-bottom: 15px; }
@@ -30,7 +30,7 @@
         .order-time { font-size: 0.85rem; color: #888; }
         
         /* 状态进度条 */
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; transition: all 0.3s; }
         .status-pending { background: #fff0f0; color: #ff4d4f; }
         .status-preparing { background: #e6f7ff; color: #1890ff; }
         .status-ready { background: #f6ffed; color: #52c41a; }
@@ -77,16 +77,19 @@
             'completed': { text: 'Completato', class: 'status-ready', icon: 'fa-check-double' }
         };
 
-        // 新增：保存所有商品的列表，用于反查名字
+        // 保存所有商品的列表，用于反查名字
         let allProducts = [];
 
         async function init() {
-            // 先去数据库拉取所有商品信息，把真实名字记下来
+            // 拉取所有商品信息，把真实名字记下来
             const { data } = await supabaseClient.from('domochi_products').select('id, name_it, name_en');
             if (data) allProducts = data;
             
-            // 然后再去加载订单
+            // 初次加载订单
             loadLocalOrders();
+
+            // 核心修改：每隔 30 秒静默刷新当前视图
+            setInterval(silentRefresh, 30000);
         }
         
         window.addEventListener('DOMContentLoaded', init);
@@ -131,11 +134,14 @@
 
         async function searchOrder() {
             const inputVal = document.getElementById('order-search-input').value;
-            if (!inputVal) return;
+            if (!inputVal) {
+                loadLocalOrders(); // 如果输入框为空并点击查询，恢复显示本地订单
+                return;
+            }
 
             const formattedSearchNum = inputVal.toString().padStart(3, '0');
             const container = document.getElementById('orders-container');
-            container.innerHTML = `<p style="text-align:center; padding: 20px;">Ricerca in corso...</p>`;
+            container.innerHTML = `<p style="text-align:center; padding: 20px;">Ricerca in corso...</p>`; // 主动查询时才显示提示
             const todayStart = getTodayStart();
 
             const { data, error } = await supabaseClient
@@ -155,6 +161,38 @@
             }
 
             renderOrders(data, container);
+        }
+
+        // 无感刷新逻辑：不闪烁屏幕
+        async function silentRefresh() {
+            const container = document.getElementById('orders-container');
+            const inputVal = document.getElementById('order-search-input').value;
+            const todayStart = getTodayStart();
+
+            if (inputVal) {
+                // 如果正在查看搜索结果，静默刷新搜索结果
+                const formattedSearchNum = inputVal.toString().padStart(3, '0');
+                const { data } = await supabaseClient
+                    .from('domochi_orders')
+                    .select('*')
+                    .eq('order_number', formattedSearchNum)
+                    .gte('created_at', todayStart);
+
+                if (data && data.length > 0) renderOrders(data, container);
+            } else {
+                // 如果正在查看本地订单，静默刷新本地订单
+                let localOrders = JSON.parse(localStorage.getItem('domochi_recent_orders') || '[]');
+                if (localOrders.length > 0) {
+                    const { data } = await supabaseClient
+                        .from('domochi_orders') 
+                        .select('*')
+                        .in('id', localOrders)
+                        .gte('created_at', todayStart)
+                        .order('created_at', { ascending: false });
+
+                    if (data) renderOrders(data, container);
+                }
+            }
         }
 
         function renderOrders(orders, container) {
@@ -181,14 +219,16 @@
                     itemsHtml = items.map(item => {
                         let itemName = 'Prodotto';
 
-                        // 核心修复：直接通过商品 ID，从刚刚拉取的产品总表里反查意大利语原名！
+                        // 核心修复：直接通过商品 ID，从刚刚拉取的产品总表里反查意大利语原名
                         const realProduct = allProducts.find(p => p.id == item.id);
                         if (realProduct) {
                             itemName = realProduct.name_it || realProduct.name_en || 'Prodotto';
                         } else {
-                            // 如果产品被删除了，启用降级兼容
+                            // 降级兼容旧数据
                             if (item.name) itemName = item.name;
                             else if (item.name_it) itemName = item.name_it;
+                            else if (item.name_zh) itemName = item.name_zh;
+                            else if (item.product_name) itemName = item.product_name;
                         }
 
                         const itemQty = item.qty || item.quantity || item.count || 1;
