@@ -15,24 +15,31 @@
             --color-pickup: #faad14;   /* 自提橙色 */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background-color: var(--bg-admin); color: var(--text-main); padding: 20px; }
+        body { background-color: var(--bg-admin); color: var(--text-main); padding: 20px; margin: 0; }
+
+        /* ================= 登录密码层样式 ================= */
+        .auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--brand-primary); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .auth-box { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; color: var(--text-main); box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 90%; max-width: 380px; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .auth-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; color: var(--brand-primary); }
+        .auth-subtitle { font-size: 0.95rem; color: #666; margin-bottom: 25px; }
+        .auth-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1.5rem; text-align: center; margin-bottom: 15px; outline: none; letter-spacing: 5px; font-weight: 800; color: var(--brand-primary); transition: border-color 0.2s; }
+        .auth-input:focus { border-color: var(--brand-primary); }
+        .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); transition: transform 0.1s; }
+        .auth-btn:active { transform: scale(0.98); }
+        .auth-error { color: #DF4F53; font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; display: none; background: #fee8e8; padding: 10px; border-radius: 8px; }
+        /* ================================================== */
 
         /* 顶部导航 */
         .admin-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
         .admin-title { font-size: 1.5rem; font-weight: 800; color: var(--brand-primary); display: flex; align-items: center; gap: 10px; }
         .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 1rem; }
-        
-        /* 声音测试按钮 */
         .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
 
         /* 订单网格布局 */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        
-        /* 订单卡片样式 */
         .order-card { background: white; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
-        /* 根据就餐方式顶部边框变色 */
         .order-card.eat_in { border-top: 6px solid var(--color-eat-in); }
         .order-card.takeaway { border-top: 6px solid var(--color-takeaway); }
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
@@ -40,35 +47,48 @@
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
         
-        /* 就餐类型标签 */
         .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; }
         .mode-badge.eat_in { background: var(--color-eat-in); }
         .mode-badge.takeaway { background: var(--color-takeaway); }
         .mode-badge.pickup { background: var(--color-pickup); }
 
-        /* 客户信息区 */
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
         .cust-row { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
         .cust-name { font-weight: 700; color: #333; }
         .cust-notes { background: #feebeb; color: var(--brand-primary); padding: 3px 8px; border-radius: 6px; font-weight: 600; margin-top: 5px; display: inline-block; width: 100%; }
 
-        /* 商品清单区 */
         .items-box { padding: 15px; flex: 1; }
         .item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.05rem; font-weight: 500; }
         .item-qty { font-weight: 800; color: var(--brand-primary); margin-right: 8px; }
 
-        /* 底部汇总与动作 */
         .card-footer { padding: 15px; border-top: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 12px; }
         .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
         .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(47, 84, 235, 0.2); }
         .btn-done:active { transform: scale(0.98); }
 
-        /* 无订单空状态 */
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px; color: #aaa; font-size: 1.2rem; font-weight: 600; }
         .empty-state i { font-size: 4rem; color: #ddd; margin-bottom: 15px; display: block; }
     </style>
 </head>
 <body>
+
+    <!-- ================= 密码登录层 ================= -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-box">
+            <h2 class="auth-title"><i class="fa-solid fa-lock"></i> Dōmochi Admin</h2>
+            <p class="auth-subtitle">Inserisci la password (请输入管理密码)</p>
+            
+            <div id="auth-error" class="auth-error">
+                <i class="fa-solid fa-circle-exclamation"></i> Password errata! (密码错误)
+            </div>
+            
+            <!-- 回车键支持 -->
+            <input type="password" id="auth-pwd" class="auth-input" placeholder="••••" onkeypress="if(event.key === 'Enter') verifyPassword()">
+            
+            <button class="auth-btn" onclick="verifyPassword()">Accedi (进入系统)</button>
+        </div>
+    </div>
+    <!-- ============================================== -->
 
     <div class="admin-header">
         <div class="admin-title">
@@ -87,42 +107,54 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ================= 密码设置区 =================
+        // 你可以在这里把 "8888" 修改为你想要的任何数字或字母组合
+        const ADMIN_PASSWORD = "8888";
+        // ==============================================
+
         const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeOrders = [];
 
-        // ================= 智能语音播报系统 =================
+        // --- 密码验证逻辑 ---
+        function verifyPassword() {
+            const inputPwd = document.getElementById('auth-pwd').value;
+            if (inputPwd === ADMIN_PASSWORD) {
+                // 密码正确，保存登录状态到当前会话
+                sessionStorage.setItem('domochi_admin_logged_in', 'true');
+                // 隐藏遮罩层
+                document.getElementById('auth-overlay').style.display = 'none';
+                // 启动后台系统
+                initAdminSystem();
+            } else {
+                // 密码错误，显示错误提示并清空输入框
+                document.getElementById('auth-error').style.display = 'block';
+                document.getElementById('auth-pwd').value = '';
+                document.getElementById('auth-pwd').focus();
+            }
+        }
+
+        // --- 语音播报 ---
         function speakText(text) {
             if ('speechSynthesis' in window) {
-                // 如果当前正在播报，先强制停止，防止声音重叠
                 window.speechSynthesis.cancel();
-
                 const utterance = new SpeechSynthesisUtterance(text);
-                
-                // 设定为中文发音
                 utterance.lang = 'zh-CN'; 
-                utterance.rate = 1.0;  // 语速正常
-                utterance.pitch = 1.0; // 音高正常
-
+                utterance.rate = 1.0; 
+                utterance.pitch = 1.0; 
                 window.speechSynthesis.speak(utterance);
             } else {
-                console.error("Il browser non supporta la sintesi vocale. (当前浏览器不支持语音播报)");
+                console.error("Il browser non supporta la sintesi vocale.");
             }
         }
 
         function playAlertSound() {
             speakText("系统测试：多莫奇接单系统已就绪。");
         }
-        // ====================================================
 
-        // 请求系统通知权限
-        if (Notification.permission === "default") {
-            Notification.requestPermission();
-        }
-
-        // 1. 初始化：从数据库拉取所有 pending (待处理) 订单
+        // --- 初始化数据获取 ---
         async function fetchInitialOrders() {
             const { data, error } = await supabaseClient
                 .from('domochi_orders')
@@ -134,12 +166,11 @@
                 console.error("加载订单失败:", error);
                 return;
             }
-
             activeOrders = data || [];
             renderOrders();
         }
 
-        // 2. 渲染订单列表
+        // --- 渲染订单 ---
         function renderOrders() {
             const container = document.getElementById('orders-container');
             document.getElementById('pending-count').innerText = `Ordini: ${activeOrders.length}`;
@@ -157,7 +188,6 @@
                 const info = order.order_data.customer_info || { name: 'Anonimo', phone: '', notes: '' };
                 const rawOption = order.order_data.dining_option || 'Consuma qui';
                 
-                // 智能格式化就餐选项，以适配前端 CSS 的类名
                 let cssClass = 'eat_in';
                 if(rawOption.toLowerCase().includes('asporto')) cssClass = 'takeaway';
                 if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
@@ -201,7 +231,7 @@
             }).join('');
         }
 
-        // 3. 实时监听 (Supabase Realtime)
+        // --- 实时监听 ---
         function setupRealtimeSubscription() {
             supabaseClient
                 .channel('realtime-orders')
@@ -210,30 +240,21 @@
                     schema: 'public', 
                     table: 'domochi_orders' 
                 }, (payload) => {
-                    console.log('检测到新订单!', payload.new);
-                    
-                    // 将新订单加入到本地数组
                     activeOrders.push(payload.new);
                     renderOrders();
 
-                    // ================= 动态提取信息并播报 =================
                     const orderNum = payload.new.order_number || '';
                     const rawOption = payload.new.order_data.dining_option || '堂食'; 
                     
-                    // 转换成中文播报词
                     let modeZh = "堂食";
                     if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) modeZh = "打包";
                     if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) modeZh = "自提";
 
-                    // 把订单号拆开读（例如把 "005" 变成 "0 0 5"），发音更清晰
                     const spacedNum = orderNum.split('').join(' ');
                     const alertMessage = `您有新的${modeZh}订单，订单号 ${spacedNum}`; 
                     
-                    // 触发语音
                     speakText(alertMessage);
-                    // ========================================================
 
-                    // 系统通知保持不变
                     if (Notification.permission === "granted") {
                         new Notification(`新订单 #${orderNum}`, {
                             body: `类型: ${rawOption} | 顾客: ${payload.new.order_data.customer_info.name}`
@@ -245,7 +266,6 @@
                     schema: 'public',
                     table: 'domochi_orders'
                 }, (payload) => {
-                    // 如果在其他设备上把订单改为了 completed，当前屏幕同步移除它
                     if (payload.new.status !== 'pending') {
                         activeOrders = activeOrders.filter(o => o.id !== payload.new.id);
                         renderOrders();
@@ -254,10 +274,10 @@
                 .subscribe();
         }
 
-        // 4. 点击完成订单：更新状态为 'completed'
+        // --- 完成订单 ---
         window.completeOrder = async function(orderId) {
             const card = document.getElementById(`card-${orderId}`);
-            if(card) card.style.transform = "scale(0.8)"; // 动效反馈
+            if(card) card.style.transform = "scale(0.8)"; 
 
             const { error } = await supabaseClient
                 .from('domochi_orders')
@@ -269,15 +289,33 @@
                 return;
             }
 
-            // 从本地数组中移除并刷新 UI
             activeOrders = activeOrders.filter(o => o.id !== orderId);
             renderOrders();
         }
 
-        // 启动看板
-        window.onload = function() {
+        // --- 核心启动逻辑 ---
+        function initAdminSystem() {
+            // 请求系统通知权限
+            if (Notification.permission === "default") {
+                Notification.requestPermission();
+            }
             fetchInitialOrders();
             setupRealtimeSubscription();
+        }
+
+        // --- 页面加载检测 ---
+        window.onload = function() {
+            // 检查之前是否已经登录过（仅在当前浏览器标签页有效）
+            const isLoggedIn = sessionStorage.getItem('domochi_admin_logged_in');
+            
+            if (isLoggedIn === 'true') {
+                // 已登录：直接隐藏遮罩并启动系统
+                document.getElementById('auth-overlay').style.display = 'none';
+                initAdminSystem();
+            } else {
+                // 未登录：聚焦到密码输入框
+                document.getElementById('auth-pwd').focus();
+            }
         }
     </script>
 </body>
