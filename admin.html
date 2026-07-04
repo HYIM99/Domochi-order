@@ -129,25 +129,27 @@
         }
 
         function speakText(text) { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'zh-CN'; window.speechSynthesis.speak(utterance); } }
-        function playAlertSound() { speakText("系统测试：多莫奇接单系统已就绪。"); }
+        function playAlertSound() { speakText("系统测试：接单系统已就绪。"); }
 
-        // 智能拉取逻辑：根据当前选中的状态(pending / completed)拉取对应订单
+        // 修复核心：移除不存在的 updated_at 字段，改为按 id 倒序并限制数量，避免报错卡死
         async function fetchOrders() {
-            let query = supabaseClient.from('domochi_orders').select('*');
-            
             if (currentMode === 'pending') {
-                // 待处理模式：显示所有未完成的订单
-                query = query.eq('status', 'pending').order('id', { ascending: true });
+                const { data, error } = await supabaseClient.from('domochi_orders')
+                    .select('*')
+                    .eq('status', 'pending')
+                    .order('id', { ascending: true });
+                if (error) { console.error("加载待处理订单失败:", error); return; }
+                activeOrders = data || [];
             } else {
-                // 已处理模式：仅显示今天之内已经点击完成的订单（防止老数据刷屏）
-                const now = new Date();
-                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-                query = query.eq('status', 'completed').gte('created_at', todayStart).order('updated_at', { ascending: false });
+                // 已处理模式：抓取最近完成的100单
+                const { data, error } = await supabaseClient.from('domochi_orders')
+                    .select('*')
+                    .eq('status', 'completed')
+                    .order('id', { ascending: false })
+                    .limit(100);
+                if (error) { console.error("加载历史订单失败:", error); return; }
+                activeOrders = data || [];
             }
-
-            const { data, error } = await query;
-            if (error) { console.error("加载失败:", error); return; }
-            activeOrders = data || [];
             renderOrders();
         }
 
@@ -170,7 +172,7 @@
 
         function renderOrders() {
             const container = document.getElementById('orders-container');
-            const countLabel = currentMode === 'pending' ? '待制作' : '今天已完成';
+            const countLabel = currentMode === 'pending' ? '待制作' : '已完成';
             document.getElementById('pending-count').innerText = `${countLabel}: ${activeOrders.length}`;
 
             if (activeOrders.length === 0) {
@@ -195,7 +197,6 @@
 
                     const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    // 如果是历史已完成订单，使用灰色标签和撤回按钮
                     const isHistory = currentMode === 'completed';
                     const cardStyle = isHistory ? 'completed-style' : '';
                     
@@ -233,19 +234,18 @@
             container.innerHTML = htmlString;
         }
 
-        // 统一修改状态函数（支持完成和撤回）
+        // 统一修改状态函数（支持完成和撤回）- 移除了不存在的 updated_at 字段
         window.changeOrderStatus = async function(orderId, newStatus) {
             const card = document.getElementById(`card-${orderId}`);
             if(card) card.style.transform = "scale(0.9)"; 
             
-            await supabaseClient.from('domochi_orders').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', orderId);
+            await supabaseClient.from('domochi_orders').update({ status: newStatus }).eq('id', orderId);
             activeOrders = activeOrders.filter(o => o.id !== orderId);
             renderOrders();
         }
 
         function setupRealtimeSubscription() {
             supabaseClient.channel('realtime-orders').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'domochi_orders' }, (payload) => {
-                // 如果当前在待处理模式下，才实时把新单加进屏幕
                 if (currentMode === 'pending' && payload.new.status === 'pending') {
                     activeOrders.push(payload.new);
                     renderOrders();
@@ -260,7 +260,6 @@
                     speakText(`您有新的${modeZh}订单，订单号 ${orderNum.split('').join(' ')}`);
                 } catch(e) {}
             }).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'domochi_orders' }, (payload) => {
-                // 实时捕捉其他设备修改的状态，保持看板数据同步
                 if (currentMode === 'pending' && payload.new.status !== 'pending') {
                     activeOrders = activeOrders.filter(o => o.id !== payload.new.id);
                     renderOrders();
