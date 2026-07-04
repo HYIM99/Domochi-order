@@ -46,7 +46,6 @@
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
         .order-card.error_card { border-top: 6px solid #ff4d4f; } 
 
-        /* 历史已完成卡片淡淡的半透明效果，以作区分 */
         .order-card.completed-style { opacity: 0.75; border-top: 6px solid #8c8c8c !important; }
 
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
@@ -64,6 +63,13 @@
         .cust-name { font-weight: 700; color: #333; }
         .cust-notes { background: #feebeb; color: var(--brand-primary); padding: 3px 8px; border-radius: 6px; font-weight: 600; margin-top: 5px; display: inline-block; width: 100%; }
 
+        /* 等待时间动态变色样式 */
+        .wait-time { padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; transition: all 0.3s;}
+        .wait-time.safe { background: #e6f7ff; color: #1890ff; }
+        .wait-time.warning { background: #fffbe6; color: #faad14; }
+        .wait-time.danger { background: #fff1f0; color: #f5222d; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
         .items-box { padding: 15px; flex: 1; }
         .item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.05rem; font-weight: 500; }
         .item-qty { font-weight: 800; color: var(--brand-primary); margin-right: 8px; }
@@ -72,7 +78,7 @@
         .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
         
         .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-revert { background: #faad14; } /* 撤回按钮橙色 */
+        .btn-revert { background: #faad14; } 
 
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px; color: #aaa; font-size: 1.2rem; font-weight: 600; }
         .empty-state i { font-size: 4rem; color: #ddd; margin-bottom: 15px; display: block; }
@@ -115,7 +121,8 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeOrders = [];
-        let currentMode = 'pending'; // 可选值: 'pending' (当前待做) 或 'completed' (历史已完成)
+        let currentMode = 'pending'; 
+        let timerInterval = null; // 用于存放定时器
 
         function verifyPassword() {
             if (document.getElementById('auth-pwd').value === ADMIN_PASSWORD) {
@@ -131,29 +138,19 @@
         function speakText(text) { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'zh-CN'; window.speechSynthesis.speak(utterance); } }
         function playAlertSound() { speakText("系统测试：接单系统已就绪。"); }
 
-        // 修复核心：移除不存在的 updated_at 字段，改为按 id 倒序并限制数量，避免报错卡死
         async function fetchOrders() {
             if (currentMode === 'pending') {
-                const { data, error } = await supabaseClient.from('domochi_orders')
-                    .select('*')
-                    .eq('status', 'pending')
-                    .order('id', { ascending: true });
+                const { data, error } = await supabaseClient.from('domochi_orders').select('*').eq('status', 'pending').order('id', { ascending: true });
                 if (error) { console.error("加载待处理订单失败:", error); return; }
                 activeOrders = data || [];
             } else {
-                // 已处理模式：抓取最近完成的100单
-                const { data, error } = await supabaseClient.from('domochi_orders')
-                    .select('*')
-                    .eq('status', 'completed')
-                    .order('id', { ascending: false })
-                    .limit(100);
+                const { data, error } = await supabaseClient.from('domochi_orders').select('*').eq('status', 'completed').order('id', { ascending: false }).limit(100);
                 if (error) { console.error("加载历史订单失败:", error); return; }
                 activeOrders = data || [];
             }
             renderOrders();
         }
 
-        // 切换看板显示模式
         window.toggleViewMode = function() {
             const btn = document.getElementById('btn-toggle-view');
             const txt = document.getElementById('toggle-text');
@@ -167,8 +164,30 @@
                 btn.classList.remove('history-mode');
                 txt.innerText = "查看已处理订单";
             }
-            fetchOrders(); // 刷新数据
+            fetchOrders(); 
         }
+
+        // ================= 新增：动态计算并更新等待时间 =================
+        function updateWaitTimes() {
+            if (currentMode !== 'pending') return; // 已完成订单不需要计时
+
+            document.querySelectorAll('.wait-time-container').forEach(el => {
+                const timeStr = el.getAttribute('data-time');
+                if(!timeStr) return;
+                
+                // 计算当前时间与下单时间的分钟差
+                const diffMins = Math.max(0, Math.floor((new Date() - new Date(timeStr)) / 60000));
+                
+                // 根据时间分配警报颜色
+                let statusClass = 'safe';
+                if (diffMins >= 20) statusClass = 'danger'; // 超时20分钟红色闪烁
+                else if (diffMins >= 10) statusClass = 'warning'; // 超时10分钟橙色警告
+                
+                el.className = `wait-time-container wait-time ${statusClass}`;
+                el.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> 等待 ${diffMins} 分钟`;
+            });
+        }
+        // ================================================================
 
         function renderOrders() {
             const container = document.getElementById('orders-container');
@@ -204,6 +223,7 @@
                         ? `<button class="btn-done btn-revert" onclick="changeOrderStatus(${order.id}, 'pending')"><i class="fa-solid fa-rotate-left"></i> 撤回并重做</button>`
                         : `<button class="btn-done" onclick="changeOrderStatus(${order.id}, 'completed')"><i class="fa-solid fa-check"></i> 出餐完成</button>`;
 
+                    // 核心修改：在时间这一行加入动态计时器的坑位
                     htmlString += `
                     <div class="order-card ${cssClass} ${cardStyle}" id="card-${order.id}">
                         <div class="card-header">
@@ -212,7 +232,12 @@
                         </div>
                         <div class="customer-box">
                             <div class="cust-row"><i class="fa-solid fa-user"></i> <span class="cust-name">${info.name}</span> ${info.phone ? `(${info.phone})` : ''}</div>
-                            <div class="cust-row" style="color: #888;"><i class="fa-solid fa-clock"></i> Ora: ${time}</div>
+                            
+                            <div class="cust-row" style="color: #888; justify-content: space-between; width: 100%;">
+                                <span><i class="fa-solid fa-clock"></i> Ora: ${time}</span>
+                                ${!isHistory ? `<span class="wait-time-container" data-time="${order.created_at}"></span>` : ''}
+                            </div>
+                            
                             ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment-dots"></i> 备注: ${info.notes}</div>` : ''}
                         </div>
                         <div class="items-box">
@@ -232,9 +257,11 @@
                 }
             });
             container.innerHTML = htmlString;
+
+            // 渲染完毕后立刻执行一次时间计算，防止刚加载时空白
+            updateWaitTimes();
         }
 
-        // 统一修改状态函数（支持完成和撤回）- 移除了不存在的 updated_at 字段
         window.changeOrderStatus = async function(orderId, newStatus) {
             const card = document.getElementById(`card-${orderId}`);
             if(card) card.style.transform = "scale(0.9)"; 
@@ -250,7 +277,6 @@
                     activeOrders.push(payload.new);
                     renderOrders();
                 }
-
                 try {
                     const orderNum = payload.new.order_number || '';
                     const rawOption = String(payload.new.order_data.dining_option || '堂食'); 
@@ -270,7 +296,14 @@
             }).subscribe();
         }
 
-        function initAdminSystem() { fetchOrders(); setupRealtimeSubscription(); }
+        function initAdminSystem() { 
+            fetchOrders(); 
+            setupRealtimeSubscription(); 
+            
+            // 每 30 秒自动刷新一次页面上所有卡片的等待时间
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateWaitTimes, 30000); 
+        }
 
         window.onload = function() {
             if (sessionStorage.getItem('domochi_admin_logged_in') === 'true') {
