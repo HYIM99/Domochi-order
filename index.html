@@ -405,24 +405,45 @@
         }
 
         window.promptQueryOrder = async function() {
-            const phone = prompt(i18n[currentLang].prompt_phone);
-            if(!phone || !phone.trim()) return;
+    const phone = prompt(i18n[currentLang].prompt_phone);
+    if(!phone || !phone.trim()) return;
 
-            const { data, error } = await supabaseClient
-                .from('domochi_orders')
-                .select('*')
-                .contains('order_data->customer_info', { phone: phone.trim() })
-                .order('id', { ascending: false })
-                .limit(1);
+    // 获取今天零点的时间戳
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
 
-            if (error) { alert("Errore: " + error.message); return; }
+    // 修改查询：移除 limit(1)，只保留根据电话号码和今天日期的筛选
+    const { data, error } = await supabaseClient
+        .from('domochi_orders')
+        .select('*')
+        .contains('order_data->customer_info', { phone: phone.trim() })
+        .gte('created_at', todayStart) // 过滤：只看今天的订单
+        .order('id', { ascending: false }); // 最新下单的排在前面
 
-            if(data && data.length > 0) {
-                showReceiptView(data[0]);
-            } else {
-                alert(i18n[currentLang].no_order_found);
+    if (error) { alert("Errore: " + error.message); return; }
+
+    if(data && data.length > 0) {
+        if (data.length === 1) {
+            // 如果只有一单，直接显示
+            showReceiptView(data[0]);
+        } else {
+            // 如果有多单，显示一个简单选择（或者你可以修改这里直接显示列表）
+            let msg = "找到 " + data.length + " 个订单：\n";
+            data.forEach((order, index) => {
+                msg += `${index + 1}. #${order.order_number} - €${order.total_amount} (${order.status})\n`;
+            });
+            msg += "\n请输入序号查看对应详情 (1 为最新单)：";
+            
+            const choice = prompt(msg);
+            const idx = parseInt(choice) - 1;
+            if(data[idx]) {
+                showReceiptView(data[idx]);
             }
         }
+    } else {
+        alert(i18n[currentLang].no_order_found);
+    }
+}
 
         function setupRealtimeStatusBracdcast() {
             supabaseClient.channel('customer-status-sync')
