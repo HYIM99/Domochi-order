@@ -24,20 +24,22 @@
         .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
 
         /* 看板界面 */
-        .admin-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 30px; border-radius: 166px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .header-left { display: flex; flex-direction: column; }
         .admin-title { font-size: 1.5rem; font-weight: 800; color: var(--brand-primary); display: flex; align-items: center; gap: 10px; }
         .sync-info { font-size: 0.75rem; color: #999; margin-top: 2px; }
         
         .header-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .search-input { padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.9rem; outline: none; width: 160px; }
+        .search-input:focus { border-color: var(--brand-primary); }
 
-        .view-toggle-btn { background: #333; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .view-toggle-btn { background: #333; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .view-toggle-btn.history-mode { background: #52c41a; }
         
-        .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; }
-        .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.95rem; }
+        .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
 
+        /* 订单网格 */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .order-card { background: white; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; transition: all 0.2s; position: relative; }
         
@@ -46,17 +48,32 @@
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
         .order-card.completed-style { opacity: 0.75; border-top: 6px solid #8c8c8c !important; }
 
+        /* 超时订单全卡片红色闪烁样式 */
+        .order-card.overdue-flash { 
+            animation: danger-flash 1.5s infinite; 
+            border: 3px solid #ff4d4f !important;
+            border-top: 8px solid #ff4d4f !important;
+        }
+        @keyframes danger-flash {
+            0% { background-color: #ffffff; }
+            50% { background-color: #fff1f0; }
+            100% { background-color: #ffffff; }
+        }
+
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
-        .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; }
+        .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; color: white; text-transform: uppercase; }
+        .mode-badge.eat_in { background: var(--color-eat-in); }
+        .mode-badge.takeaway { background: var(--color-takeaway); }
+        .mode-badge.pickup { background: var(--color-pickup); }
 
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
         .cust-row { margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
         .cust-name { font-weight: 700; color: #333; font-size: 1rem; }
-        .cust-phone { color: #1890ff; font-weight: 600; }
-        .cust-notes { background: #fee8e8; color: var(--brand-primary); padding: 8px; border-radius: 6px; font-weight: 700; margin-top: 8px; border-left: 4px solid var(--brand-primary); }
+        .cust-phone { color: #1890ff; font-weight: 600; margin-left: 5px; }
+        .cust-notes { background: #fee8e8; color: var(--brand-primary); padding: 8px; border-radius: 6px; font-weight: 700; margin-top: 8px; border-left: 4px solid var(--brand-primary); display: block; width: 100%; }
 
-        .wait-time { padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.85rem; }
+        .wait-time { padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; }
         .wait-time.safe { background: #e6f7ff; color: #1890ff; }
         .wait-time.warning { background: #fffbe6; color: #faad14; }
         .wait-time.danger { background: #fff1f0; color: #f5222d; animation: pulse 1.5s infinite; }
@@ -111,9 +128,9 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeOrders = [];
-        let allProducts = []; // 用于解析产品名称
         let currentMode = 'pending'; 
 
+        // --- 核心语音播报 ---
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -142,11 +159,6 @@
         function playAlertSound() { 
             unlockAudio();
             speakText("语音播报已就绪。"); 
-        }
-
-        async function fetchProducts() {
-            const { data } = await supabaseClient.from('domochi_products').select('*');
-            allProducts = data || [];
         }
 
         async function fetchOrders() {
@@ -182,7 +194,7 @@
             document.getElementById('pending-count').innerText = `${currentMode==='pending'?'待制作':'已完成'}: ${filtered.length}`;
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="empty-state">Nessun ordine trovato</div>`;
+                container.innerHTML = `<div class="empty-state">Nessun ordine trovato (暂无订单)</div>`;
                 return;
             }
 
@@ -194,23 +206,37 @@
                     const rawOption = String(rawData.dining_option || 'Consuma qui');
                     
                     let cssClass = 'eat_in';
-                    if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) cssClass = 'takeaway';
-                    if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
+                    let zhMode = '堂食'; // 映射中文
 
-                    const items = Array.isArray(rawData.items) ? rawData.items : [];
+                    if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) {
+                        cssClass = 'takeaway';
+                        zhMode = '打包';
+                    }
+                    if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) {
+                        cssClass = 'pickup';
+                        zhMode = '自提';
+                    }
+
+                    const items = Array.isArray(rawData) ? rawData : (rawData.items || []);
                     const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const isHistory = currentMode === 'completed';
 
                     const diffMins = Math.floor((now - new Date(order.created_at)) / 60000);
                     let timeLevel = 'safe';
-                    if(diffMins >= 20) timeLevel = 'danger';
-                    else if(diffMins >= 10) timeLevel = 'warning';
+                    let overdueClass = ''; // 超时样式类
+
+                    if(diffMins >= 20) {
+                        timeLevel = 'danger';
+                        if(!isHistory) overdueClass = 'overdue-flash'; // 待处理订单超时则闪烁
+                    } else if(diffMins >= 10) {
+                        timeLevel = 'warning';
+                    }
 
                     return `
-                    <div class="order-card ${cssClass} ${isHistory ? 'completed-style' : ''}">
+                    <div class="order-card ${cssClass} ${overdueClass} ${isHistory ? 'completed-style' : ''}">
                         <div class="card-header">
                             <span class="order-num">#${order.order_number || order.id}</span>
-                            <span class="mode-badge ${cssClass}">${isHistory ? 'FINITO' : rawOption}</span>
+                            <span class="mode-badge ${cssClass}">${isHistory ? 'FINITO' : zhMode}</span>
                         </div>
                         <div class="customer-box">
                             <div class="cust-row">
@@ -221,20 +247,15 @@
                                 <span><i class="fa-solid fa-clock"></i> ${timeStr}</span>
                                 ${!isHistory ? `<span class="wait-time ${timeLevel}"><i class="fa-solid fa-hourglass-start"></i> ${diffMins} min</span>` : ''}
                             </div>
-                            ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment"></i> ${info.notes}</div>` : ''}
+                            ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment"></i> 备注: ${info.notes}</div>` : ''}
                         </div>
                         <div class="items-box">
-                            ${items.map(i => {
-                                // 核心修复逻辑：尝试匹配产品库名称，中文优先
-                                const p = allProducts.find(x => x.id == i.id);
-                                const displayName = p ? (p.name_zh || p.name_it || p.name) : (i.name || 'Prodotto');
-                                return `<div class="item-row"><span><span class="item-qty">${i.qty}x</span> ${displayName}</span></div>`;
-                            }).join('')}
+                            ${items.map(i => `<div class="item-row"><span><span class="item-qty">${i.qty}x</span> ${i.name}</span></div>`).join('')}
                         </div>
                         <div class="card-footer">
                             <div class="total-row"><span>Totale:</span><span style="color:var(--brand-primary)">€ ${parseFloat(order.total_amount || 0).toFixed(2)}</span></div>
                             <button class="btn-done" onclick="changeStatus(${order.id}, '${isHistory?'pending':'completed'}')">
-                                ${isHistory?'恢复订单':'完成出餐'}
+                                ${isHistory?'<i class="fa-solid fa-rotate-left"></i> 恢复订单':'<i class="fa-solid fa-check"></i> 出餐完成'}
                             </button>
                         </div>
                     </div>`;
@@ -265,11 +286,10 @@
             }).subscribe();
         }
 
-        async function initAdminSystem() {
-            await fetchProducts(); // 首先加载产品库
-            await fetchOrders();
+        function initAdminSystem() {
+            fetchOrders();
             setupRealtime();
-            setInterval(renderOrders, 30000); 
+            setInterval(renderOrders, 30000); // 30秒更新一次卡片时间
         }
 
         window.onload = () => {
