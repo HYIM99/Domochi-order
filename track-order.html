@@ -122,18 +122,14 @@
             const inputVal = document.getElementById('order-search-input').value;
             if (!inputVal) return;
 
-            // 将用户输入的数字格式化为3位数，例如 1 变成 001，以匹配数据库中的 order_number
             const formattedSearchNum = inputVal.toString().padStart(3, '0');
-
             const container = document.getElementById('orders-container');
             container.innerHTML = `<p style="text-align:center; padding: 20px;">Ricerca in corso...</p>`;
-
             const todayStart = getTodayStart();
 
             const { data, error } = await supabaseClient
                 .from('domochi_orders')
                 .select('*')
-                // 修复：让用户搜取餐号(order_number)而不是数据库ID，体验更好
                 .eq('order_number', formattedSearchNum)
                 .gte('created_at', todayStart);
 
@@ -163,23 +159,28 @@
             container.innerHTML = orders.map(order => {
                 const statusInfo = statusMap[order.status || 'pending'] || statusMap['pending'];
                 
-                // 处理时间显示 (强制使用两位数 24小时制)
                 const d = new Date(order.created_at);
                 const timeStr = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
                 
-                // 核心修复：正确解析存储在 order_data 里的 items，以及读取 qty 属性
                 let itemsHtml = '';
                 try {
                     const orderData = typeof order.order_data === 'string' ? JSON.parse(order.order_data) : (order.order_data || {});
                     const items = orderData.items || [];
                     
-                    itemsHtml = items.map(item => `
+                    itemsHtml = items.map(item => {
+                        // 核心修复：多字段兼容读取。无论新老订单的字段名叫什么都能抓取到
+                        const itemName = item.name || item.name_it || item.name_zh || item.name_en || item.product_name || 'Prodotto';
+                        const itemQty = item.qty || item.quantity || 1;
+                        const itemPrice = item.price || 0;
+
+                        return `
                         <div class="item-row">
-                            <span class="item-qty">${item.qty}x</span>
-                            <span class="item-name">${item.name}</span>
-                            <span>€ ${(item.price * item.qty).toFixed(2)}</span>
+                            <span class="item-qty">${itemQty}x</span>
+                            <span class="item-name">${itemName}</span>
+                            <span>€ ${(parseFloat(itemPrice) * parseInt(itemQty)).toFixed(2)}</span>
                         </div>
-                    `).join('');
+                        `;
+                    }).join('');
                 } catch (e) {
                     console.error("解析商品详情失败:", e);
                     itemsHtml = '<p style="color:#888; font-size:0.9rem;">Dettagli non disponibili</p>';
@@ -189,7 +190,6 @@
                     <div class="order-card ${order.status !== 'completed' ? 'active' : ''}">
                         <div class="order-header">
                             <div>
-                                <!-- 修复：显示取餐号 order_number -->
                                 <div class="order-id">#${order.order_number || order.id}</div>
                                 <div class="order-time">${timeStr}</div>
                             </div>
@@ -202,7 +202,6 @@
                         
                         <div class="order-total">
                             <span>Totale</span>
-                            <!-- 核心修复：金额字段应该读取 total_amount -->
                             <span style="color:var(--brand-primary);">€ ${parseFloat(order.total_amount).toFixed(2)}</span>
                         </div>
                     </div>
