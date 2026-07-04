@@ -23,13 +23,18 @@
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* VIEW 1: 欢迎页 */
         #view-welcome { padding-bottom: 0; background: var(--brand-secondary); display: none; flex-direction: column; align-items: center; justify-content: center; }
         #view-welcome.active { display: flex; }
         .welcome-logo { width: 140px; height: 140px; border-radius: 50%; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 20px; object-fit: cover; background: white;}
-        .welcome-title { font-size: 2rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 40px; letter-spacing: -0.5px; }
-        .big-btn { width: 90%; max-width: 350px; background: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
-        .big-btn i { font-size: 1.6rem; color: var(--brand-primary); }
+        .welcome-title { font-size: 2rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 30px; letter-spacing: -0.5px; }
+        .big-btn { width: 90%; max-width: 350px; background: white; border: none; padding: 18px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
+        .big-btn i { font-size: 1.4rem; color: var(--brand-primary); }
+        
+        .big-btn.query-btn { background: var(--brand-primary); color: white; margin-top: 15px; }
+        .big-btn.query-btn i { color: white; }
 
+        /* VIEW 2: 菜单页 */
         .header { background: var(--brand-primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .brand-logo-small { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
@@ -48,7 +53,7 @@
         .product-price { color: var(--brand-primary); font-weight: 800; font-size: 1.1rem; }
         
         .qty-controls { display: flex; align-items: center; gap: 10px; background: #f5f5f5; border-radius: 20px; padding: 4px 8px; }
-        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: white; color: var(--text-main); font-weight: bold; font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; cursor: pointer;}
+        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: white; color: var(--text-main); font-weight: bold; font-size: 1rem; display: flex; justify-content: center; align-items: center; cursor: pointer;}
         .qty-btn.add { background: var(--brand-primary); color: white; }
         .qty-number { font-weight: 700; font-size: 0.95rem; min-width: 12px; text-align: center; }
 
@@ -70,6 +75,7 @@
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
         .modal-item-price { color: var(--brand-primary); font-size: 0.9rem; font-weight: 600;}
 
+        /* VIEW 3: 结算页 */
         .nav-back { padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--brand-primary); font-size: 1.1rem; cursor: pointer; background: white; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-right: 120px; }
         .checkout-section { padding: 20px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
@@ -77,12 +83,29 @@
         .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #666; margin-bottom: 6px; }
         .form-input { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s; background: #fdfdfd; }
         .form-input:focus { border-color: var(--brand-primary); }
+        
+        /* 隐私勾选框样式 */
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--brand-primary); cursor: pointer; flex-shrink: 0; }
+        .checkbox-group label { font-size: 0.85rem; color: #777; font-weight: 500; line-height: 1.4; margin-bottom: 0; cursor: pointer; display: inline-block; }
+
         .checkout-summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #555; }
         .checkout-summary-total { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #eee; font-size: 1.2rem; font-weight: 800; color: var(--brand-primary); }
         .pay-method-btn { width: 100%; padding: 15px; border: 2px solid var(--brand-primary); background: rgba(223, 79, 83, 0.05); color: var(--brand-primary); border-radius: 12px; font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
         .bottom-action-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px; background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 100; }
         .btn-final-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); cursor: pointer; }
-        .btn-final-submit:disabled { background: #ccc; box-shadow: none; }
+
+        /* VIEW 4: 电子小票与进度页 */
+        .ticket-box { background: white; border: 2px dashed #ccc; padding: 25px 20px; border-radius: 15px; margin: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
+        .ticket-title { text-align: center; font-size: 1.4rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .status-banner { text-align: center; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .status-banner.status-pending { background: #fffbe6; color: #faad14; animation: pulse 2s infinite; }
+        .status-banner.status-completed { background: #f6ffed; color: #52c41a; border: 2px solid #b7eb8f; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+        .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
     </style>
 </head>
 <body>
@@ -93,16 +116,19 @@
         <span class="lang-btn" id="l-en" onclick="setLang('en')">EN</span>
     </div>
 
-    <!-- VIEW 1: 欢迎页 -->
+    <!-- ================= VIEW 1: 欢迎页 ================= -->
     <div id="view-welcome" class="view active">
         <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Dōmochi" class="welcome-logo">
         <h1 class="welcome-title">Dōmochi</h1>
         <button class="big-btn" onclick="startOrder('eat_in')"><i class="fa-solid fa-utensils"></i> <span data-i18n="eat_in">堂食</span></button>
         <button class="big-btn" onclick="startOrder('takeaway')"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="takeaway">打包</span></button>
         <button class="big-btn" onclick="startOrder('pickup')"><i class="fa-solid fa-store"></i> <span data-i18n="pickup">自提</span></button>
+        
+        <!-- 手机号找回/查询进度按钮 -->
+        <button class="big-btn query-btn" onclick="promptQueryOrder()"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
     </div>
 
-    <!-- VIEW 2: 菜单页 -->
+    <!-- ================= VIEW 2: 菜单页 ================= -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area">
@@ -130,7 +156,7 @@
         </div>
     </div>
 
-    <!-- VIEW 3: 结算页 -->
+    <!-- ================= VIEW 3: 结算页 ================= -->
     <div id="view-checkout" class="view">
         <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
         <div class="checkout-section">
@@ -141,14 +167,44 @@
         <div class="checkout-section">
             <div class="section-title"><i class="fa-solid fa-user"></i> <span data-i18n="your_details">填写信息</span></div>
             <div class="form-group"><label data-i18n="name">姓名</label><input type="text" id="cust-name" class="form-input" data-i18n-ph="name_ph" placeholder="例：张三"></div>
-            <div class="form-group"><label data-i18n="phone">电话 (选填)</label><input type="tel" id="cust-phone" class="form-input" data-i18n-ph="phone_ph" placeholder="例：333 1234567"></div>
+            <div class="form-group"><label><span data-i18n="phone">电话</span> <b style="color:var(--brand-primary)">* (Obbligatorio)</b></label><input type="tel" id="cust-phone" class="form-input" data-i18n-ph="phone_req_ph" placeholder="必须填写电话号码"></div>
             <div class="form-group"><label data-i18n="notes">备注</label><input type="text" id="cust-notes" class="form-input" data-i18n-ph="notes_ph" placeholder="去冰，少糖..."></div>
+            
+            <!-- 核心升级：增加隐私信息收集同意打勾 -->
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="cust-privacy">
+                <label for="cust-privacy" data-i18n="privacy_agree">我同意收集我的信息，仅用于方便管理并追踪本订单状态。</label>
+            </div>
         </div>
         <div class="checkout-section" style="margin-bottom: 100px;">
             <div class="section-title"><i class="fa-solid fa-credit-card"></i> <span data-i18n="pay_method">支付方式</span></div>
             <div class="pay-method-btn"><i class="fa-solid fa-cash-register"></i> <span data-i18n="pay_cash">到店付款</span></div>
         </div>
         <div class="bottom-action-bar"><button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button></div>
+    </div>
+
+    <!-- ================= VIEW 4: 电子小票与制作进度页 ================= -->
+    <div id="view-receipt" class="view">
+        <div class="nav-back" onclick="switchView('view-welcome')"><i class="fa-solid fa-house"></i> <span data-i18n="back_home">返回首页</span></div>
+        
+        <div class="ticket-box">
+            <div class="ticket-title">Dōmochi Scontrino</div>
+            
+            <div id="receipt-status-banner" class="status-banner"></div>
+
+            <div class="ticket-row"><strong data-i18n="receipt_num">取餐号：</strong><span id="rec-num" style="font-size:1.4rem; font-weight:900; color:var(--brand-primary);">#--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_mode">就餐选择：</strong><span id="rec-mode">--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_name">顾客姓名：</strong><span id="rec-name">--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_phone">联系电话：</strong><span id="rec-phone">--</span></div>
+            <div class="ticket-row"><strong>Note (备注)：</strong><span id="rec-notes">--</span></div>
+            
+            <div style="margin: 20px 0 10px 0; font-weight:bold; font-size:1rem; border-bottom:2px solid #333; padding-bottom:5px;" data-i18n="receipt_items">商品明细：</div>
+            <div id="receipt-items-list"></div>
+            
+            <div class="ticket-total"><span data-i18n="total">总计</span><span id="rec-total">€ 0.00</span></div>
+        </div>
+        
+        <p style="text-align:center; color:#888; font-size:0.85rem; padding:0 20px;" data-i18n="receipt_tip">提示：您可以截屏保存此小票，或稍后在首页输入手机号重新查阅进度。</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -158,12 +214,28 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const i18n = {
-            zh: { eat_in: "堂食", takeaway: "打包带走", pickup: "到店自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", loading: "菜单加载中...", empty: "暂无商品", cart_title: "您的购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", name_ph: "例：张三", phone: "电话 (选填)", phone_ph: "例：333 1234567", notes: "备注", notes_ph: "去冰，少糖...", pay_method: "支付方式", pay_cash: "到店付款", confirm: "确认下单", err_name: "请填写您的姓名。", processing: "提交中...", error: "提交失败: " },
-            it: { eat_in: "Consuma qui", takeaway: "Da asporto", pickup: "Ritiro in negozio", cat_mochi: "Mochi", cat_drinks: "Bevande", cat_desserts: "Dessert", loading: "Caricamento...", empty: "Nessun prodotto", cart_title: "Il tuo carrello", view_cart: "Vedi Carrello", go_checkout: "Vai alla Cassa", back_menu: "Torna al Menu", summary: "Riepilogo", total: "Totale", your_details: "I tuoi Dati", name: "Nome", name_ph: "Es. Mario Rossi", phone: "Telefono (Opzionale)", phone_ph: "Es. 333 1234567", notes: "Note", notes_ph: "Senza ghiaccio...", pay_method: "Pagamento", pay_cash: "Paga in Cassa", confirm: "Conferma Ordine", err_name: "Inserisci il tuo nome.", processing: "Elaborazione...", error: "Errore: " },
-            en: { eat_in: "Dine In", takeaway: "Takeaway", pickup: "Pickup", cat_mochi: "Mochi", cat_drinks: "Drinks", cat_desserts: "Desserts", loading: "Loading...", empty: "No items", cart_title: "Your Cart", view_cart: "View Cart", go_checkout: "Checkout", back_menu: "Back to Menu", summary: "Order Summary", total: "Total", your_details: "Your Details", name: "Name", name_ph: "E.g. John Doe", phone: "Phone (Optional)", phone_ph: "E.g. 333 1234567", notes: "Notes", notes_ph: "No ice...", pay_method: "Payment", pay_cash: "Pay at Register", confirm: "Confirm Order", err_name: "Please enter your name.", processing: "Processing...", error: "Error: " }
+            zh: {
+                eat_in: "堂食", takeaway: "打包带走", pickup: "到店自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", loading: "菜单加载中...", empty: "暂无商品", cart_title: "您的购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", name_ph: "例：张三", phone: "电话", phone_req_ph: "请输入电话号码 (必填)", notes: "备注", notes_ph: "去冰，少糖...", pay_method: "支付方式", pay_cash: "到店付款", confirm: "确认下单", err_name: "请填写您的姓名。", err_phone: "为了向您展示电子小票与制作进度，请必须填写电话号码！", processing: "提交中...", error: "提交失败: ",
+                find_order: "手机号查订单/进度", back_home: "返回首页", receipt_num: "取餐取号：", receipt_mode: "就餐选择：", receipt_name: "顾客姓名：", receipt_phone: "联系电话：", receipt_items: "商品明细：", receipt_tip: "提示：您可以截屏保存此小票，或稍后在首页输入手机号重新查阅进度。",
+                prompt_phone: "请输入您的电话号码以查询近期订单：", status_making: "⏳ 正在制作中，请稍候...", status_done: "✅ 已出餐！请凭号前往柜台取餐", no_order_found: "未找到此手机号对应的待处理订单。",
+                privacy_agree: "我同意收集我的信息，仅用于方便管理并追踪本订单状态。", err_privacy: "请勾选同意隐私条款才能下单。"
+            },
+            it: {
+                eat_in: "Consuma qui", takeaway: "Da asporto", pickup: "Ritiro in negozio", cat_mochi: "Mochi", cat_drinks: "Bevande", cat_desserts: "Dessert", loading: "Caricamento...", empty: "Nessun prodotto", cart_title: "Il tuo carrello", view_cart: "Vedi Carrello", go_checkout: "Vai alla Cassa", back_menu: "Torna al Menu", summary: "Riepilogo", total: "Totale", your_details: "I tuoi Dati", name: "Nome", name_ph: "Es. Mario Rossi", phone: "Telefono", phone_req_ph: "Cellulare (Obbligatorio)", notes: "Note", notes_ph: "Senza ghiaccio...", pay_method: "Pagamento", pay_cash: "Paga in Cassa", confirm: "Conferma Ordine", err_name: "Inserisci il tuo nome.", err_phone: "Il numero di telefono è obbligatorio per controllare lo scontrino e lo stato!", processing: "Elaborazione...", error: "Errore: ",
+                find_order: "Consulta Ordine / Stato", back_home: "Torna alla Home", receipt_num: "Numero d'ordine: ", receipt_mode: "Tipo di consegna: ", receipt_name: "Nome cliente: ", receipt_phone: "Telefono: ", receipt_items: "Dettagli prodotti: ", receipt_tip: "Suggerimento: Puoi fare uno screenshot di questo scontrino o inserire il tuo numero in Home per controllare lo stato.",
+                prompt_phone: "Inserisci il tuo numero di telefono:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto! Ritira al banco", no_order_found: "Nessun ordine attivo trovato per questo numero.",
+                privacy_agree: "Acconsento alla raccolta dei miei dati al solo scopo di gestire e tracciare questo ordine.", err_privacy: "Per favore, accetta i termini di privacy per procedere."
+            },
+            en: {
+                eat_in: "Dine In", takeaway: "Takeaway", pickup: "Pickup", cat_mochi: "Mochi", cat_drinks: "Drinks", cat_desserts: "Desserts", loading: "Loading...", empty: "No items", cart_title: "Your Cart", view_cart: "View Cart", go_checkout: "Checkout", back_menu: "Back to Menu", summary: "Order Summary", total: "Total", your_details: "Your Details", name: "Name", name_ph: "E.g. John Doe", phone: "Phone", phone_req_ph: "Phone Number (Required)", notes: "Notes", notes_ph: "No ice...", pay_method: "Payment", pay_cash: "Pay at Register", confirm: "Confirm Order", err_name: "Please enter your name.", err_phone: "Phone number is strictly required to check order details and preparation status!", processing: "Processing...", error: "Error: ",
+                find_order: "Track Order Status", back_home: "Back to Home", receipt_num: "Order Number: ", receipt_mode: "Dining option: ", receipt_name: "Customer Name: ", receipt_phone: "Phone: ", receipt_items: "Items: ", receipt_tip: "Tip: You can screenshot this e-ticket or enter your phone number on Home page to track status later.",
+                prompt_phone: "Please enter your phone number:", status_making: "⏳ Preparing your order...", status_done: "✅ Ready! Please pickup at counter", no_order_found: "No active order found for this phone number.",
+                privacy_agree: "I agree to the collection of my info solely for managing and tracking this order.", err_privacy: "Please agree to the privacy terms to place the order."
+            }
         };
 
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = '';
+        let liveOrderId = null; 
 
         window.setLang = function(lang) {
             currentLang = lang;
@@ -175,7 +247,13 @@
             renderMenu();
         }
 
-        function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0, 0); }
+        function switchView(viewId) { 
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
+            document.getElementById(viewId).classList.add('active'); 
+            window.scrollTo(0, 0); 
+            if(viewId !== 'view-receipt') liveOrderId = null;
+        }
+        
         window.startOrder = function(modeKey) { diningOptionKey = modeKey; document.getElementById('display-dining-mode').innerText = i18n[currentLang][modeKey]; document.getElementById('chk-dining-mode').innerText = i18n[currentLang][modeKey]; switchView('view-menu'); }
         window.goBackToWelcome = function() { switchView('view-welcome'); }
         window.goBackToMenu = function() { switchView('view-menu'); }
@@ -195,6 +273,7 @@
             const { data } = await supabaseClient.from('domochi_products').select('*').eq('is_available', true).order('sort_order', { ascending: true });
             allProducts = data || [];
             renderMenu();
+            setupRealtimeStatusBracdcast(); 
         }
 
         window.switchCategory = function(cat) { currentCat = cat; document.querySelectorAll('.tab-btn').forEach(btn => { btn.classList.remove('active'); if(btn.id === 'tab-' + cat) btn.classList.add('active'); }); renderMenu(); }
@@ -231,8 +310,13 @@
             const custName = document.getElementById('cust-name').value.trim();
             const custPhone = document.getElementById('cust-phone').value.trim();
             const custNotes = document.getElementById('cust-notes').value.trim();
+            const custPrivacy = document.getElementById('cust-privacy').checked;
 
             if (!custName) { alert(i18n[currentLang].err_name); document.getElementById('cust-name').focus(); return; }
+            if (!custPhone) { alert(i18n[currentLang].err_phone); document.getElementById('cust-phone').focus(); return; }
+            
+            // 核心功能：拦截未勾选隐私条款的提交
+            if (!custPrivacy) { alert(i18n[currentLang].err_privacy); return; }
 
             btn.innerText = i18n[currentLang].processing; btn.disabled = true;
             let totalPrice = 0; const orderItems = Object.values(cart); orderItems.forEach(i => totalPrice += i.price * i.qty);
@@ -248,7 +332,6 @@
                 
                 const nextOrderNumber = (count + 1).toString().padStart(3, '0');
 
-                // 核心修复：强制记录顾客点击下单这一瞬间的精准系统时间！
                 const payload = {
                     order_number: nextOrderNumber,
                     order_data: {
@@ -258,23 +341,99 @@
                     },
                     total_amount: totalPrice,
                     status: 'pending',
-                    created_at: new Date().toISOString() // 强制覆盖数据库默认时间
+                    created_at: new Date().toISOString()
                 };
 
-                const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
+                const { data, error } = await supabaseClient.from('domochi_orders').insert([payload]).select();
                 if (error) throw error;
                 
-                const msg = currentLang === 'zh' ? `✅ 下单成功！\n取餐号：#${nextOrderNumber}\n谢谢您, ${custName}!` : (currentLang === 'en' ? `✅ Success!\nOrder: #${nextOrderNumber}\nThank you, ${custName}!` : `✅ Ordine inviato!\nNumero: #${nextOrderNumber}\nGrazie, ${custName}!`);
-                alert(msg);
+                cart = {}; 
+                updateCartUI(); 
+                renderMenu();
                 
-                cart = {}; document.getElementById('cust-name').value = ''; document.getElementById('cust-phone').value = ''; document.getElementById('cust-notes').value = '';
-                updateCartUI(); renderMenu(); switchView('view-welcome');
+                if(data && data[0]) {
+                    showReceiptView(data[0]);
+                } else {
+                    switchView('view-welcome');
+                }
+
+                // 下单成功后自动取消勾选，以备下次点单
+                document.getElementById('cust-privacy').checked = false;
+
             } catch (err) {
                 alert(i18n[currentLang].error + err.message);
-            } finally {
                 btn.innerText = i18n[currentLang].confirm; btn.disabled = false;
             }
         }
+
+        function showReceiptView(order) {
+            liveOrderId = order.id; 
+            
+            document.getElementById('rec-num').innerText = `#${order.order_number}`;
+            document.getElementById('rec-mode').innerText = order.order_data.dining_option || '--';
+            document.getElementById('rec-name').innerText = order.order_data.customer_info.name || '--';
+            document.getElementById('rec-phone').innerText = order.order_data.customer_info.phone || '--';
+            document.getElementById('rec-notes').innerText = order.order_data.customer_info.notes || '--';
+            document.getElementById('rec-total').innerText = `€ ${parseFloat(order.total_amount).toFixed(2)}`;
+            
+            const itemsList = document.getElementById('receipt-items-list');
+            const items = order.order_data.items || [];
+            itemsList.innerHTML = items.map(i => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.9rem; color:#555;">
+                    <span>${i.qty}x ${i.name}</span>
+                    <span>€ ${(i.price * i.qty).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            renderStatusBanner(order.status);
+            switchView('view-receipt');
+            
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-notes').value = '';
+        }
+
+        function renderStatusBanner(status) {
+            const banner = document.getElementById('receipt-status-banner');
+            if (status === 'pending') {
+                banner.className = "status-banner status-pending";
+                banner.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`;
+            } else {
+                banner.className = "status-banner status-completed";
+                banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`;
+            }
+        }
+
+        window.promptQueryOrder = async function() {
+            const phone = prompt(i18n[currentLang].prompt_phone);
+            if(!phone || !phone.trim()) return;
+
+            const { data, error } = await supabaseClient
+                .from('domochi_orders')
+                .select('*')
+                .contains('order_data->customer_info', { phone: phone.trim() })
+                .order('id', { ascending: false })
+                .limit(1);
+
+            if (error) { alert("Errore: " + error.message); return; }
+
+            if(data && data.length > 0) {
+                showReceiptView(data[0]);
+            } else {
+                alert(i18n[currentLang].no_order_found);
+            }
+        }
+
+        function setupRealtimeStatusBracdcast() {
+            supabaseClient.channel('customer-status-sync')
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'domochi_orders' }, (payload) => {
+                    if (liveOrderId && payload.new.id === liveOrderId) {
+                        renderStatusBanner(payload.new.status);
+                    }
+                })
+                .subscribe();
+        }
+
         window.onload = init;
     </script>
 </body>
