@@ -48,7 +48,7 @@
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
         .order-card.completed-style { opacity: 0.75; border-top: 6px solid #8c8c8c !important; }
 
-        /* 超时订单全卡片红色闪烁样式 */
+        /* 超时订单全卡片红色闪烁 */
         .order-card.overdue-flash { 
             animation: danger-flash 1.5s infinite; 
             border: 3px solid #ff4d4f !important;
@@ -63,9 +63,6 @@
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
         .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; color: white; text-transform: uppercase; }
-        .mode-badge.eat_in { background: var(--color-eat-in); }
-        .mode-badge.takeaway { background: var(--color-takeaway); }
-        .mode-badge.pickup { background: var(--color-pickup); }
 
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
         .cust-row { margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
@@ -128,9 +125,9 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let activeOrders = [];
+        let allProducts = []; // 用于名称匹配
         let currentMode = 'pending'; 
 
-        // --- 核心语音播报 ---
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -159,6 +156,12 @@
         function playAlertSound() { 
             unlockAudio();
             speakText("语音播报已就绪。"); 
+        }
+
+        // 加载产品库
+        async function fetchProducts() {
+            const { data } = await supabaseClient.from('domochi_products').select('*');
+            allProducts = data || [];
         }
 
         async function fetchOrders() {
@@ -206,7 +209,7 @@
                     const rawOption = String(rawData.dining_option || 'Consuma qui');
                     
                     let cssClass = 'eat_in';
-                    let zhMode = '堂食'; // 映射中文
+                    let zhMode = '堂食';
 
                     if(rawOption.toLowerCase().includes('asporto') || rawOption.toLowerCase().includes('takeaway')) {
                         cssClass = 'takeaway';
@@ -217,20 +220,13 @@
                         zhMode = '自提';
                     }
 
-                    const items = Array.isArray(rawData) ? rawData : (rawData.items || []);
+                    const items = Array.isArray(rawData.items) ? rawData.items : [];
                     const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const isHistory = currentMode === 'completed';
 
                     const diffMins = Math.floor((now - new Date(order.created_at)) / 60000);
-                    let timeLevel = 'safe';
-                    let overdueClass = ''; // 超时样式类
-
-                    if(diffMins >= 20) {
-                        timeLevel = 'danger';
-                        if(!isHistory) overdueClass = 'overdue-flash'; // 待处理订单超时则闪烁
-                    } else if(diffMins >= 10) {
-                        timeLevel = 'warning';
-                    }
+                    let overdueClass = ''; 
+                    if(diffMins >= 20 && !isHistory) overdueClass = 'overdue-flash';
 
                     return `
                     <div class="order-card ${cssClass} ${overdueClass} ${isHistory ? 'completed-style' : ''}">
@@ -245,12 +241,17 @@
                             </div>
                             <div class="cust-row" style="margin-top:5px; color:#888;">
                                 <span><i class="fa-solid fa-clock"></i> ${timeStr}</span>
-                                ${!isHistory ? `<span class="wait-time ${timeLevel}"><i class="fa-solid fa-hourglass-start"></i> ${diffMins} min</span>` : ''}
+                                ${!isHistory ? `<span class="wait-time ${diffMins >= 20 ? 'danger' : (diffMins >= 10 ? 'warning' : 'safe')}"><i class="fa-solid fa-hourglass-start"></i> ${diffMins} min</span>` : ''}
                             </div>
                             ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment"></i> 备注: ${info.notes}</div>` : ''}
                         </div>
                         <div class="items-box">
-                            ${items.map(i => `<div class="item-row"><span><span class="item-qty">${i.qty}x</span> ${i.name}</span></div>`).join('')}
+                            ${items.map(i => {
+                                // 查找库中名称，优先中文
+                                const p = allProducts.find(x => x.id == i.id);
+                                const displayName = p ? (p.name_zh || p.name_it || p.name) : (i.name || 'Prodotto');
+                                return `<div class="item-row"><span><span class="item-qty">${i.qty}x</span> ${displayName}</span></div>`;
+                            }).join('')}
                         </div>
                         <div class="card-footer">
                             <div class="total-row"><span>Totale:</span><span style="color:var(--brand-primary)">€ ${parseFloat(order.total_amount || 0).toFixed(2)}</span></div>
@@ -286,10 +287,11 @@
             }).subscribe();
         }
 
-        function initAdminSystem() {
-            fetchOrders();
+        async function initAdminSystem() {
+            await fetchProducts(); // 启动前先获取产品名称库
+            await fetchOrders();
             setupRealtime();
-            setInterval(renderOrders, 30000); // 30秒更新一次卡片时间
+            setInterval(renderOrders, 30000); 
         }
 
         window.onload = () => {
