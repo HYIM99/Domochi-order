@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Miei Ordini | Dōmochi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --brand-primary: #DF4F53; --text-main: #4A3B32; --bg-body: #FFFDFB; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 50px;}
+        
+        .nav-header { background: var(--brand-primary); padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; z-index:100;}
+        .nav-header a { color: white; text-decoration: none; font-weight: bold; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; }
+        
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        
+        /* 搜索框区域 */
+        .search-box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); margin-bottom: 30px; display: flex; gap: 10px; }
+        .search-input { flex: 1; padding: 12px 15px; border: 2px solid #f0f0f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border 0.3s; }
+        .search-input:focus { border-color: var(--brand-primary); }
+        .search-btn { background: var(--brand-primary); color: white; border: none; padding: 0 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        /* 订单卡片 */
+        .order-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); margin-bottom: 15px; border: 2px solid transparent; }
+        .order-card.active { border-color: #E2B29A; }
+        
+        .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .order-id { font-size: 1.2rem; font-weight: 800; color: var(--brand-primary); }
+        .order-time { font-size: 0.85rem; color: #888; }
+        
+        /* 状态进度条 */
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        .status-pending { background: #fff0f0; color: #ff4d4f; }
+        .status-preparing { background: #e6f7ff; color: #1890ff; }
+        .status-ready { background: #f6ffed; color: #52c41a; }
+
+        .order-items { margin-bottom: 15px; }
+        .item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; color: #555; }
+        .item-qty { font-weight: bold; color: var(--text-main); width: 30px; }
+        .item-name { flex: 1; }
+        
+        .order-total { display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; border-top: 1px solid #eee; padding-top: 15px; }
+
+        .empty-state { text-align: center; padding: 50px 20px; color: #888; }
+        .empty-state i { font-size: 3rem; color: #ddd; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <a href="index.html"><i class="fa-solid fa-chevron-left"></i> Home</a>
+        <span style="font-weight:800; letter-spacing: 1px;">I MIEI ORDINI</span>
+        <div style="width: 70px;"></div> <!-- 占位符以保持标题居中 -->
+    </div>
+
+    <div class="container">
+        <!-- 手动查询区 -->
+        <div class="search-box">
+            <input type="number" id="order-search-input" class="search-input" placeholder="N. Ordine (es. 1024)">
+            <button class="search-btn" onclick="searchOrder()"><i class="fa-solid fa-magnifying-glass"></i> Cerca</button>
+        </div>
+
+        <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Ordini di Oggi</h3>
+        <div id="orders-container">
+            <p style="text-align:center; padding: 20px;" id="loading-text">Caricamento...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseClient = supabase.createClient("https://thulheyvwmfwfhhfjktk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ");
+
+        // 状态字典映射
+        const statusMap = {
+            'pending': { text: 'In attesa', class: 'status-pending', icon: 'fa-clock' },
+            'preparing': { text: 'In preparazione', class: 'status-preparing', icon: 'fa-fire' },
+            'ready': { text: 'Pronto da ritirare', class: 'status-ready', icon: 'fa-check-circle' },
+            'completed': { text: 'Completato', class: 'status-ready', icon: 'fa-check-double' }
+        };
+
+        window.addEventListener('DOMContentLoaded', loadLocalOrders);
+
+        // 获取当天凌晨0点的时间戳
+        function getTodayStart() {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            return now.toISOString();
+        }
+
+        // 1. 自动加载本机今天下过的订单
+        async function loadLocalOrders() {
+            const container = document.getElementById('orders-container');
+            // 假设下单时，你把订单ID存在了 localStorage.getItem('domochi_recent_orders')，例如 "[1024, 1025]"
+            let localOrders = JSON.parse(localStorage.getItem('domochi_recent_orders') || '[]');
+
+            if (localOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>Nessun ordine trovato per oggi.</p>
+                        <small>Inserisci il numero dell'ordine sopra per cercare.</small>
+                    </div>`;
+                return;
+            }
+
+            const todayStart = getTodayStart();
+
+            // 查询这些ID，并且必须是今天的订单
+            const { data, error } = await supabaseClient
+                .from('domochi_orders') // 请确保这是你的真实订单表名
+                .select('*')
+                .in('id', localOrders)
+                .gte('created_at', todayStart)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error(error);
+                container.innerHTML = `<p style="text-align:center; color:red;">Errore di connessione.</p>`;
+                return;
+            }
+
+            renderOrders(data, container);
+        }
+
+        // 2. 顾客手动输入订单号搜索
+        async function searchOrder() {
+            const inputVal = document.getElementById('order-search-input').value;
+            if (!inputVal) return;
+
+            const container = document.getElementById('orders-container');
+            container.innerHTML = `<p style="text-align:center; padding: 20px;">Ricerca in corso...</p>`;
+
+            const todayStart = getTodayStart();
+
+            const { data, error } = await supabaseClient
+                .from('domochi_orders')
+                .select('*')
+                .eq('id', inputVal)
+                .gte('created_at', todayStart);
+
+            if (error || !data || data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-exclamation" style="color:#ff4d4f;"></i>
+                        <p>Ordine #${inputVal} non trovato.</p>
+                        <small>Assicurati di aver inserito il numero corretto e che l'ordine sia di oggi.</small>
+                    </div>`;
+                return;
+            }
+
+            renderOrders(data, container);
+        }
+
+        // 3. 渲染订单卡片UI
+        function renderOrders(orders, container) {
+            if (!orders || orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>Nessun ordine trovato per oggi.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = orders.map(order => {
+                // 处理状态显示
+                const statusInfo = statusMap[order.status || 'pending'] || statusMap['pending'];
+                
+                // 处理时间显示 (HH:MM)
+                const timeStr = new Date(order.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                
+                // 解析商品列表 (假设你的订单表里 items 存的是 JSON 数组)
+                let itemsHtml = '';
+                try {
+                    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+                    itemsHtml = items.map(item => `
+                        <div class="item-row">
+                            <span class="item-qty">${item.quantity}x</span>
+                            <span class="item-name">${item.name}</span>
+                            <span>€ ${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                    `).join('');
+                } catch (e) {
+                    itemsHtml = '<p style="color:#888; font-size:0.9rem;">Dettagli non disponibili</p>';
+                }
+
+                return `
+                    <div class="order-card ${order.status !== 'completed' ? 'active' : ''}">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">#${order.id}</div>
+                                <div class="order-time">${timeStr}</div>
+                            </div>
+                            <span class="status-badge ${statusInfo.class}"><i class="fa-solid ${statusInfo.icon}"></i> ${statusInfo.text}</span>
+                        </div>
+                        
+                        <div class="order-items">
+                            ${itemsHtml}
+                        </div>
+                        
+                        <div class="order-total">
+                            <span>Totale</span>
+                            <span style="color:var(--brand-primary);">€ ${parseFloat(order.total_price).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
