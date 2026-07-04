@@ -12,23 +12,34 @@
             --text-main: #4A3B32; 
             --bg-body: #F9F8F6;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 120px; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
-        /* 顶部导航与 Logo */
+        /* 视图切换逻辑 (核心) */
+        .view { display: none; animation: fadeIn 0.3s ease-in-out; min-height: 100vh; padding-bottom: 120px; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= 1. 欢迎页样式 ================= */
+        #view-welcome { padding-bottom: 0; background: var(--brand-secondary); display: none; flex-direction: column; align-items: center; justify-content: center; }
+        #view-welcome.active { display: flex; }
+        .welcome-logo { width: 140px; height: 140px; border-radius: 50%; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 20px; object-fit: cover; background: white;}
+        .welcome-title { font-size: 2rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 40px; letter-spacing: -0.5px; }
+        .big-btn { width: 90%; max-width: 350px; background: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; transition: transform 0.1s; }
+        .big-btn:active { transform: scale(0.97); }
+        .big-btn i { font-size: 1.6rem; color: var(--brand-primary); }
+
+        /* ================= 2. 菜单页样式 ================= */
         .header { background: var(--brand-primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
-        .brand-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
+        .brand-logo-small { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
         .brand-name { font-size: 1.2rem; font-weight: 800; }
-        .table-badge { background: white; color: var(--brand-primary); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-        /* 分类切换 */
+        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer;}
+        
         .category-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: none; background: white; color: var(--text-main); font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; }
         .tab-btn.active { background: var(--brand-primary); color: white; }
-        .tab-btn i { font-size: 0.9rem; }
 
-        /* 产品列表 */
         .menu-container { padding: 0 15px; }
         .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; }
         .product-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--brand-secondary); flex-shrink: 0; }
@@ -36,106 +47,163 @@
         .product-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; }
         .product-price { color: var(--brand-primary); font-weight: 800; font-size: 1.1rem; }
         
-        /* 数量加减按钮 */
         .qty-controls { display: flex; align-items: center; gap: 10px; background: #f5f5f5; border-radius: 20px; padding: 4px 8px; }
         .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: white; color: var(--text-main); font-weight: bold; font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; cursor: pointer;}
         .qty-btn.add { background: var(--brand-primary); color: white; }
         .qty-number { font-weight: 700; font-size: 0.95rem; min-width: 12px; text-align: center; }
 
-        /* 底部购物车悬浮条 */
         .cart-bar { position: fixed; bottom: 15px; left: 15px; right: 15px; background: white; border-radius: 25px; padding: 12px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border: 2px solid var(--brand-primary); transition: transform 0.3s; }
         .cart-total { display: flex; flex-direction: column; cursor: pointer; flex: 1; }
-        .cart-total span { font-size: 0.85rem; color: #666; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .cart-total span { font-size: 0.85rem; color: #666; font-weight: 600; }
         .cart-total strong { font-size: 1.3rem; color: var(--brand-primary); }
         .checkout-btn { background: var(--brand-primary); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(223, 79, 83, 0.3); cursor: pointer; }
-        .checkout-btn:disabled { background: #ccc; box-shadow: none; }
         .cart-bar.hidden { transform: translateY(150%); } 
 
-        /* 购物车详情弹窗 (Modal) */
+        /* 购物车弹窗 */
         .cart-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .cart-modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .cart-modal { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 999; padding: 20px; padding-bottom: 100px; max-height: 85vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
+        .cart-modal { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 999; padding: 20px; padding-bottom: 100px; max-height: 85vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
         .cart-modal.show { transform: translateY(0); }
         .cart-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .cart-modal-header h3 { font-size: 1.2rem; color: var(--text-main); }
         .close-modal-btn { background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; }
-        
-        /* 新增：就餐方式选择按钮样式 */
-        .dining-options { display: flex; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .dining-btn { flex: 1; padding: 12px 5px; border-radius: 12px; border: 2px solid #eee; background: white; color: var(--text-main); font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .dining-btn.active { border-color: var(--brand-primary); background: rgba(223, 79, 83, 0.05); color: var(--brand-primary); }
-        .dining-btn i { font-size: 1.2rem; }
-
         .modal-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #eee; }
         .modal-item-info { flex: 1; }
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
         .modal-item-price { color: var(--brand-primary); font-size: 0.9rem; font-weight: 600;}
+
+        /* ================= 3. 结算与信息页样式 ================= */
+        .nav-back { padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--brand-primary); font-size: 1.1rem; cursor: pointer; background: white; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .checkout-section { padding: 20px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #666; margin-bottom: 6px; }
+        .form-input { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; outline: none; transition: border-color 0.2s; background: #fdfdfd; }
+        .form-input:focus { border-color: var(--brand-primary); }
+        .checkout-summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; color: #555; }
+        .checkout-summary-total { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #eee; font-size: 1.2rem; font-weight: 800; color: var(--brand-primary); }
+        
+        .pay-method-btn { width: 100%; padding: 15px; border: 2px solid var(--brand-primary); background: rgba(223, 79, 83, 0.05); color: var(--brand-primary); border-radius: 12px; font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
+
+        .bottom-action-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px; background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 100; }
+        .btn-final-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 15px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); cursor: pointer; }
+        .btn-final-submit:disabled { background: #ccc; box-shadow: none; }
     </style>
 </head>
 <body>
 
-    <!-- 顶部导航 -->
-    <div class="header">
-        <div class="logo-area">
-            <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Logo" class="brand-logo">
-            <span class="brand-name">Dōmochi</span>
-        </div>
-        <!-- 这里会动态显示当前的就餐方式 -->
-        <div class="table-badge" id="table-display">Mangia qui</div>
-    </div>
-
-    <!-- 分类标签 -->
-    <div class="category-tabs">
-        <button class="tab-btn active" onclick="switchCategory('mochi')">
-            <i class="fa-solid fa-cookie"></i> Mochi
-        </button>
-        <button class="tab-btn" onclick="switchCategory('drinks')">
-            <i class="fa-solid fa-mug-hot"></i> Bevande
-        </button>
-        <button class="tab-btn" onclick="switchCategory('desserts')">
-            <i class="fa-solid fa-ice-cream"></i> Dessert
-        </button>
-    </div>
-
-    <!-- 菜单列表 -->
-    <div class="menu-container" id="menu-list">
-        <p style="text-align:center; padding: 40px; color: #888;">Caricamento menu...</p>
-    </div>
-
-    <!-- 购物车弹窗遮罩与内容 -->
-    <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
-    <div class="cart-modal" id="cart-modal">
-        <div class="cart-modal-header">
-            <h3>Conferma Ordine</h3>
-            <button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+    <!-- ================= VIEW 1: 欢迎页 ================= -->
+    <div id="view-welcome" class="view active">
+        <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Dōmochi" class="welcome-logo">
+        <h1 class="welcome-title">Dōmochi</h1>
         
-        <!-- 新增：就餐方式选择区 -->
-        <div class="dining-options">
-            <button class="dining-btn active" id="btn-mangia" onclick="setDiningOption('Mangia qui', 'btn-mangia')">
-                <i class="fa-solid fa-utensils"></i> 马上吃
+        <button class="big-btn" onclick="startOrder('Mangia qui')">
+            <i class="fa-solid fa-utensils"></i> Consuma al tavolo (马上吃)
+        </button>
+        <button class="big-btn" onclick="startOrder('Da asporto')">
+            <i class="fa-solid fa-bag-shopping"></i> Da asporto (打包)
+        </button>
+        <button class="big-btn" onclick="startOrder('Ritiro')">
+            <i class="fa-solid fa-store"></i> Ritiro in negozio (自提)
+        </button>
+    </div>
+
+
+    <!-- ================= VIEW 2: 菜单页 ================= -->
+    <div id="view-menu" class="view">
+        <div class="header">
+            <div class="logo-area">
+                <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small">
+                <span class="brand-name">Dōmochi</span>
+            </div>
+            <!-- 点击可以重新选择就餐方式 -->
+            <div class="table-badge" onclick="goBackToWelcome()">
+                <span id="display-dining-mode">Mangia qui</span> <i class="fa-solid fa-pen"></i>
+            </div>
+        </div>
+
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="switchCategory('mochi')">
+                <i class="fa-solid fa-cookie"></i> Mochi
             </button>
-            <button class="dining-btn" id="btn-asporto" onclick="setDiningOption('Da asporto', 'btn-asporto')">
-                <i class="fa-solid fa-bag-shopping"></i> 打包
+            <button class="tab-btn" onclick="switchCategory('drinks')">
+                <i class="fa-solid fa-mug-hot"></i> Bevande
             </button>
-            <button class="dining-btn" id="btn-ritiro" onclick="setDiningOption('Ritiro', 'btn-ritiro')">
-                <i class="fa-solid fa-store"></i> 自提
+            <button class="tab-btn" onclick="switchCategory('desserts')">
+                <i class="fa-solid fa-ice-cream"></i> Dessert
             </button>
         </div>
 
-        <div id="cart-modal-list">
-            <!-- 购物车内的物品将渲染在这里 -->
+        <div class="menu-container" id="menu-list">
+            <p style="text-align:center; padding: 40px; color: #888;">Caricamento menu...</p>
+        </div>
+
+        <!-- 购物车弹窗 -->
+        <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
+        <div class="cart-modal" id="cart-modal">
+            <div class="cart-modal-header">
+                <h3>Il tuo carrello</h3>
+                <button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cart-modal-list"></div>
+            <!-- 这里原本的提交订单按钮被移除了，统一用底部的“去结算” -->
+        </div>
+
+        <!-- 底部悬浮条 -->
+        <div class="cart-bar hidden" id="cart-bar">
+            <div class="cart-total" onclick="toggleCartModal()">
+                <span><i class="fa-solid fa-cart-shopping"></i> Vedi Carrello (<b id="cart-qty">0</b>)</span>
+                <strong id="cart-price">€ 0.00</strong>
+            </div>
+            <!-- 这里改为跳转到 Checkout 页 -->
+            <button class="checkout-btn" onclick="goToCheckout()">Vai alla Cassa</button>
         </div>
     </div>
 
-    <!-- 底部悬浮条 -->
-    <div class="cart-bar hidden" id="cart-bar">
-        <div class="cart-total" onclick="toggleCartModal()">
-            <span><i class="fa-solid fa-cart-shopping"></i> Vedi Carrello (<b id="cart-qty">0</b>)</span>
-            <strong id="cart-price">€ 0.00</strong>
+
+    <!-- ================= VIEW 3: 结算与信息页 ================= -->
+    <div id="view-checkout" class="view">
+        <div class="nav-back" onclick="goBackToMenu()">
+            <i class="fa-solid fa-arrow-left"></i> Torna al Menu
         </div>
-        <button class="checkout-btn" id="btn-submit" onclick="submitOrder()">Invia Ordine</button>
+
+        <div class="checkout-section">
+            <div class="section-title"><i class="fa-solid fa-receipt"></i> Riepilogo Ordine (<span id="chk-dining-mode"></span>)</div>
+            <div id="checkout-summary-list"></div>
+            <div class="checkout-summary-total">
+                <span>Totale</span>
+                <span id="chk-total-price">€ 0.00</span>
+            </div>
+        </div>
+
+        <div class="checkout-section">
+            <div class="section-title"><i class="fa-solid fa-user"></i> I tuoi Dati (填写信息)</div>
+            <div class="form-group">
+                <label>Nome (姓名)</label>
+                <input type="text" id="cust-name" class="form-input" placeholder="Es. Mario Rossi">
+            </div>
+            <div class="form-group">
+                <label>Telefono (电话 - Facoltativo)</label>
+                <input type="tel" id="cust-phone" class="form-input" placeholder="Es. 333 1234567">
+            </div>
+            <div class="form-group">
+                <label>Note aggiuntive (备注)</label>
+                <input type="text" id="cust-notes" class="form-input" placeholder="Senza ghiaccio, meno zucchero...">
+            </div>
+        </div>
+
+        <div class="checkout-section" style="margin-bottom: 100px;">
+            <div class="section-title"><i class="fa-solid fa-credit-card"></i> Metodo di Pagamento</div>
+            <!-- 占位按钮：目前默认为门店支付 -->
+            <div class="pay-method-btn">
+                <i class="fa-solid fa-cash-register"></i> Paga in Cassa (到店/收银台付款)
+            </div>
+        </div>
+
+        <div class="bottom-action-bar">
+            <button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()">Conferma Ordine</button>
+        </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -146,32 +214,67 @@
         let allProducts = [];
         let currentCat = 'mochi';
         let cart = {}; 
-        let diningOption = 'Mangia qui'; // 默认就餐方式
+        let diningOption = ''; // 存储就餐方式
 
-        // 初始化
+        // ----- 视图控制函数 -----
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // 1. 从欢迎页选择就餐方式
+        window.startOrder = function(mode) {
+            diningOption = mode;
+            document.getElementById('display-dining-mode').innerText = mode;
+            document.getElementById('chk-dining-mode').innerText = mode;
+            switchView('view-menu');
+        }
+
+        // 返回欢迎页重新选择
+        window.goBackToWelcome = function() {
+            switchView('view-welcome');
+        }
+
+        // 2. 从菜单页前往结算页
+        window.goToCheckout = function() {
+            // 关闭购物车弹窗
+            document.getElementById('cart-modal').classList.remove('show');
+            document.getElementById('cart-overlay').classList.remove('show');
+            
+            // 渲染结算页的商品清单
+            const summaryList = document.getElementById('checkout-summary-list');
+            let totalPrice = 0;
+            summaryList.innerHTML = Object.values(cart).map(item => {
+                totalPrice += item.price * item.qty;
+                return `
+                    <div class="checkout-summary-item">
+                        <span>${item.qty}x ${item.name}</span>
+                        <span>€ ${(item.price * item.qty).toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('chk-total-price').innerText = `€ ${totalPrice.toFixed(2)}`;
+            switchView('view-checkout');
+        }
+
+        // 从结算页返回菜单页
+        window.goBackToMenu = function() {
+            switchView('view-menu');
+        }
+
+
+        // ----- 数据加载与菜单逻辑 -----
         async function init() {
-            document.getElementById('table-display').innerText = diningOption;
-
             const { data } = await supabaseClient.from('domochi_products')
                 .select('*')
                 .eq('is_available', true)
                 .order('sort_order', { ascending: true });
-            
             allProducts = data || [];
             renderMenu();
         }
 
-        // 设置就餐方式
-        window.setDiningOption = function(type, btnId) {
-            diningOption = type;
-            // 更新按钮样式
-            document.querySelectorAll('.dining-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(btnId).classList.add('active');
-            // 更新顶部右上角的角标显示
-            document.getElementById('table-display').innerText = type;
-        }
-
-        // 切换分类
         window.switchCategory = function(cat) {
             currentCat = cat;
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -181,20 +284,14 @@
             renderMenu();
         }
 
-        // 渲染主菜单
         function renderMenu() {
             const list = document.getElementById('menu-list');
             const items = allProducts.filter(p => p.category === currentCat);
-            
-            if (items.length === 0) {
-                list.innerHTML = `<p style="text-align:center; padding: 40px; color: #888;">Nessun prodotto</p>`;
-                return;
-            }
+            if (items.length === 0) { list.innerHTML = `<p style="text-align:center; padding: 40px; color: #888;">Nessun prodotto</p>`; return; }
 
             list.innerHTML = items.map(p => {
                 const qty = cart[p.id]?.qty || 0;
                 const price = p.price ? parseFloat(p.price).toFixed(2) : '4.00'; 
-                
                 return `
                 <div class="product-card">
                     <img src="${p.image_url || 'https://i.ibb.co/gMcnX8yj/IMG-0668.jpg'}" class="product-img">
@@ -203,84 +300,52 @@
                         <div class="product-price">€ ${price}</div>
                     </div>
                     <div class="qty-controls">
-                        ${qty > 0 ? `
-                            <button class="qty-btn" onclick="updateCart(${p.id}, -1)">-</button>
-                            <span class="qty-number">${qty}</span>
-                        ` : ''}
+                        ${qty > 0 ? `<button class="qty-btn" onclick="updateCart(${p.id}, -1)">-</button><span class="qty-number">${qty}</span>` : ''}
                         <button class="qty-btn add" onclick="updateCart(${p.id}, 1)">+</button>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // 增减购物车
         window.updateCart = function(productId, change) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
-            
             const price = product.price ? parseFloat(product.price) : 4.00; 
 
-            if (!cart[productId]) {
-                cart[productId] = { id: product.id, name: product.name_it, price: price, qty: 0 };
-            }
-
+            if (!cart[productId]) cart[productId] = { id: product.id, name: product.name_it, price: price, qty: 0 };
             cart[productId].qty += change;
+            if (cart[productId].qty <= 0) delete cart[productId];
 
-            if (cart[productId].qty <= 0) {
-                delete cart[productId];
-            }
-
-            renderMenu(); 
-            updateCartUI(); 
-            renderCartModal(); 
+            renderMenu(); updateCartUI(); renderCartModal(); 
         }
 
-        // 刷新底部总价和数量
         function updateCartUI() {
             const bar = document.getElementById('cart-bar');
-            let totalQty = 0;
-            let totalPrice = 0;
-
-            Object.values(cart).forEach(item => {
-                totalQty += item.qty;
-                totalPrice += item.price * item.qty;
-            });
+            let totalQty = 0; let totalPrice = 0;
+            Object.values(cart).forEach(item => { totalQty += item.qty; totalPrice += item.price * item.qty; });
 
             document.getElementById('cart-qty').innerText = totalQty;
             document.getElementById('cart-price').innerText = `€ ${totalPrice.toFixed(2)}`;
 
-            if (totalQty > 0) {
-                bar.classList.remove('hidden');
-            } else {
+            if (totalQty > 0) bar.classList.remove('hidden');
+            else {
                 bar.classList.add('hidden');
                 document.getElementById('cart-modal').classList.remove('show');
                 document.getElementById('cart-overlay').classList.remove('show');
             }
         }
 
-        // 显示/隐藏购物车弹窗
         window.toggleCartModal = function() {
             const modal = document.getElementById('cart-modal');
             const overlay = document.getElementById('cart-overlay');
-            
             if (Object.keys(cart).length === 0) return;
-
-            if (modal.classList.contains('show')) {
-                modal.classList.remove('show');
-                overlay.classList.remove('show');
-            } else {
-                renderCartModal();
-                modal.classList.add('show');
-                overlay.classList.add('show');
-            }
+            if (modal.classList.contains('show')) { modal.classList.remove('show'); overlay.classList.remove('show'); } 
+            else { renderCartModal(); modal.classList.add('show'); overlay.classList.add('show'); }
         }
 
-        // 渲染购物车弹窗列表
         function renderCartModal() {
             const list = document.getElementById('cart-modal-list');
-            const cartItems = Object.values(cart);
-            
-            list.innerHTML = cartItems.map(item => `
+            list.innerHTML = Object.values(cart).map(item => `
                 <div class="modal-item">
                     <div class="modal-item-info">
                         <div class="modal-item-name">${item.name}</div>
@@ -295,53 +360,62 @@
             `).join('');
         }
 
-        // 提交订单
-        window.submitOrder = async function() {
+        // ----- 3. 最终提交订单逻辑 -----
+        window.submitFinalOrder = async function() {
             const btn = document.getElementById('btn-submit');
-            btn.innerText = "Inviando...";
+            
+            // 获取客户信息
+            const custName = document.getElementById('cust-name').value.trim();
+            const custPhone = document.getElementById('cust-phone').value.trim();
+            const custNotes = document.getElementById('cust-notes').value.trim();
+
+            if (!custName) {
+                alert("Per favore, inserisci il tuo nome. (请填写您的姓名)");
+                document.getElementById('cust-name').focus();
+                return;
+            }
+
+            btn.innerText = "Elaborazione...";
             btn.disabled = true;
 
-            const orderItems = Object.values(cart);
             let totalPrice = 0;
+            const orderItems = Object.values(cart);
             orderItems.forEach(i => totalPrice += i.price * i.qty);
 
             try {
-                // 1. 获取现有订单数生成客单号
-                const { count } = await supabaseClient
-                    .from('domochi_orders')
-                    .select('*', { count: 'exact', head: true });
-                
+                const { count } = await supabaseClient.from('domochi_orders').select('*', { count: 'exact', head: true });
                 const nextOrderNumber = (count + 1).toString().padStart(3, '0');
 
-                // 2. 构造数据 (巧妙地将就餐方式存入 order_data 的 JSON 结构中)
+                // 组装数据：将客户信息和就餐方式一起放入 order_data 的 JSON 中
                 const payload = {
                     order_number: nextOrderNumber,
                     order_data: {
-                        dining_option: diningOption, // 包含：Mangia qui, Da asporto, Ritiro
-                        items: orderItems            // 包含：具体的商品数组
+                        customer_info: { name: custName, phone: custPhone, notes: custNotes },
+                        dining_option: diningOption,
+                        items: orderItems 
                     },
                     total_amount: totalPrice,
                     status: 'pending'
                 };
 
-                // 3. 写入数据库
                 const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
                 if (error) throw error;
                 
-                alert(`✅ Ordine inviato!\nIl tuo numero: #${nextOrderNumber}`);
+                alert(`✅ Ordine completato!\nIl tuo numero: #${nextOrderNumber}\nGrazie, ${custName}!`);
                 
-                // 4. 清空状态
+                // 重置应用状态并返回欢迎页
                 cart = {}; 
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-phone').value = '';
+                document.getElementById('cust-notes').value = '';
                 updateCartUI();
                 renderMenu();
-                
-                document.getElementById('cart-modal').classList.remove('show');
-                document.getElementById('cart-overlay').classList.remove('show');
+                switchView('view-welcome');
 
             } catch (err) {
                 alert("Errore invio ordine: " + err.message);
             } finally {
-                btn.innerText = "Invia Ordine";
+                btn.innerText = "Conferma Ordine";
                 btn.disabled = false;
             }
         }
