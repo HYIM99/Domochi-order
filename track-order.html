@@ -50,13 +50,13 @@
     <div class="nav-header">
         <a href="index.html"><i class="fa-solid fa-chevron-left"></i> Home</a>
         <span style="font-weight:800; letter-spacing: 1px;">I MIEI ORDINI</span>
-        <div style="width: 70px;"></div> <!-- 占位符以保持标题居中 -->
+        <div style="width: 70px;"></div> 
     </div>
 
     <div class="container">
         <!-- 手动查询区 -->
         <div class="search-box">
-            <input type="number" id="order-search-input" class="search-input" placeholder="N. Ordine (es. 1024)">
+            <input type="number" id="order-search-input" class="search-input" placeholder="N. Ordine (es. 001)">
             <button class="search-btn" onclick="searchOrder()"><i class="fa-solid fa-magnifying-glass"></i> Cerca</button>
         </div>
 
@@ -80,17 +80,14 @@
 
         window.addEventListener('DOMContentLoaded', loadLocalOrders);
 
-        // 获取当天凌晨0点的时间戳
         function getTodayStart() {
             const now = new Date();
             now.setHours(0, 0, 0, 0);
             return now.toISOString();
         }
 
-        // 1. 自动加载本机今天下过的订单
         async function loadLocalOrders() {
             const container = document.getElementById('orders-container');
-            // 假设下单时，你把订单ID存在了 localStorage.getItem('domochi_recent_orders')，例如 "[1024, 1025]"
             let localOrders = JSON.parse(localStorage.getItem('domochi_recent_orders') || '[]');
 
             if (localOrders.length === 0) {
@@ -105,9 +102,8 @@
 
             const todayStart = getTodayStart();
 
-            // 查询这些ID，并且必须是今天的订单
             const { data, error } = await supabaseClient
-                .from('domochi_orders') // 请确保这是你的真实订单表名
+                .from('domochi_orders') 
                 .select('*')
                 .in('id', localOrders)
                 .gte('created_at', todayStart)
@@ -122,10 +118,12 @@
             renderOrders(data, container);
         }
 
-        // 2. 顾客手动输入订单号搜索
         async function searchOrder() {
             const inputVal = document.getElementById('order-search-input').value;
             if (!inputVal) return;
+
+            // 将用户输入的数字格式化为3位数，例如 1 变成 001，以匹配数据库中的 order_number
+            const formattedSearchNum = inputVal.toString().padStart(3, '0');
 
             const container = document.getElementById('orders-container');
             container.innerHTML = `<p style="text-align:center; padding: 20px;">Ricerca in corso...</p>`;
@@ -135,14 +133,15 @@
             const { data, error } = await supabaseClient
                 .from('domochi_orders')
                 .select('*')
-                .eq('id', inputVal)
+                // 修复：让用户搜取餐号(order_number)而不是数据库ID，体验更好
+                .eq('order_number', formattedSearchNum)
                 .gte('created_at', todayStart);
 
             if (error || !data || data.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fa-solid fa-circle-exclamation" style="color:#ff4d4f;"></i>
-                        <p>Ordine #${inputVal} non trovato.</p>
+                        <p>Ordine #${formattedSearchNum} non trovato.</p>
                         <small>Assicurati di aver inserito il numero corretto e che l'ordine sia di oggi.</small>
                     </div>`;
                 return;
@@ -151,7 +150,6 @@
             renderOrders(data, container);
         }
 
-        // 3. 渲染订单卡片UI
         function renderOrders(orders, container) {
             if (!orders || orders.length === 0) {
                 container.innerHTML = `
@@ -163,24 +161,27 @@
             }
 
             container.innerHTML = orders.map(order => {
-                // 处理状态显示
                 const statusInfo = statusMap[order.status || 'pending'] || statusMap['pending'];
                 
-                // 处理时间显示 (HH:MM)
-                const timeStr = new Date(order.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                // 处理时间显示 (强制使用两位数 24小时制)
+                const d = new Date(order.created_at);
+                const timeStr = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
                 
-                // 解析商品列表 (假设你的订单表里 items 存的是 JSON 数组)
+                // 核心修复：正确解析存储在 order_data 里的 items，以及读取 qty 属性
                 let itemsHtml = '';
                 try {
-                    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+                    const orderData = typeof order.order_data === 'string' ? JSON.parse(order.order_data) : (order.order_data || {});
+                    const items = orderData.items || [];
+                    
                     itemsHtml = items.map(item => `
                         <div class="item-row">
-                            <span class="item-qty">${item.quantity}x</span>
+                            <span class="item-qty">${item.qty}x</span>
                             <span class="item-name">${item.name}</span>
-                            <span>€ ${(item.price * item.quantity).toFixed(2)}</span>
+                            <span>€ ${(item.price * item.qty).toFixed(2)}</span>
                         </div>
                     `).join('');
                 } catch (e) {
+                    console.error("解析商品详情失败:", e);
                     itemsHtml = '<p style="color:#888; font-size:0.9rem;">Dettagli non disponibili</p>';
                 }
 
@@ -188,7 +189,8 @@
                     <div class="order-card ${order.status !== 'completed' ? 'active' : ''}">
                         <div class="order-header">
                             <div>
-                                <div class="order-id">#${order.id}</div>
+                                <!-- 修复：显示取餐号 order_number -->
+                                <div class="order-id">#${order.order_number || order.id}</div>
                                 <div class="order-time">${timeStr}</div>
                             </div>
                             <span class="status-badge ${statusInfo.class}"><i class="fa-solid ${statusInfo.icon}"></i> ${statusInfo.text}</span>
@@ -200,7 +202,8 @@
                         
                         <div class="order-total">
                             <span>Totale</span>
-                            <span style="color:var(--brand-primary);">€ ${parseFloat(order.total_price).toFixed(2)}</span>
+                            <!-- 核心修复：金额字段应该读取 total_amount -->
+                            <span style="color:var(--brand-primary);">€ ${parseFloat(order.total_amount).toFixed(2)}</span>
                         </div>
                     </div>
                 `;
