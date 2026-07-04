@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordina Ora | Dōmochi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-primary: #DF4F53; 
+            --brand-secondary: #FDEEDC; 
+            --text-main: #4A3B32; 
+            --bg-body: #F9F8F6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; -webkit-tap-highlight-color: transparent; }
+        
+        /* 顶部导航与桌号显示 */
+        .header { background: var(--brand-primary); color: white; padding: 20px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .header h1 { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .table-badge { background: white; color: var(--brand-primary); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* 分类切换 */
+        .category-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .tab-btn { padding: 8px 16px; border-radius: 20px; border: none; background: white; color: var(--text-main); font-weight: 600; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: var(--brand-primary); color: white; }
+
+        /* 产品列表 */
+        .menu-container { padding: 0 15px; }
+        .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; }
+        .product-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--brand-secondary); flex-shrink: 0; }
+        .product-info { flex: 1; }
+        .product-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; }
+        .product-price { color: var(--brand-primary); font-weight: 800; font-size: 1.1rem; }
+        
+        /* 数量加减按钮 */
+        .qty-controls { display: flex; align-items: center; gap: 10px; background: #f5f5f5; border-radius: 20px; padding: 4px 8px; }
+        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: white; color: var(--text-main); font-weight: bold; font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; }
+        .qty-btn.add { background: var(--brand-primary); color: white; }
+        .qty-number { font-weight: 700; font-size: 0.95rem; min-width: 12px; text-align: center; }
+
+        /* 底部购物车悬浮条 */
+        .cart-bar { position: fixed; bottom: 15px; left: 15px; right: 15px; background: white; border-radius: 25px; padding: 12px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border: 2px solid var(--brand-primary); }
+        .cart-total { display: flex; flex-direction: column; }
+        .cart-total span { font-size: 0.8rem; color: #888; font-weight: 600; }
+        .cart-total strong { font-size: 1.3rem; color: var(--brand-primary); }
+        .checkout-btn { background: var(--brand-primary); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(223, 79, 83, 0.3); }
+        .checkout-btn:disabled { background: #ccc; box-shadow: none; }
+        
+        /* 隐藏无购物车状态 */
+        .cart-bar.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1><i class="fa-solid fa-utensils"></i> Dōmochi</h1>
+        <div class="table-badge" id="table-display">Tavolo: --</div>
+    </div>
+
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="switchCategory('mochi')">Mochi</button>
+        <button class="tab-btn" onclick="switchCategory('drinks')">Bevande</button>
+        <button class="tab-btn" onclick="switchCategory('desserts')">Desserts</button>
+    </div>
+
+    <div class="menu-container" id="menu-list">
+        <p style="text-align:center; padding: 40px; color: #888;">Caricamento menu...</p>
+    </div>
+
+    <div class="cart-bar hidden" id="cart-bar">
+        <div class="cart-total">
+            <span>Totale</span>
+            <strong id="cart-price">€ 0.00</strong>
+        </div>
+        <button class="checkout-btn" id="btn-submit" onclick="submitOrder()">Invia Ordine</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let allProducts = [];
+        let currentCat = 'mochi';
+        let cart = {}; // 购物车对象，以产品 ID 为 key
+        let tableNumber = 'Takeaway'; // 默认外带
+
+        // 1. 初始化：获取桌号并加载数据
+        async function init() {
+            // 解析 URL 里的桌号，例如 order.domochi.it/?table=5
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('table')) {
+                tableNumber = urlParams.get('table');
+            }
+            document.getElementById('table-display').innerText = tableNumber === 'Takeaway' ? 'Asporto' : `Tavolo: ${tableNumber}`;
+
+            // 加载在线商品
+            const { data } = await supabaseClient.from('domochi_products')
+                .select('*')
+                .eq('is_available', true)
+                .order('sort_order', { ascending: true });
+            
+            allProducts = data || [];
+            renderMenu();
+        }
+
+        // 2. 切换分类
+        window.switchCategory = function(cat) {
+            currentCat = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(cat.substring(0,4))) btn.classList.add('active');
+            });
+            renderMenu();
+        }
+
+        // 3. 渲染菜单
+        function renderMenu() {
+            const list = document.getElementById('menu-list');
+            const items = allProducts.filter(p => p.category === currentCat);
+            
+            if (items.length === 0) {
+                list.innerHTML = `<p style="text-align:center; padding: 40px; color: #888;">Nessun prodotto</p>`;
+                return;
+            }
+
+            list.innerHTML = items.map(p => {
+                const qty = cart[p.id]?.qty || 0;
+                // 注意：如果数据库里还没有 price 字段，暂时默认按 4.00 算，方便你测试
+                const price = p.price ? parseFloat(p.price).toFixed(2) : '4.00'; 
+                
+                return `
+                <div class="product-card">
+                    <img src="${p.image_url || 'https://i.ibb.co/gMcnX8yj/IMG-0668.jpg'}" class="product-img">
+                    <div class="product-info">
+                        <div class="product-title">${p.name_it}</div>
+                        <div class="product-price">€ ${price}</div>
+                    </div>
+                    <div class="qty-controls">
+                        ${qty > 0 ? `
+                            <button class="qty-btn" onclick="updateCart(${p.id}, -1)">-</button>
+                            <span class="qty-number">${qty}</span>
+                        ` : ''}
+                        <button class="qty-btn add" onclick="updateCart(${p.id}, 1)">+</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // 4. 更新购物车
+        window.updateCart = function(productId, change) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            const price = product.price ? parseFloat(product.price) : 4.00; // 备用默认价格
+
+            if (!cart[productId]) {
+                cart[productId] = { id: product.id, name: product.name_it, price: price, qty: 0 };
+            }
+
+            cart[productId].qty += change;
+
+            if (cart[productId].qty <= 0) {
+                delete cart[productId];
+            }
+
+            renderMenu(); // 刷新数字显示
+            updateCartUI(); // 刷新底部结算栏
+        }
+
+        // 5. 刷新底部结算栏
+        function updateCartUI() {
+            const bar = document.getElementById('cart-bar');
+            let totalQty = 0;
+            let totalPrice = 0;
+
+            Object.values(cart).forEach(item => {
+                totalQty += item.qty;
+                totalPrice += item.price * item.qty;
+            });
+
+            if (totalQty > 0) {
+                bar.classList.remove('hidden');
+                document.getElementById('cart-price').innerText = `€ ${totalPrice.toFixed(2)}`;
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        // 6. 提交订单到数据库
+        window.submitOrder = async function() {
+            const btn = document.getElementById('btn-submit');
+            btn.innerText = "Inviando...";
+            btn.disabled = true;
+
+            const orderItems = Object.values(cart);
+            let totalPrice = 0;
+            orderItems.forEach(i => totalPrice += i.price * i.qty);
+
+            const payload = {
+                table_number: tableNumber,
+                order_data: orderItems,
+                total_amount: totalPrice,
+                status: 'pending' // pending 表示后厨刚收到
+            };
+
+            try {
+                const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
+                if (error) throw error;
+                
+                alert("✅ Ordine inviato con successo! (下单成功，请稍候)");
+                cart = {}; // 清空购物车
+                updateCartUI();
+                renderMenu();
+            } catch (err) {
+                alert("Errore invio ordine: " + err.message);
+            } finally {
+                btn.innerText = "Invia Ordine";
+                btn.disabled = false;
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
