@@ -15,31 +15,28 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-main); -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
-        /* 语言切换器悬浮样式 */
         .lang-switcher { position: fixed; top: 15px; right: 15px; background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); z-index: 2000; font-size: 0.85rem; font-weight: 700; display: flex; gap: 10px; border: 1px solid #eee; }
         .lang-btn { color: #aaa; cursor: pointer; transition: all 0.2s; }
         .lang-btn.active { color: var(--brand-primary); transform: scale(1.1); }
 
-        /* 视图切换逻辑 */
         .view { display: none; animation: fadeIn 0.3s ease-in-out; min-height: 100vh; padding-bottom: 120px; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ================= 1. 欢迎页 ================= */
+        /* Welcome View */
         #view-welcome { padding-bottom: 0; background: var(--brand-secondary); display: none; flex-direction: column; align-items: center; justify-content: center; }
         #view-welcome.active { display: flex; }
         .welcome-logo { width: 140px; height: 140px; border-radius: 50%; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 20px; object-fit: cover; background: white;}
         .welcome-title { font-size: 2rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 40px; letter-spacing: -0.5px; }
-        .big-btn { width: 90%; max-width: 350px; background: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; transition: transform 0.1s; }
-        .big-btn:active { transform: scale(0.97); }
+        .big-btn { width: 90%; max-width: 350px; background: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; }
         .big-btn i { font-size: 1.6rem; color: var(--brand-primary); }
 
-        /* ================= 2. 菜单页 ================= */
+        /* Menu View */
         .header { background: var(--brand-primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .brand-logo-small { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
         .brand-name { font-size: 1.2rem; font-weight: 800; }
-        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-right: 120px; /* 给语言按钮留空位 */ }
+        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-right: 120px; }
         
         .category-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: none; background: white; color: var(--text-main); font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; }
@@ -61,7 +58,7 @@
         .cart-total { display: flex; flex-direction: column; cursor: pointer; flex: 1; }
         .cart-total span { font-size: 0.85rem; color: #666; font-weight: 600; }
         .cart-total strong { font-size: 1.3rem; color: var(--brand-primary); }
-        .checkout-btn { background: var(--brand-primary); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(223, 79, 83, 0.3); cursor: pointer; }
+        .checkout-btn { background: var(--brand-primary); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1rem; cursor: pointer; }
         .cart-bar.hidden { transform: translateY(150%); } 
 
         .cart-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -75,7 +72,7 @@
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
         .modal-item-price { color: var(--brand-primary); font-size: 0.9rem; font-weight: 600;}
 
-        /* ================= 3. 结算页 ================= */
+        /* Checkout View */
         .nav-back { padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--brand-primary); font-size: 1.1rem; cursor: pointer; background: white; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-right: 120px; }
         .checkout-section { padding: 20px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
@@ -93,118 +90,65 @@
 </head>
 <body>
 
-    <!-- 语言切换器 (全局悬浮) -->
     <div class="lang-switcher">
         <span class="lang-btn active" id="l-zh" onclick="setLang('zh')">中</span>
         <span class="lang-btn" id="l-it" onclick="setLang('it')">IT</span>
         <span class="lang-btn" id="l-en" onclick="setLang('en')">EN</span>
     </div>
 
-    <!-- ================= VIEW 1: 欢迎页 ================= -->
     <div id="view-welcome" class="view active">
         <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Dōmochi" class="welcome-logo">
         <h1 class="welcome-title">Dōmochi</h1>
-        
-        <button class="big-btn" onclick="startOrder('eat_in')">
-            <i class="fa-solid fa-utensils"></i> <span data-i18n="eat_in">堂食</span>
-        </button>
-        <button class="big-btn" onclick="startOrder('takeaway')">
-            <i class="fa-solid fa-bag-shopping"></i> <span data-i18n="takeaway">打包</span>
-        </button>
-        <button class="big-btn" onclick="startOrder('pickup')">
-            <i class="fa-solid fa-store"></i> <span data-i18n="pickup">自提</span>
-        </button>
+        <button class="big-btn" onclick="startOrder('eat_in')"><i class="fa-solid fa-utensils"></i> <span data-i18n="eat_in">堂食</span></button>
+        <button class="big-btn" onclick="startOrder('takeaway')"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="takeaway">打包</span></button>
+        <button class="big-btn" onclick="startOrder('pickup')"><i class="fa-solid fa-store"></i> <span data-i18n="pickup">自提</span></button>
     </div>
 
-    <!-- ================= VIEW 2: 菜单页 ================= -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area">
                 <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small">
                 <span class="brand-name">Dōmochi</span>
             </div>
-            <div class="table-badge" onclick="goBackToWelcome()">
-                <span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i>
-            </div>
+            <div class="table-badge" onclick="goBackToWelcome()"><span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i></div>
         </div>
-
         <div class="category-tabs">
-            <button class="tab-btn active" id="tab-mochi" onclick="switchCategory('mochi')">
-                <i class="fa-solid fa-cookie"></i> <span data-i18n="cat_mochi">麻薯</span>
-            </button>
-            <button class="tab-btn" id="tab-drinks" onclick="switchCategory('drinks')">
-                <i class="fa-solid fa-mug-hot"></i> <span data-i18n="cat_drinks">饮品</span>
-            </button>
-            <button class="tab-btn" id="tab-desserts" onclick="switchCategory('desserts')">
-                <i class="fa-solid fa-ice-cream"></i> <span data-i18n="cat_desserts">甜点</span>
-            </button>
+            <button class="tab-btn active" id="tab-mochi" onclick="switchCategory('mochi')"><i class="fa-solid fa-cookie"></i> <span data-i18n="cat_mochi">麻薯</span></button>
+            <button class="tab-btn" id="tab-drinks" onclick="switchCategory('drinks')"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="cat_drinks">饮品</span></button>
+            <button class="tab-btn" id="tab-desserts" onclick="switchCategory('desserts')"><i class="fa-solid fa-ice-cream"></i> <span data-i18n="cat_desserts">甜点</span></button>
         </div>
-
         <div class="menu-container" id="menu-list">
             <p style="text-align:center; padding: 40px; color: #888;" data-i18n="loading">加载中...</p>
         </div>
-
-        <!-- 购物车弹窗 -->
         <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
         <div class="cart-modal" id="cart-modal">
-            <div class="cart-modal-header">
-                <h3 data-i18n="cart_title">购物车</h3>
-                <button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+            <div class="cart-modal-header"><h3 data-i18n="cart_title">购物车</h3><button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="cart-modal-list"></div>
         </div>
-
-        <!-- 底部悬浮条 -->
         <div class="cart-bar hidden" id="cart-bar">
-            <div class="cart-total" onclick="toggleCartModal()">
-                <span><i class="fa-solid fa-cart-shopping"></i> <span data-i18n="view_cart">查看购物车</span> (<b id="cart-qty">0</b>)</span>
-                <strong id="cart-price">€ 0.00</strong>
-            </div>
+            <div class="cart-total" onclick="toggleCartModal()"><span><i class="fa-solid fa-cart-shopping"></i> <span data-i18n="view_cart">查看购物车</span> (<b id="cart-qty">0</b>)</span><strong id="cart-price">€ 0.00</strong></div>
             <button class="checkout-btn" onclick="goToCheckout()" data-i18n="go_checkout">去结算</button>
         </div>
     </div>
 
-    <!-- ================= VIEW 3: 结算页 ================= -->
     <div id="view-checkout" class="view">
-        <div class="nav-back" onclick="goBackToMenu()">
-            <i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span>
-        </div>
-
+        <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
         <div class="checkout-section">
             <div class="section-title"><i class="fa-solid fa-receipt"></i> <span data-i18n="summary">订单汇总</span> (<span id="chk-dining-mode"></span>)</div>
             <div id="checkout-summary-list"></div>
-            <div class="checkout-summary-total">
-                <span data-i18n="total">总计</span>
-                <span id="chk-total-price">€ 0.00</span>
-            </div>
+            <div class="checkout-summary-total"><span data-i18n="total">总计</span><span id="chk-total-price">€ 0.00</span></div>
         </div>
-
         <div class="checkout-section">
             <div class="section-title"><i class="fa-solid fa-user"></i> <span data-i18n="your_details">填写信息</span></div>
-            <div class="form-group">
-                <label data-i18n="name">姓名</label>
-                <input type="text" id="cust-name" class="form-input" data-i18n-ph="name_ph" placeholder="例：张三">
-            </div>
-            <div class="form-group">
-                <label data-i18n="phone">电话 (选填)</label>
-                <input type="tel" id="cust-phone" class="form-input" data-i18n-ph="phone_ph" placeholder="例：333 1234567">
-            </div>
-            <div class="form-group">
-                <label data-i18n="notes">备注</label>
-                <input type="text" id="cust-notes" class="form-input" data-i18n-ph="notes_ph" placeholder="去冰，少糖...">
-            </div>
+            <div class="form-group"><label data-i18n="name">姓名</label><input type="text" id="cust-name" class="form-input" data-i18n-ph="name_ph" placeholder="例：张三"></div>
+            <div class="form-group"><label data-i18n="phone">电话 (选填)</label><input type="tel" id="cust-phone" class="form-input" data-i18n-ph="phone_ph" placeholder="例：333 1234567"></div>
+            <div class="form-group"><label data-i18n="notes">备注</label><input type="text" id="cust-notes" class="form-input" data-i18n-ph="notes_ph" placeholder="去冰，少糖..."></div>
         </div>
-
         <div class="checkout-section" style="margin-bottom: 100px;">
             <div class="section-title"><i class="fa-solid fa-credit-card"></i> <span data-i18n="pay_method">支付方式</span></div>
-            <div class="pay-method-btn">
-                <i class="fa-solid fa-cash-register"></i> <span data-i18n="pay_cash">到店付款</span>
-            </div>
+            <div class="pay-method-btn"><i class="fa-solid fa-cash-register"></i> <span data-i18n="pay_cash">到店付款</span></div>
         </div>
-
-        <div class="bottom-action-bar">
-            <button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button>
-        </div>
+        <div class="bottom-action-bar"><button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -213,242 +157,112 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ================= 多语言字典 =================
         const i18n = {
             zh: {
-                eat_in: "堂食", takeaway: "打包带走", pickup: "到店自提",
-                cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点",
-                loading: "菜单加载中...", empty: "暂无商品",
-                cart_title: "您的购物车", view_cart: "查看购物车", go_checkout: "去结算",
-                back_menu: "返回菜单", summary: "订单汇总", total: "总计",
-                your_details: "填写信息", name: "姓名", name_ph: "例：张三",
-                phone: "电话 (选填)", phone_ph: "例：333 1234567",
-                notes: "备注", notes_ph: "去冰，少糖...",
-                pay_method: "支付方式", pay_cash: "到店付款", confirm: "确认下单",
-                err_name: "请填写您的姓名。", processing: "提交中...", error: "提交失败: "
+                eat_in: "堂食", takeaway: "打包带走", pickup: "到店自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", loading: "菜单加载中...", empty: "暂无商品", cart_title: "您的购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", name_ph: "例：张三", phone: "电话 (选填)", phone_ph: "例：333 1234567", notes: "备注", notes_ph: "去冰，少糖...", pay_method: "支付方式", pay_cash: "到店付款", confirm: "确认下单", err_name: "请填写您的姓名。", processing: "提交中...", error: "提交失败: "
             },
             it: {
-                eat_in: "Consuma qui", takeaway: "Da asporto", pickup: "Ritiro in negozio",
-                cat_mochi: "Mochi", cat_drinks: "Bevande", cat_desserts: "Dessert",
-                loading: "Caricamento...", empty: "Nessun prodotto",
-                cart_title: "Il tuo carrello", view_cart: "Vedi Carrello", go_checkout: "Vai alla Cassa",
-                back_menu: "Torna al Menu", summary: "Riepilogo", total: "Totale",
-                your_details: "I tuoi Dati", name: "Nome", name_ph: "Es. Mario Rossi",
-                phone: "Telefono (Opzionale)", phone_ph: "Es. 333 1234567",
-                notes: "Note", notes_ph: "Senza ghiaccio...",
-                pay_method: "Pagamento", pay_cash: "Paga in Cassa", confirm: "Conferma Ordine",
-                err_name: "Inserisci il tuo nome.", processing: "Elaborazione...", error: "Errore: "
+                eat_in: "Consuma qui", takeaway: "Da asporto", pickup: "Ritiro in negozio", cat_mochi: "Mochi", cat_drinks: "Bevande", cat_desserts: "Dessert", loading: "Caricamento...", empty: "Nessun prodotto", cart_title: "Il tuo carrello", view_cart: "Vedi Carrello", go_checkout: "Vai alla Cassa", back_menu: "Torna al Menu", summary: "Riepilogo", total: "Totale", your_details: "I tuoi Dati", name: "Nome", name_ph: "Es. Mario Rossi", phone: "Telefono (Opzionale)", phone_ph: "Es. 333 1234567", notes: "Note", notes_ph: "Senza ghiaccio...", pay_method: "Pagamento", pay_cash: "Paga in Cassa", confirm: "Conferma Ordine", err_name: "Inserisci il tuo nome.", processing: "Elaborazione...", error: "Errore: "
             },
             en: {
-                eat_in: "Dine In", takeaway: "Takeaway", pickup: "Pickup",
-                cat_mochi: "Mochi", cat_drinks: "Drinks", cat_desserts: "Desserts",
-                loading: "Loading...", empty: "No items",
-                cart_title: "Your Cart", view_cart: "View Cart", go_checkout: "Checkout",
-                back_menu: "Back to Menu", summary: "Order Summary", total: "Total",
-                your_details: "Your Details", name: "Name", name_ph: "E.g. John Doe",
-                phone: "Phone (Optional)", phone_ph: "E.g. 333 1234567",
-                notes: "Notes", notes_ph: "No ice...",
-                pay_method: "Payment", pay_cash: "Pay at Register", confirm: "Confirm Order",
-                err_name: "Please enter your name.", processing: "Processing...", error: "Error: "
+                eat_in: "Dine In", takeaway: "Takeaway", pickup: "Pickup", cat_mochi: "Mochi", cat_drinks: "Drinks", cat_desserts: "Desserts", loading: "Loading...", empty: "No items", cart_title: "Your Cart", view_cart: "View Cart", go_checkout: "Checkout", back_menu: "Back to Menu", summary: "Order Summary", total: "Total", your_details: "Your Details", name: "Name", name_ph: "E.g. John Doe", phone: "Phone (Optional)", phone_ph: "E.g. 333 1234567", notes: "Notes", notes_ph: "No ice...", pay_method: "Payment", pay_cash: "Pay at Register", confirm: "Confirm Order", err_name: "Please enter your name.", processing: "Processing...", error: "Error: "
             }
         };
 
-        let currentLang = 'zh'; // 默认语言
-        let allProducts = [];
-        let currentCat = 'mochi';
-        let cart = {}; 
-        let diningOptionKey = ''; 
+        let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = '';
 
-        // 切换语言引擎
         window.setLang = function(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('l-' + lang).classList.add('active');
-
-            // 替换静态文本
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(i18n[lang][key]) el.innerText = i18n[lang][key];
-            });
-
-            // 替换输入框提示文本
-            document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-                const key = el.getAttribute('data-i18n-ph');
-                if(i18n[lang][key]) el.placeholder = i18n[lang][key];
-            });
-
-            // 刷新动态显示的就餐方式文本
-            if(diningOptionKey) {
-                document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey];
-                document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey];
-            }
-
-            renderMenu(); // 刷新菜单以更新产品语言
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(i18n[lang][key]) el.innerText = i18n[lang][key]; });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { const key = el.getAttribute('data-i18n-ph'); if(i18n[lang][key]) el.placeholder = i18n[lang][key]; });
+            if(diningOptionKey) { document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey]; document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey]; }
+            renderMenu();
         }
 
-
-        function switchView(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        window.startOrder = function(modeKey) {
-            diningOptionKey = modeKey;
-            document.getElementById('display-dining-mode').innerText = i18n[currentLang][modeKey];
-            document.getElementById('chk-dining-mode').innerText = i18n[currentLang][modeKey];
-            switchView('view-menu');
-        }
-
+        function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0, 0); }
+        window.startOrder = function(modeKey) { diningOptionKey = modeKey; document.getElementById('display-dining-mode').innerText = i18n[currentLang][modeKey]; document.getElementById('chk-dining-mode').innerText = i18n[currentLang][modeKey]; switchView('view-menu'); }
         window.goBackToWelcome = function() { switchView('view-welcome'); }
+        window.goBackToMenu = function() { switchView('view-menu'); }
 
         window.goToCheckout = function() {
             document.getElementById('cart-modal').classList.remove('show');
             document.getElementById('cart-overlay').classList.remove('show');
-            
             const summaryList = document.getElementById('checkout-summary-list');
             let totalPrice = 0;
-            summaryList.innerHTML = Object.values(cart).map(item => {
-                totalPrice += item.price * item.qty;
-                return `
-                    <div class="checkout-summary-item">
-                        <span>${item.qty}x ${item.name}</span>
-                        <span>€ ${(item.price * item.qty).toFixed(2)}</span>
-                    </div>
-                `;
-            }).join('');
-            
+            summaryList.innerHTML = Object.values(cart).map(item => { totalPrice += item.price * item.qty; return `<div class="checkout-summary-item"><span>${item.qty}x ${item.name}</span><span>€ ${(item.price * item.qty).toFixed(2)}</span></div>`; }).join('');
             document.getElementById('chk-total-price').innerText = `€ ${totalPrice.toFixed(2)}`;
             switchView('view-checkout');
         }
 
-        window.goBackToMenu = function() { switchView('view-menu'); }
-
         async function init() {
-            setLang('zh'); // 初始化渲染语言
+            setLang('zh');
             const { data } = await supabaseClient.from('domochi_products').select('*').eq('is_available', true).order('sort_order', { ascending: true });
             allProducts = data || [];
             renderMenu();
         }
 
-        window.switchCategory = function(cat) {
-            currentCat = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.id === 'tab-' + cat) btn.classList.add('active');
-            });
-            renderMenu();
-        }
+        window.switchCategory = function(cat) { currentCat = cat; document.querySelectorAll('.tab-btn').forEach(btn => { btn.classList.remove('active'); if(btn.id === 'tab-' + cat) btn.classList.add('active'); }); renderMenu(); }
 
         function renderMenu() {
-            const list = document.getElementById('menu-list');
-            const items = allProducts.filter(p => p.category === currentCat);
+            const list = document.getElementById('menu-list'); const items = allProducts.filter(p => p.category === currentCat);
             if (items.length === 0) { list.innerHTML = `<p style="text-align:center; padding: 40px; color: #888;">${i18n[currentLang].empty}</p>`; return; }
-
             list.innerHTML = items.map(p => {
-                const qty = cart[p.id]?.qty || 0;
-                const price = p.price ? parseFloat(p.price).toFixed(2) : '4.00'; 
-                
-                // 数据库产品名多语言智能回退：优先找 name_zh/name_en, 如果没有则用 name_it
+                const qty = cart[p.id]?.qty || 0; const price = p.price ? parseFloat(p.price).toFixed(2) : '4.00';
                 const productName = p[`name_${currentLang}`] || p.name_it || p.name || 'Prodotto';
-
-                return `
-                <div class="product-card">
-                    <img src="${p.image_url || 'https://i.ibb.co/gMcnX8yj/IMG-0668.jpg'}" class="product-img">
-                    <div class="product-info">
-                        <div class="product-title">${productName}</div>
-                        <div class="product-price">€ ${price}</div>
-                    </div>
-                    <div class="qty-controls">
-                        ${qty > 0 ? `<button class="qty-btn" onclick="updateCart(${p.id}, -1)">-</button><span class="qty-number">${qty}</span>` : ''}
-                        <button class="qty-btn add" onclick="updateCart(${p.id}, 1)">+</button>
-                    </div>
-                </div>`;
+                return `<div class="product-card"><img src="${p.image_url || 'https://i.ibb.co/gMcnX8yj/IMG-0668.jpg'}" class="product-img"><div class="product-info"><div class="product-title">${productName}</div><div class="product-price">€ ${price}</div></div><div class="qty-controls">${qty > 0 ? `<button class="qty-btn" onclick="updateCart(${p.id}, -1)">-</button><span class="qty-number">${qty}</span>` : ''}<button class="qty-btn add" onclick="updateCart(${p.id}, 1)">+</button></div></div>`;
             }).join('');
         }
 
         window.updateCart = function(productId, change) {
-            const product = allProducts.find(p => p.id === productId);
-            if (!product) return;
-            const price = product.price ? parseFloat(product.price) : 4.00; 
-            const productName = product[`name_${currentLang}`] || product.name_it || product.name;
-
+            const product = allProducts.find(p => p.id === productId); if (!product) return;
+            const price = product.price ? parseFloat(product.price) : 4.00; const productName = product[`name_${currentLang}`] || product.name_it || product.name;
             if (!cart[productId]) cart[productId] = { id: product.id, name: productName, price: price, qty: 0 };
-            cart[productId].qty += change;
-            if (cart[productId].qty <= 0) delete cart[productId];
-
-            renderMenu(); updateCartUI(); renderCartModal(); 
+            cart[productId].qty += change; if (cart[productId].qty <= 0) delete cart[productId];
+            renderMenu(); updateCartUI(); renderCartModal();
         }
 
         function updateCartUI() {
-            const bar = document.getElementById('cart-bar');
-            let totalQty = 0; let totalPrice = 0;
-            Object.values(cart).forEach(item => { totalQty += item.qty; totalPrice += item.price * item.qty; });
-
-            document.getElementById('cart-qty').innerText = totalQty;
-            document.getElementById('cart-price').innerText = `€ ${totalPrice.toFixed(2)}`;
-
-            if (totalQty > 0) bar.classList.remove('hidden');
-            else {
-                bar.classList.add('hidden');
-                document.getElementById('cart-modal').classList.remove('show');
-                document.getElementById('cart-overlay').classList.remove('show');
-            }
+            const bar = document.getElementById('cart-bar'); let totalQty = 0; let totalPrice = 0; Object.values(cart).forEach(item => { totalQty += item.qty; totalPrice += item.price * item.qty; });
+            document.getElementById('cart-qty').innerText = totalQty; document.getElementById('cart-price').innerText = `€ ${totalPrice.toFixed(2)}`;
+            if (totalQty > 0) bar.classList.remove('hidden'); else { bar.classList.add('hidden'); document.getElementById('cart-modal').classList.remove('show'); document.getElementById('cart-overlay').classList.remove('show'); }
         }
 
-        window.toggleCartModal = function() {
-            const modal = document.getElementById('cart-modal');
-            const overlay = document.getElementById('cart-overlay');
-            if (Object.keys(cart).length === 0) return;
-            if (modal.classList.contains('show')) { modal.classList.remove('show'); overlay.classList.remove('show'); } 
-            else { renderCartModal(); modal.classList.add('show'); overlay.classList.add('show'); }
-        }
+        window.toggleCartModal = function() { const modal = document.getElementById('cart-modal'); const overlay = document.getElementById('cart-overlay'); if (Object.keys(cart).length === 0) return; if (modal.classList.contains('show')) { modal.classList.remove('show'); overlay.classList.remove('show'); } else { renderCartModal(); modal.classList.add('show'); overlay.classList.add('show'); } }
+        function renderCartModal() { const list = document.getElementById('cart-modal-list'); list.innerHTML = Object.values(cart).map(item => `<div class="modal-item"><div class="modal-item-info"><div class="modal-item-name">${item.name}</div><div class="modal-item-price">€ ${(item.price * item.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${item.id}, -1)">-</button><span class="qty-number">${item.qty}</span><button class="qty-btn add" onclick="updateCart(${item.id}, 1)">+</button></div></div>`).join(''); }
 
-        function renderCartModal() {
-            const list = document.getElementById('cart-modal-list');
-            list.innerHTML = Object.values(cart).map(item => `
-                <div class="modal-item">
-                    <div class="modal-item-info">
-                        <div class="modal-item-name">${item.name}</div>
-                        <div class="modal-item-price">€ ${(item.price * item.qty).toFixed(2)}</div>
-                    </div>
-                    <div class="qty-controls">
-                        <button class="qty-btn" onclick="updateCart(${item.id}, -1)">-</button>
-                        <span class="qty-number">${item.qty}</span>
-                        <button class="qty-btn add" onclick="updateCart(${item.id}, 1)">+</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
+        // 核心更新：生成每日自动重置的流水单号
         window.submitFinalOrder = async function() {
             const btn = document.getElementById('btn-submit');
             const custName = document.getElementById('cust-name').value.trim();
             const custPhone = document.getElementById('cust-phone').value.trim();
             const custNotes = document.getElementById('cust-notes').value.trim();
 
-            if (!custName) {
-                alert(i18n[currentLang].err_name);
-                document.getElementById('cust-name').focus();
-                return;
-            }
+            if (!custName) { alert(i18n[currentLang].err_name); document.getElementById('cust-name').focus(); return; }
 
-            btn.innerText = i18n[currentLang].processing;
-            btn.disabled = true;
-
-            let totalPrice = 0;
-            const orderItems = Object.values(cart);
-            orderItems.forEach(i => totalPrice += i.price * i.qty);
+            btn.innerText = i18n[currentLang].processing; btn.disabled = true;
+            let totalPrice = 0; const orderItems = Object.values(cart); orderItems.forEach(i => totalPrice += i.price * i.qty);
 
             try {
-                const { count } = await supabaseClient.from('domochi_orders').select('*', { count: 'exact', head: true });
+                // 计算今天意大利当地时间的零点和深夜时间段，用于统计今日单量
+                const now = new Date();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+
+                // 只查询今天生成的订单总数
+                const { count } = await supabaseClient
+                    .from('domochi_orders')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', todayStart);
+                
+                // 每日跨天自动从 001 开始重新计算
                 const nextOrderNumber = (count + 1).toString().padStart(3, '0');
 
                 const payload = {
                     order_number: nextOrderNumber,
                     order_data: {
                         customer_info: { name: custName, phone: custPhone, notes: custNotes },
-                        dining_option: i18n.it[diningOptionKey], // 数据库统一存意大利语状态，方便后厨查看
+                        dining_option: i18n.it[diningOptionKey], 
                         items: orderItems 
                     },
                     total_amount: totalPrice,
@@ -458,28 +272,17 @@
                 const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
                 if (error) throw error;
                 
-                // 根据当前语言弹出成功提示
-                const msg = currentLang === 'zh' ? `✅ 下单成功！\n取餐号：#${nextOrderNumber}\n谢谢您, ${custName}!` : 
-                            (currentLang === 'en' ? `✅ Success!\nOrder: #${nextOrderNumber}\nThank you, ${custName}!` : 
-                            `✅ Ordine inviato!\nNumero: #${nextOrderNumber}\nGrazie, ${custName}!`);
+                const msg = currentLang === 'zh' ? `✅ 下单成功！\n取餐号：#${nextOrderNumber}\n谢谢您, ${custName}!` : (currentLang === 'en' ? `✅ Success!\nOrder: #${nextOrderNumber}\nThank you, ${custName}!` : `✅ Ordine inviato!\nNumero: #${nextOrderNumber}\nGrazie, ${custName}!`);
                 alert(msg);
                 
-                cart = {}; 
-                document.getElementById('cust-name').value = '';
-                document.getElementById('cust-phone').value = '';
-                document.getElementById('cust-notes').value = '';
-                updateCartUI();
-                renderMenu();
-                switchView('view-welcome');
-
+                cart = {}; document.getElementById('cust-name').value = ''; document.getElementById('cust-phone').value = ''; document.getElementById('cust-notes').value = '';
+                updateCartUI(); renderMenu(); switchView('view-welcome');
             } catch (err) {
                 alert(i18n[currentLang].error + err.message);
             } finally {
-                btn.innerText = i18n[currentLang].confirm;
-                btn.disabled = false;
+                btn.innerText = i18n[currentLang].confirm; btn.disabled = false;
             }
         }
-
         window.onload = init;
     </script>
 </body>
