@@ -38,7 +38,7 @@
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .brand-logo-small { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
         .brand-name { font-size: 1.2rem; font-weight: 800; }
-        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-right: 120px; }
+        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; }
         
         .category-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: none; background: white; color: var(--text-main); font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; }
@@ -142,14 +142,21 @@
         <button class="big-btn" onclick="startOrder('eat_in')"><i class="fa-solid fa-utensils"></i> <span data-i18n="eat_in">堂食</span></button>
         <button class="big-btn" onclick="startOrder('takeaway')"><i class="fa-solid fa-bag-shopping"></i> <span data-i18n="takeaway">打包</span></button>
         <button class="big-btn" onclick="startOrder('pickup')"><i class="fa-solid fa-store"></i> <span data-i18n="pickup">自提</span></button>
-        <button class="big-btn query-btn" onclick="promptQueryOrder()"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
+        
+        <!-- 修改：直接跳转到新页面 -->
+        <button class="big-btn query-btn" onclick="window.location.href='track-order.html'"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
     </div>
 
     <!-- VIEW 2: 菜单页 -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area"><img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small"><span class="brand-name">Dōmochi</span></div>
-            <div class="table-badge" onclick="goBackToWelcome()"><span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i></div>
+            
+            <!-- 修改：在右上角增加了直接查看订单的快捷图标 -->
+            <div style="display: flex; align-items: center; margin-right: 100px;">
+                <a href="track-order.html" style="color: white; font-size: 1.2rem; margin-right: 15px;"><i class="fa-solid fa-receipt"></i></a>
+                <div class="table-badge" onclick="goBackToWelcome()" style="margin-right: 0;"><span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i></div>
+            </div>
         </div>
         <div class="category-tabs">
             <button class="tab-btn active" id="tab-mochi" onclick="switchCategory('mochi')"><i class="fa-solid fa-cookie"></i> <span data-i18n="cat_mochi">麻薯</span></button>
@@ -330,6 +337,13 @@
                 };
                 const { data } = await supabaseClient.from('domochi_orders').insert([orderData]).select();
                 
+                // === 修改：将新订单 ID 保存到本地，供 track-order.html 自动查询 ===
+                if (data && data.length > 0) {
+                    let recentOrders = JSON.parse(localStorage.getItem('domochi_recent_orders') || '[]');
+                    recentOrders.push(data[0].id);
+                    localStorage.setItem('domochi_recent_orders', JSON.stringify(recentOrders));
+                }
+                
                 // 核心修复：提交成功后彻底清空购物车，恢复 UI 状态，允许下一次点单
                 cart = {}; 
                 document.getElementById('cust-notes').value = ''; // 仅清空备注，保留姓名电话方便复用
@@ -378,6 +392,7 @@
             else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; }
         }
 
+        // 注意：保留了这个方法名以防别处引用，但主要按钮已经改为直接跳转了
         window.promptQueryOrder = async () => {
             const phone = prompt(i18n[currentLang].prompt_phone); if(!phone) return;
             const todayStart = new Date(); todayStart.setHours(0,0,0,0);
