@@ -86,6 +86,20 @@
         .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--brand-primary); cursor: pointer; flex-shrink: 0; }
         .checkbox-group label { font-size: 0.85rem; color: #777; font-weight: 500; line-height: 1.4; cursor: pointer; }
 
+        /* VIEW 3 核心修改：确认下单按钮放大 */
+        .btn-final-submit { 
+            width: 100%; 
+            background: var(--brand-primary); 
+            color: white; 
+            border: none; 
+            padding: 24px; /* 从 16px 增加到 24px */
+            border-radius: 15px; 
+            font-weight: 800; 
+            font-size: 1.4rem; /* 从 1.1rem 增加到 1.4rem */
+            box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); 
+            cursor: pointer; 
+        }
+
         /* VIEW 4: 电子小票 */
         .ticket-box { background: white; border: 2px dashed #ccc; padding: 25px 20px; border-radius: 15px; margin: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .ticket-title { text-align: center; font-size: 1.4rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
@@ -96,7 +110,7 @@
         .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
 
-        /* VIEW 5: 详细历史列表 (新增/保持样式) */
+        /* VIEW 5: 详细历史列表 (保持样式) */
         .history-list-container { padding: 15px; }
         .history-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--brand-primary); }
         .history-info { flex: 1; }
@@ -176,10 +190,10 @@
         <div class="ticket-box">
             <div class="ticket-title">Dōmochi Scontrino</div>
             <div id="receipt-status-banner" class="status-banner"></div>
-            <div class="ticket-row"><strong>取餐号：</strong><span id="rec-num" style="font-size:1.4rem; font-weight:900; color:var(--brand-primary);">#--</span></div>
-            <div class="ticket-row"><strong>就餐选择：</strong><span id="rec-mode">--</span></div>
-            <div class="ticket-row"><strong>顾客姓名：</strong><span id="rec-name">--</span></div>
-            <div class="ticket-row"><strong>联系电话：</strong><span id="rec-phone">--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_num">取餐号：</strong><span id="rec-num" style="font-size:1.4rem; font-weight:900; color:var(--brand-primary);">#--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_mode">就餐选择：</strong><span id="rec-mode">--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_name">顾客姓名：</strong><span id="rec-name">--</span></div>
+            <div class="ticket-row"><strong data-i18n="receipt_phone">联系电话：</strong><span id="rec-phone">--</span></div>
             <div style="margin: 15px 0 10px 0; font-weight:bold; border-bottom:2px solid #333;" data-i18n="receipt_items">商品明细：</div>
             <div id="receipt-items-list"></div>
             <div class="ticket-total"><span data-i18n="total">总计</span><span id="rec-total">€ 0.00</span></div>
@@ -201,21 +215,24 @@
 
         const i18n = {
             zh: {
-                eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "返回首页", receipt_items: "商品明细：",
+                eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "查看购物车", go_checkout: "去结算", back_menu: "返回菜单", summary: "订单汇总", total: "总计", your_details: "填写信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "返回首页", 
+                receipt_num: "取餐号：", receipt_mode: "就餐方式：", receipt_name: "顾客姓名：", receipt_phone: "联系电话：", receipt_items: "商品明细：",
                 find_order: "手机号查进度", prompt_phone: "请输入电话查询今日单：", status_making: "⏳ 正在制作...", status_done: "✅ 已出餐，请取餐", no_order_found: "今日暂无记录", today_orders: "今日记录", history_desc: "点击下方单据查看详情", privacy_agree: "同意收集信息追踪订单", err_privacy: "请同意隐私条款", err_phone: "请填写电话", err_name: "请填写姓名"
             },
             it: {
-                eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", receipt_items: "Dettagli:",
+                eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", 
+                receipt_num: "N. Ordine:", receipt_mode: "Modalità:", receipt_name: "Cliente:", receipt_phone: "Telefono:", receipt_items: "Dettagli:",
                 find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto! Ritira al banco", no_order_found: "Nessun ordine oggi", today_orders: "Ordini di Oggi", history_desc: "Tocca per i dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome"
             },
             en: {
-                eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", receipt_items: "Items:",
+                eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", 
+                receipt_num: "Order No:", receipt_mode: "Option:", receipt_name: "Name:", receipt_phone: "Phone:", receipt_items: "Items:",
                 find_order: "Track Order", prompt_phone: "Enter phone for today:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders today", today_orders: "Today's Orders", history_desc: "Tap to view detail", privacy_agree: "Agree to track order", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req."
             }
         };
 
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = ''; 
-        let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = [];
+        let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = []; let currentReceiptOrder = null;
 
         function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); }
         
@@ -224,8 +241,9 @@
             document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(i18n[lang][k]) el.innerText = i18n[lang][k]; });
             if(diningOptionKey) { document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey]; document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey]; }
             renderMenu();
-            if(liveOrderId) renderStatusBanner(liveOrderStatus); // 自动更新详情页状态
-            if(lastQueriedOrders.length > 0) renderHistoryList(lastQueriedOrders); // 自动更新列表页状态
+            // 核心修复：如果当前在显示小票，重新渲染内容以应用语言切换
+            if(currentReceiptOrder) showReceipt(currentReceiptOrder);
+            if(lastQueriedOrders.length > 0) renderHistoryList(lastQueriedOrders); 
         };
 
         window.startOrder = (m) => { diningOptionKey=m; switchView('view-menu'); setLang(currentLang); };
@@ -251,7 +269,7 @@
 
         window.updateCart = (pid, chg) => {
             const p = allProducts.find(x=>x.id===pid); if(!p) return;
-            if(!cart[pid]) cart[pid] = { id: p.id, name: p[`name_${currentLang}`]||p.name, price: parseFloat(p.price||4), qty: 0 };
+            if(!cart[pid]) cart[pid] = { id: p.id, name: p[`name_${currentLang}`]||p.name, price: parseFloat(p.price||4), qty: 0, original_id: p.id };
             cart[pid].qty += chg; if(cart[pid].qty<=0) delete cart[pid];
             renderMenu(); updateUI(); renderCart();
         }
@@ -263,9 +281,19 @@
         }
 
         window.toggleCartModal = () => { document.getElementById('cart-modal').classList.toggle('show'); document.getElementById('cart-overlay').classList.toggle('show'); };
-        function renderCart() { document.getElementById('cart-modal-list').innerHTML = Object.values(cart).map(i => `<div class="modal-item"><div class="modal-item-info"><b>${i.name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${i.id},-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCart(${i.id},1)">+</button></div></div>`).join(''); }
+        function renderCart() { 
+            document.getElementById('cart-modal-list').innerHTML = Object.values(cart).map(i => {
+                const p = allProducts.find(x => x.id === i.id);
+                const displayName = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+                return `<div class="modal-item"><div class="modal-item-info"><b>${displayName}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${i.id},-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCart(${i.id},1)">+</button></div></div>`
+            }).join(''); 
+        }
 
-        window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`}).join(''); document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; switchView('view-checkout'); };
+        window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ 
+            const p = allProducts.find(x => x.id === i.id);
+            const displayName = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+            t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${displayName}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`}).join(''); document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; switchView('view-checkout'); 
+        };
 
         window.submitFinalOrder = async () => {
             const n=document.getElementById('cust-name').value, p=document.getElementById('cust-phone').value, privacy=document.getElementById('cust-privacy').checked;
@@ -285,13 +313,33 @@
             } catch(e) { alert(e.message); btn.disabled=false; }
         };
 
+        // 核心修复：自动根据语言切换小票显示内容
         function showReceipt(o) {
+            currentReceiptOrder = o; // 存入全局，方便切换语言时刷新
             liveOrderId = o.id; liveOrderStatus = o.status;
+            
             document.getElementById('rec-num').innerText=`#${o.order_number}`;
-            document.getElementById('rec-mode').innerText=o.order_data.dining_option; document.getElementById('rec-name').innerText=o.order_data.customer_info.name;
-            document.getElementById('rec-phone').innerText=o.order_data.customer_info.phone; document.getElementById('rec-total').innerText=`€ ${parseFloat(o.total_amount).toFixed(2)}`;
-            document.getElementById('receipt-items-list').innerHTML = o.order_data.items.map(i=>`<div class="ticket-row"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`).join('');
-            renderStatusBanner(o.status); switchView('view-receipt');
+            
+            // 翻译就餐方式
+            let modeKey = 'eat_in';
+            const opt = o.order_data.dining_option;
+            if(opt === "Da asporto") modeKey = 'takeaway';
+            if(opt === "Ritiro in negozio") modeKey = 'pickup';
+            document.getElementById('rec-mode').innerText = i18n[currentLang][modeKey];
+
+            document.getElementById('rec-name').innerText=o.order_data.customer_info.name;
+            document.getElementById('rec-phone').innerText=o.order_data.customer_info.phone;
+            document.getElementById('rec-total').innerText=`€ ${parseFloat(o.total_amount).toFixed(2)}`;
+            
+            // 翻译商品明细
+            document.getElementById('receipt-items-list').innerHTML = o.order_data.items.map(i => {
+                const p = allProducts.find(x => x.id === i.id);
+                const displayName = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+                return `<div class="ticket-row"><span>${i.qty}x ${displayName}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`;
+            }).join('');
+
+            renderStatusBanner(o.status); 
+            switchView('view-receipt');
         }
 
         function renderStatusBanner(s) {
@@ -300,7 +348,6 @@
             else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-check"></i> ${i18n[currentLang].status_done}`; }
         }
 
-        // --- 核心修复：详细列表查询与下单时间校准 ---
         window.promptQueryOrder = async () => {
             const phone = prompt(i18n[currentLang].prompt_phone); if(!phone) return;
             const todayStart = new Date(); todayStart.setHours(0,0,0,0);
@@ -308,7 +355,7 @@
             const { data, error } = await supabaseClient.from('domochi_orders')
                 .select('*')
                 .contains('order_data->customer_info', { phone: phone.trim() })
-                .gte('created_at', todayStart.toISOString()) // 确保只查今天
+                .gte('created_at', todayStart.toISOString()) 
                 .order('id', {ascending: false});
 
             if(error || !data || data.length === 0) { alert(i18n[currentLang].no_order_found); return; }
@@ -325,17 +372,22 @@
         function renderHistoryList(orders) {
             const container = document.getElementById('history-list');
             container.innerHTML = orders.map(o => {
-                // 修复：下单时间校准。使用 Date 对象解析服务器 UTC 时间，然后转为本地格式
                 const dateObj = new Date(o.created_at);
                 const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 
+                let modeKey = 'eat_in';
+                const opt = o.order_data.dining_option;
+                if(opt === "Da asporto") modeKey = 'takeaway';
+                if(opt === "Ritiro in negozio") modeKey = 'pickup';
+                const displayMode = i18n[currentLang][modeKey];
+
                 const sLabel = o.status==='pending' ? i18n[currentLang].status_making : i18n[currentLang].status_done;
                 const sClass = o.status==='pending' ? 'status-tag-pending' : 'status-tag-completed';
                 
                 return `
                 <div class="history-card" onclick='viewOrderDetail(${JSON.stringify(o)})'>
                     <div class="history-info">
-                        <div class="history-meta">${timeStr} | ${o.order_data.dining_option}</div>
+                        <div class="history-meta">${timeStr} | ${displayMode}</div>
                         <div class="history-title">Ordine #${o.order_number}</div>
                         <div class="history-status-tag ${sClass}">${sLabel}</div>
                     </div>
@@ -350,7 +402,6 @@
         function setupRealtime() {
             supabaseClient.channel('sync').on('postgres_changes', {event:'UPDATE', schema:'public', table:'domochi_orders'}, p => {
                 if(liveOrderId && p.new.id===liveOrderId) renderStatusBanner(p.new.status);
-                // 同时也刷新一下历史列表里的状态（如果存在）
                 if(lastQueriedOrders.length > 0) {
                     lastQueriedOrders = lastQueriedOrders.map(o => o.id === p.new.id ? p.new : o);
                     if(document.getElementById('view-history').classList.contains('active')) renderHistoryList(lastQueriedOrders);
