@@ -22,37 +22,33 @@
         .auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--brand-primary); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .auth-box { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 90%; max-width: 380px; }
         .auth-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1.5rem; text-align: center; margin-bottom: 15px; outline: none; letter-spacing: 5px; font-weight: 800; color: var(--brand-primary); }
-        .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: opacity 0.2s; }
-        .auth-btn:active { opacity: 0.8; }
-        .auth-error { color: #DF4F53; font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; display: none; background: #fee8e8; padding: 10px; border-radius: 8px; }
+        .auth-btn { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
 
         /* 顶部导航 */
         .admin-header { background: white; padding: 15px 25px; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 25px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; position: sticky; top: 10px; z-index: 100; }
         .admin-title { font-size: 1.4rem; font-weight: 800; color: var(--brand-primary); display: flex; align-items: center; gap: 10px; }
         
         .header-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .search-input { padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 0.9rem; width: 180px; transition: all 0.3s; }
-        .search-input:focus { border-color: var(--brand-primary); width: 220px; }
+        .search-input { padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 0.9rem; width: 160px; }
 
         .view-toggle-btn { background: #333; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .view-toggle-btn.history-mode { background: #52c41a; }
         
-        .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; white-space: nowrap; }
-        .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+        .stats-badge { background: #fee8e8; color: var(--brand-primary); padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; }
+        .audio-test-btn { background: #f0f0f0; border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
 
         /* 订单网格 */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .order-card { background: white; border-radius: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; border: 2px solid transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
         
-        /* 状态条 */
         .order-card.eat_in { border-top: 6px solid var(--color-eat-in); }
         .order-card.takeaway { border-top: 6px solid var(--color-takeaway); }
         .order-card.pickup { border-top: 6px solid var(--color-pickup); }
-        .order-card.completed-style { opacity: 0.8; border-top: 6px solid #8c8c8c !important; filter: grayscale(0.3); }
+        .order-card.completed-style { opacity: 0.75; border-top: 6px solid #8c8c8c !important; filter: grayscale(0.2); }
 
-        /* 超时闪烁动画 */
+        /* 超时闪烁动画 (超过20分钟) */
         .order-card.critical { animation: border-pulse 1.5s infinite; border: 2px solid #ff4d4f; }
-        @keyframes border-pulse { 0% { box-shadow: 0 0 0px rgba(255,77,79,0.4); } 50% { box-shadow: 0 0 20px rgba(255,77,79,0.7); } 100% { box-shadow: 0 0 0px rgba(255,77,79,0.4); } }
+        @keyframes border-pulse { 0% { box-shadow: 0 0 0px rgba(255,77,79,0.2); } 50% { box-shadow: 0 0 15px rgba(255,77,79,0.6); } 100% { box-shadow: 0 0 0px rgba(255,77,79,0.2); } }
 
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
@@ -63,7 +59,6 @@
         .mode-badge.pickup { background: var(--color-pickup); }
 
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
-        .cust-row { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
         .cust-name { font-weight: 700; color: #333; font-size: 1rem; }
         .cust-notes { background: #fee8e8; color: var(--brand-primary); padding: 6px 10px; border-radius: 6px; font-weight: 700; margin-top: 8px; font-size: 0.85rem; border-left: 4px solid var(--brand-primary); }
 
@@ -75,58 +70,52 @@
 
         .items-box { padding: 15px; flex: 1; }
         .item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1rem; font-weight: 600; }
-        .item-qty { font-weight: 900; color: var(--brand-primary); margin-right: 8px; font-size: 1.1rem; }
+        .item-qty { font-weight: 900; color: var(--brand-primary); margin-right: 8px; }
 
         .card-footer { padding: 15px; border-top: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 10px; }
         .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
         
-        .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s; }
-        .btn-done:active { transform: scale(0.96); }
+        .btn-done { width: 100%; background: #2f54eb; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-revert { background: #faad14; } 
 
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: #aaa; }
-        .sync-time { font-size: 0.75rem; color: #999; margin-top: 5px; text-align: right; width: 100%; }
+        .sync-info { font-size: 0.75rem; color: #999; text-align: right; width: 100%; }
 
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .admin-header { padding: 12px; border-radius: 0 0 16px 16px; margin: -10px -10px 15px -10px; position: sticky; top: 0; }
-            .search-input { width: 100%; }
+            .admin-header { padding: 12px; border-radius: 0 0 16px 16px; margin: -10px -10px 15px -10px; }
+            .search-input { width: 100px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 登录模块保持不变 -->
     <div id="auth-overlay" class="auth-overlay">
         <div class="auth-box">
-            <h2 class="auth-title"><i class="fa-solid fa-lock"></i> Dōmochi Admin</h2>
-            <p style="margin-bottom:20px; color:#666;">Inserisci la password di gestione</p>
-            <div id="auth-error" class="auth-error">Password errata!</div>
+            <h2 style="color:var(--brand-primary); margin-bottom:5px;">Dōmochi Admin</h2>
+            <p style="margin-bottom:20px; color:#666; font-size:0.9rem;">Inserisci password (请输入密码)</p>
+            <div id="auth-error" style="color:red; display:none; margin-bottom:10px; font-weight:bold;">Password Errata!</div>
             <input type="password" id="auth-pwd" class="auth-input" placeholder="••••" onkeypress="if(event.key === 'Enter') verifyPassword()">
-            <button class="auth-btn" onclick="verifyPassword()">Accedi</button>
+            <button class="auth-btn" onclick="verifyPassword()">ENTRA</button>
         </div>
     </div>
 
-    <!-- 增强版头部 -->
     <div class="admin-header">
         <div class="admin-title">
-            <i class="fa-solid fa-bowl-food"></i> 接单看板
+            <i class="fa-solid fa-bell"></i> Dōmochi 接单
             <button class="audio-test-btn" onclick="playAlertSound()"><i class="fa-solid fa-volume-high"></i></button>
         </div>
         <div class="header-controls">
-            <!-- 新增搜索框 -->
-            <input type="text" id="order-search" class="search-input" placeholder="Cerca # o Nome..." oninput="renderOrders()">
+            <input type="text" id="order-search" class="search-input" placeholder="搜索单号/姓名..." oninput="renderOrders()">
             <button class="view-toggle-btn" id="btn-toggle-view" onclick="toggleViewMode()">
-                <i class="fa-solid fa-clock-history"></i> <span id="toggle-text">已处理订单</span>
+                <i class="fa-solid fa-clock-history"></i> <span id="toggle-text">查看历史</span>
             </button>
-            <div class="stats-badge" id="pending-count">Caricamento...</div>
+            <div class="stats-badge" id="pending-count">Ordini: 0</div>
         </div>
-        <div class="sync-time" id="last-sync">Sync: --:--</div>
+        <div class="sync-info" id="last-sync">Ultimo aggiornamento: --:--</div>
     </div>
 
-    <div class="orders-grid" id="orders-container">
-        <!-- 订单卡片动态载入 -->
-    </div>
+    <div class="orders-grid" id="orders-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -145,27 +134,27 @@
                 document.getElementById('auth-overlay').style.display = 'none';
                 initAdminSystem();
             } else {
-                const err = document.getElementById('auth-error');
-                err.style.display = 'block';
-                setTimeout(() => err.style.display = 'none', 2000);
+                document.getElementById('auth-error').style.display = 'block';
             }
         }
 
-        // 语音播报：增加对重复播报的防抖和队列处理
+        // 核心语音函数
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'zh-CN';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'zh-CN';
+                    utterance.rate = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }, 100);
             }
         }
-        function playAlertSound() { speakText("系统播报：语音测试正常。"); }
+
+        function playAlertSound() { speakText("系统播报：语音功能已就绪。"); }
 
         async function fetchOrders() {
             let query = supabaseClient.from('domochi_orders').select('*');
-            
             if (currentMode === 'pending') {
                 query = query.eq('status', 'pending').order('created_at', { ascending: true });
             } else {
@@ -175,7 +164,7 @@
             const { data, error } = await query;
             if (!error) {
                 activeOrders = data || [];
-                document.getElementById('last-sync').innerText = "Sync: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                document.getElementById('last-sync').innerText = "Ultimo aggiornamento: " + new Date().toLocaleTimeString();
                 renderOrders();
             }
         }
@@ -184,9 +173,8 @@
             const btn = document.getElementById('btn-toggle-view');
             const txt = document.getElementById('toggle-text');
             currentMode = (currentMode === 'pending') ? 'completed' : 'pending';
-            
             btn.classList.toggle('history-mode', currentMode === 'completed');
-            txt.innerText = currentMode === 'pending' ? "查看已处理" : "返回待处理";
+            txt.innerText = currentMode === 'pending' ? "查看历史" : "返回待处理";
             fetchOrders();
         }
 
@@ -194,7 +182,6 @@
             const container = document.getElementById('orders-container');
             const searchTerm = document.getElementById('order-search').value.toLowerCase();
             
-            // 过滤逻辑
             const filteredOrders = activeOrders.filter(o => {
                 const name = (o.order_data?.customer_info?.name || "").toLowerCase();
                 const num = String(o.order_number || o.id);
@@ -204,7 +191,7 @@
             document.getElementById('pending-count').innerText = `${currentMode === 'pending' ? '待制作' : '已完成'}: ${filteredOrders.length}`;
 
             if (filteredOrders.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-inbox fa-3x"></i><p style="margin-top:15px">Nessun ordine trovato</p></div>`;
+                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-mug-hot fa-3x"></i><p style="margin-top:15px">Nessun ordine presente</p></div>`;
                 return;
             }
 
@@ -220,9 +207,7 @@
                     if(rawOption.toLowerCase().includes('ritiro') || rawOption.toLowerCase().includes('pickup')) cssClass = 'pickup';
 
                     let items = Array.isArray(rawData) ? rawData : (rawData.items || []);
-                    const orderTime = new Date(order.created_at);
-                    const timeStr = orderTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+                    const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const isHistory = currentMode === 'completed';
                     
                     htmlString += `
@@ -232,11 +217,11 @@
                             <span class="mode-badge ${cssClass}">${isHistory ? 'FINITO' : rawOption}</span>
                         </div>
                         <div class="customer-box">
-                            <div class="cust-row"><i class="fa-solid fa-user"></i> <span class="cust-name">${info.name}</span></div>
-                            <div class="cust-row" style="justify-content: space-between;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="cust-name"><i class="fa-solid fa-user"></i> ${info.name}</span>
                                 <span><i class="fa-solid fa-clock"></i> ${timeStr}</span>
-                                ${!isHistory ? `<span class="wait-time-container wait-time safe" data-time="${order.created_at}">Calcolo...</span>` : ''}
                             </div>
+                            ${!isHistory ? `<div style="margin-top:8px"><span class="wait-time-container wait-time safe" data-time="${order.created_at}">Calcolo...</span></div>` : ''}
                             ${info.notes ? `<div class="cust-notes"><i class="fa-solid fa-comment"></i> ${info.notes}</div>` : ''}
                         </div>
                         <div class="items-box">
@@ -249,11 +234,11 @@
                         <div class="card-footer">
                             <div class="total-row"><span>Totale</span><span style="color:var(--brand-primary)">€${parseFloat(order.total_amount || 0).toFixed(2)}</span></div>
                             <button class="btn-done ${isHistory?'btn-revert':''}" onclick="changeOrderStatus(${order.id}, '${isHistory?'pending':'completed'}')">
-                                <i class="fa-solid ${isHistory?'fa-rotate-left':'fa-check-double'}"></i> ${isHistory?'Ripristina':'Completato'}
+                                <i class="fa-solid ${isHistory?'fa-rotate-left':'fa-check'}"></i> ${isHistory?'恢复订单':'完成出餐'}
                             </button>
                         </div>
                     </div>`;
-                } catch (e) { console.error("Error rendering card", e); }
+                } catch (e) { console.error(e); }
             });
             container.innerHTML = htmlString;
             updateWaitTimes();
@@ -268,59 +253,68 @@
                 if(!timeAttr || !container) return;
 
                 const diffMins = Math.floor((now - new Date(timeAttr)) / 60000);
-                
                 let status = 'safe';
                 card.classList.remove('critical');
                 
-                if (diffMins >= 25) {
+                if (diffMins >= 20) {
                     status = 'danger';
-                    card.classList.add('critical'); // 超过25分钟闪烁
-                } else if (diffMins >= 12) {
+                    card.classList.add('critical');
+                } else if (diffMins >= 10) {
                     status = 'warning';
                 }
 
                 container.className = `wait-time-container wait-time ${status}`;
-                container.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> ${diffMins} min`;
+                container.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> 等待 ${diffMins} 分钟`;
             });
         }
 
         window.changeOrderStatus = async function(orderId, newStatus) {
-            const btn = event.currentTarget;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
-
             const { error } = await supabaseClient.from('domochi_orders').update({ status: newStatus }).eq('id', orderId);
             if (!error) {
                 activeOrders = activeOrders.filter(o => o.id !== orderId);
                 renderOrders();
-            } else {
-                btn.disabled = false;
-                alert("Errore nel salvataggio");
             }
         }
 
+        // ================= 重写的实时监听与分类语音播报 =================
         function setupRealtimeSubscription() {
-            supabaseClient.channel('custom-all-channel')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'domochi_orders' }, (payload) => {
-                if (payload.eventType === 'INSERT') {
-                    if (currentMode === 'pending') {
-                        activeOrders.unshift(payload.new);
-                        renderOrders();
-                    }
-                    const num = payload.new.order_number || payload.new.id;
-                    speakText(`新订单，号码 ${String(num).split('').join(' ')}`);
-                } else {
-                    // 更新或删除时重新获取以保持同步
-                    fetchOrders();
+            supabaseClient.channel('orders-realtime')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'domochi_orders' }, (payload) => {
+                if (currentMode === 'pending') {
+                    activeOrders.push(payload.new);
+                    renderOrders();
                 }
-            }).subscribe();
+
+                // 语音播报逻辑（保留原本的分类识别）
+                try {
+                    const orderNum = payload.new.order_number || '';
+                    const rawOption = String(payload.new.order_data.dining_option || '堂食');
+                    
+                    let modeZh = "堂食";
+                    const lowerOption = rawOption.toLowerCase();
+                    if(lowerOption.includes('asporto') || lowerOption.includes('takeaway')) {
+                        modeZh = "打包";
+                    } else if(lowerOption.includes('ritiro') || lowerOption.includes('pickup')) {
+                        modeZh = "自提";
+                    }
+
+                    // 播报：您有新的[打包]订单，订单号 1 2 3
+                    speakText(`您有新的${modeZh}订单，订单号 ${orderNum.split('').join(' ')}`);
+                } catch(e) {
+                    console.error("Voice Error:", e);
+                }
+            })
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'domochi_orders' }, (payload) => {
+                fetchOrders();
+            })
+            .subscribe();
         }
 
         function initAdminSystem() { 
             fetchOrders(); 
             setupRealtimeSubscription(); 
             if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateWaitTimes, 20000); // 20秒刷一次等待时间
+            timerInterval = setInterval(updateWaitTimes, 30000); 
         }
 
         window.onload = function() {
