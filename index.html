@@ -406,38 +406,38 @@
 
         window.promptQueryOrder = async function() {
     const phone = prompt(i18n[currentLang].prompt_phone);
-    if(!phone || !phone.trim()) return;
+    if (!phone || !phone.trim()) return;
 
-    // 获取今天零点的时间戳
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-    // 修改查询：移除 limit(1)，只保留根据电话号码和今天日期的筛选
     const { data, error } = await supabaseClient
         .from('domochi_orders')
         .select('*')
         .contains('order_data->customer_info', { phone: phone.trim() })
-        .gte('created_at', todayStart) // 过滤：只看今天的订单
-        .order('id', { ascending: false }); // 最新下单的排在前面
+        .gte('created_at', twentyFourHoursAgo)
+        .order('id', { ascending: false });
 
-    if (error) { alert("Errore: " + error.message); return; }
+    if (error) { alert("Error: " + error.message); return; }
 
-    if(data && data.length > 0) {
+    if (data && data.length > 0) {
         if (data.length === 1) {
-            // 如果只有一单，直接显示
             showReceiptView(data[0]);
         } else {
-            // 如果有多单，显示一个简单选择（或者你可以修改这里直接显示列表）
-            let msg = "找到 " + data.length + " 个订单：\n";
+            let msg = i18n[currentLang].find_order + " (" + data.length + "):\n";
             data.forEach((order, index) => {
                 msg += `${index + 1}. #${order.order_number} - €${order.total_amount} (${order.status})\n`;
             });
-            msg += "\n请输入序号查看对应详情 (1 为最新单)：";
+            msg += "\n(1=Newest)";
             
             const choice = prompt(msg);
-            const idx = parseInt(choice) - 1;
-            if(data[idx]) {
-                showReceiptView(data[idx]);
+            // 确保 choice 不为空，且转换为数字后有效
+            if (choice !== null && choice.trim() !== "") {
+                const idx = parseInt(choice.trim()) - 1;
+                if (!isNaN(idx) && data[idx]) {
+                    showReceiptView(data[idx]);
+                } else {
+                    alert("Invalid choice");
+                }
             }
         }
     } else {
