@@ -45,7 +45,7 @@
         .tab-btn.active { background: var(--brand-primary); color: white; }
 
         .menu-container { padding: 0 15px; }
-        .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; transition: all 0.3s; cursor: pointer;}
+        .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; transition: all 0.3s; cursor: pointer; }
         
         /* 售罄状态样式 */
         .product-card.sold-out { opacity: 0.55; filter: grayscale(90%); pointer-events: none; }
@@ -134,7 +134,6 @@
         <span class="lang-btn" id="l-en" onclick="setLang('en')">EN</span>
     </div>
 
-    <!-- VIEW 1: 欢迎页 -->
     <div id="view-welcome" class="view active">
         <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="welcome-logo">
         <h1 class="welcome-title">Dōmochi</h1>
@@ -145,10 +144,10 @@
         <button class="big-btn query-btn" onclick="window.location.href='track-order.html'"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
     </div>
 
-    <!-- VIEW 2: 菜单页 -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area"><img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small"><span class="brand-name">Dōmochi</span></div>
+            
             <div style="display: flex; align-items: center; margin-right: 100px;">
                 <a href="track-order.html" style="color: white; font-size: 1.2rem; margin-right: 15px;"><i class="fa-solid fa-receipt"></i></a>
                 <div class="table-badge" onclick="goHomeAndReset()" style="margin-right: 0;"><span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i></div>
@@ -159,10 +158,8 @@
             <button class="tab-btn" id="tab-drinks" onclick="switchCategory('drinks')"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="cat_drinks">饮品</span></button>
             <button class="tab-btn" id="tab-desserts" onclick="switchCategory('desserts')"><i class="fa-solid fa-ice-cream"></i> <span data-i18n="cat_desserts">甜点</span></button>
         </div>
-        
         <div class="menu-container" id="menu-list"></div>
         
-        <!-- 购物车弹窗 -->
         <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
         <div class="cart-modal" id="cart-modal">
             <div class="cart-modal-header"><h3 data-i18n="cart_title">购物车</h3><button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button></div>
@@ -175,13 +172,10 @@
         </div>
     </div>
 
-    <!-- 新增：产品详情弹窗 -->
     <div class="cart-modal-overlay" id="prod-overlay" onclick="closeProductModal()" style="z-index:1001;"></div>
     <div class="cart-modal prod-modal" id="prod-modal" style="z-index:1002;">
-        <!-- 动态注入产品详情 -->
-    </div>
+        </div>
 
-    <!-- VIEW 3: 结算页 -->
     <div id="view-checkout" class="view">
         <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
         <div class="checkout-section">
@@ -202,7 +196,6 @@
         <div class="bottom-action-bar"><button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button></div>
     </div>
 
-    <!-- VIEW 4: 电子小票 -->
     <div id="view-receipt" class="view">
         <div class="nav-back" onclick="goHomeAndReset()"><i class="fa-solid fa-house"></i> <span data-i18n="back_home">返回首页</span></div>
         <div class="ticket-box">
@@ -249,7 +242,7 @@
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = ''; 
         let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = []; let currentReceiptOrder = null;
 
-        // 新增：详情弹窗用的变量
+        // 新增详情弹窗变量
         let currentModalProduct = null;
         let selectedSize = 'standard';
         let selectedSizePrice = 0;
@@ -261,7 +254,6 @@
             document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if(i18n[lang][k]) el.innerText = i18n[lang][k]; });
             if(diningOptionKey) { document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey]; document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey]; }
             renderMenu();
-            
             if(currentReceiptOrder) showReceipt(currentReceiptOrder);
         };
 
@@ -300,18 +292,18 @@
 
                 let controlHtml = '';
                 if (isPosAvailable) {
-                    if (p.category === 'drinks') {
-                        // 饮料：显示“选择”按钮
-                        controlHtml = `<div class="qty-controls">${totalQty>0?`<span class="qty-number" style="margin-right:5px; color:var(--brand-primary)">${totalQty}</span>`:''}<button class="qty-btn add" style="width:auto; padding:0 12px; border-radius:15px;" onclick="event.stopPropagation(); openProductModal(${p.id})">${i18n[currentLang].select}</button></div>`;
+                    if (p.has_large) {
+                        // 支持大杯：显示“选择”按钮
+                        controlHtml = `<div class="qty-controls">${totalQty>0?`<span class="qty-number" style="margin-right:5px; color:var(--brand-primary)">${totalQty}</span>`:''}<button class="qty-btn add" style="width:auto; padding:0 12px; border-radius:15px; font-size:0.85rem;" onclick="event.stopPropagation(); openProductModal(${p.id})">${i18n[currentLang].select}</button></div>`;
                     } else {
-                        // 甜品：默认+-号
+                        // 普通甜品：默认+-号
                         controlHtml = `<div class="qty-controls">${totalQty>0?`<button class="qty-btn" onclick="event.stopPropagation(); updateCart(${p.id},-1)">-</button><span class="qty-number">${totalQty}</span>`:''}<button class="qty-btn add" onclick="event.stopPropagation(); updateCart(${p.id},1)">+</button></div>`;
                     }
                 } else {
                     controlHtml = `<div class="sold-out-badge" data-i18n="sold_out">${i18n[currentLang].sold_out}</div>`;
                 }
 
-                // 点击卡片本身，直接打开详情页
+                // 点击卡片本身，直接打开详情页看介绍
                 return `
                 <div class="product-card ${isPosAvailable ? '' : 'sold-out'}" onclick="${isPosAvailable ? `openProductModal(${p.id})` : ''}">
                     <img src="${p.image_url || ''}" class="product-img">
@@ -364,7 +356,8 @@
             const basePrice = parseFloat(p.price || 0);
 
             let optionsHtml = '';
-            if (p.category === 'drinks') {
+            if (p.has_large) {
+                const lp = p.large_price || 1.0;
                 optionsHtml = `
                     <div class="modal-options" style="margin-top: 20px;">
                         <h4 style="margin-bottom:10px; font-size:1rem;">${i18n[currentLang].size_select}</h4>
@@ -372,9 +365,9 @@
                             <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_regular}</span>
                             <span>€ ${basePrice.toFixed(2)}</span>
                         </div>
-                        <div class="size-option" id="opt-Grande" onclick="chooseSize('Grande', 1.00)">
-                            <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_large}</span>
-                            <span>€ ${(basePrice + 1.00).toFixed(2)}</span>
+                        <div class="size-option" id="opt-Grande" onclick="chooseSize('Grande', ${lp})">
+                            <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_large.replace('+€1.00', '+€'+lp.toFixed(2))}</span>
+                            <span>€ ${(basePrice + lp).toFixed(2)}</span>
                         </div>
                     </div>
                 `;
@@ -400,7 +393,7 @@
             document.getElementById('prod-overlay').classList.add('show');
             document.getElementById('prod-modal').classList.add('show');
             
-            if (p.category === 'drinks') chooseSize('Regolare', 0); // 默认选小杯
+            if (p.has_large) chooseSize('Regolare', 0); // 默认选小杯
         };
 
         window.chooseSize = (size, priceExtra) => {
@@ -430,8 +423,6 @@
             document.getElementById('prod-overlay').classList.remove('show');
         }
 
-        // ==========================
-
         function updateUI() {
             const bar = document.getElementById('cart-bar'); let q=0, t=0; Object.values(cart).forEach(i=>{ q+=i.qty; t+=i.price*i.qty; });
             document.getElementById('cart-qty').innerText=q; document.getElementById('cart-price').innerText=`€ ${t.toFixed(2)}`;
@@ -446,9 +437,8 @@
                 const p = allProducts.find(x => x.id === i.id);
                 let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
                 
-                // 拼接规格名称
                 if (i.size && i.size !== 'standard') {
-                    const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.replace(' (+€1.00)','');
+                    const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
                     name += ` (${sizeLabel})`;
                 }
 
@@ -460,7 +450,7 @@
             const p = allProducts.find(x => x.id === i.id);
             let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
             if (i.size && i.size !== 'standard') {
-                const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.replace(' (+€1.00)','');
+                const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
                 name += ` (${sizeLabel})`;
             }
 
@@ -479,7 +469,10 @@
                 const finalCartItems = Object.values(cart).map(i => {
                     const prod = allProducts.find(x => x.id === i.id);
                     let fullName = prod ? (prod.name_it || prod.name) : i.name;
-                    if (i.size && i.size !== 'standard') fullName += ` (${i.size})`;
+                    if (i.size && i.size !== 'standard') {
+                        // 发给厨房统一用原本设定的格式，例如 (Grande)
+                        fullName += ` (${i.size})`;
+                    }
                     return { id: i.id, name: fullName, price: i.price, qty: i.qty };
                 });
 
