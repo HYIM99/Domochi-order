@@ -38,14 +38,14 @@
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .brand-logo-small { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid white; background-color: white; }
         .brand-name { font-size: 1.2rem; font-weight: 800; }
-        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-right: 120px; }
+        .table-badge { background: white; color: var(--brand-primary); padding: 5px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px; cursor: pointer; }
         
         .category-tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: none; background: white; color: var(--text-main); font-weight: 600; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px; }
         .tab-btn.active { background: var(--brand-primary); color: white; }
 
         .menu-container { padding: 0 15px; }
-        .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; transition: all 0.3s; }
+        .product-card { display: flex; background: white; border-radius: 16px; padding: 12px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); gap: 15px; align-items: center; transition: all 0.3s; cursor: pointer;}
         
         /* 售罄状态样式 */
         .product-card.sold-out { opacity: 0.55; filter: grayscale(90%); pointer-events: none; }
@@ -79,6 +79,18 @@
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
         .modal-item-price { color: var(--brand-primary); font-size: 0.9rem; font-weight: 600;}
 
+        /* 新增：产品详情弹窗样式 */
+        .prod-modal { padding: 0; }
+        .modal-prod-img { width: 100%; height: 260px; object-fit: cover; background: var(--brand-secondary); }
+        .modal-back-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.85); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; z-index: 10; color: #333;}
+        .modal-prod-body { padding: 20px; }
+        .size-option { display: flex; justify-content: space-between; padding: 14px 16px; border: 2px solid #f0f0f0; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; font-weight: 600; align-items: center;}
+        .size-option.active { border-color: var(--brand-primary); background: #fffafb; color: var(--brand-primary); }
+        .size-radio { font-size: 1.2rem; margin-right: 8px; color: #ccc; transition: 0.2s;}
+        .size-option.active .size-radio { color: var(--brand-primary); }
+        .modal-prod-footer { padding: 15px 20px 30px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: white; position: sticky; bottom: 0;}
+        .add-to-cart-btn { background: var(--brand-primary); color: white; border: none; padding: 14px 30px; border-radius: 20px; font-weight: 800; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(223,79,83,0.3); }
+
         /* VIEW 3: 结算页 */
         .nav-back { padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--brand-primary); font-size: 1.1rem; cursor: pointer; background: white; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-right: 120px; }
         .checkout-section { padding: 20px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
@@ -90,7 +102,6 @@
         .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; }
         .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--brand-primary); cursor: pointer; flex-shrink: 0; }
         .checkbox-group label { font-size: 0.85rem; color: #777; font-weight: 500; line-height: 1.4; cursor: pointer; }
-
         .btn-final-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 24px; border-radius: 15px; font-weight: 800; font-size: 1.4rem; box-shadow: 0 4px 15px rgba(223, 79, 83, 0.3); cursor: pointer; }
 
         /* VIEW 4: 电子小票 */
@@ -103,7 +114,7 @@
         .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
 
-        /* VIEW 5: 详细历史列表 */
+        /* VIEW 5: 历史订单页 */
         .history-list-container { padding: 15px; }
         .history-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--brand-primary); }
         .history-info { flex: 1; }
@@ -123,6 +134,7 @@
         <span class="lang-btn" id="l-en" onclick="setLang('en')">EN</span>
     </div>
 
+    <!-- VIEW 1: 欢迎页 -->
     <div id="view-welcome" class="view active">
         <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="welcome-logo">
         <h1 class="welcome-title">Dōmochi</h1>
@@ -133,10 +145,10 @@
         <button class="big-btn query-btn" onclick="window.location.href='track-order.html'"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="find_order">手机号查订单/进度</span></button>
     </div>
 
+    <!-- VIEW 2: 菜单页 -->
     <div id="view-menu" class="view">
         <div class="header">
             <div class="logo-area"><img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" class="brand-logo-small"><span class="brand-name">Dōmochi</span></div>
-            
             <div style="display: flex; align-items: center; margin-right: 100px;">
                 <a href="track-order.html" style="color: white; font-size: 1.2rem; margin-right: 15px;"><i class="fa-solid fa-receipt"></i></a>
                 <div class="table-badge" onclick="goHomeAndReset()" style="margin-right: 0;"><span id="display-dining-mode">--</span> <i class="fa-solid fa-pen"></i></div>
@@ -147,18 +159,29 @@
             <button class="tab-btn" id="tab-drinks" onclick="switchCategory('drinks')"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="cat_drinks">饮品</span></button>
             <button class="tab-btn" id="tab-desserts" onclick="switchCategory('desserts')"><i class="fa-solid fa-ice-cream"></i> <span data-i18n="cat_desserts">甜点</span></button>
         </div>
+        
         <div class="menu-container" id="menu-list"></div>
+        
+        <!-- 购物车弹窗 -->
         <div class="cart-modal-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
         <div class="cart-modal" id="cart-modal">
             <div class="cart-modal-header"><h3 data-i18n="cart_title">购物车</h3><button class="close-modal-btn" onclick="toggleCartModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="cart-modal-list"></div>
         </div>
+        
         <div class="cart-bar hidden" id="cart-bar">
             <div class="cart-total" onclick="toggleCartModal()"><span><i class="fa-solid fa-cart-shopping"></i> <span data-i18n="view_cart">查看购物车</span> (<b id="cart-qty">0</b>)</span><strong id="cart-price">€ 0.00</strong></div>
             <button class="checkout-btn" onclick="goToCheckout()" data-i18n="go_checkout">去结算</button>
         </div>
     </div>
 
+    <!-- 新增：产品详情弹窗 -->
+    <div class="cart-modal-overlay" id="prod-overlay" onclick="closeProductModal()" style="z-index:1001;"></div>
+    <div class="cart-modal prod-modal" id="prod-modal" style="z-index:1002;">
+        <!-- 动态注入产品详情 -->
+    </div>
+
+    <!-- VIEW 3: 结算页 -->
     <div id="view-checkout" class="view">
         <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
         <div class="checkout-section">
@@ -179,6 +202,7 @@
         <div class="bottom-action-bar"><button class="btn-final-submit" id="btn-submit" onclick="submitFinalOrder()" data-i18n="confirm">确认下单</button></div>
     </div>
 
+    <!-- VIEW 4: 电子小票 -->
     <div id="view-receipt" class="view">
         <div class="nav-back" onclick="goHomeAndReset()"><i class="fa-solid fa-house"></i> <span data-i18n="back_home">返回首页</span></div>
         <div class="ticket-box">
@@ -195,12 +219,6 @@
         </div>
     </div>
 
-    <div id="view-history" class="view">
-        <div class="nav-back" onclick="goHomeAndReset()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_home">返回首页</span></div>
-        <div style="padding: 15px 20px;"><h2 style="font-size:1.4rem; font-weight:900;" data-i18n="today_orders">今日订单</h2><p style="color:#888; font-size:0.9rem;" data-i18n="history_desc">点击订单查看详细小票</p></div>
-        <div class="history-list-container" id="history-list"></div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
@@ -211,22 +229,30 @@
             zh: {
                 eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "购物车", go_checkout: "结算", back_menu: "返回菜单", summary: "汇总", total: "总计", your_details: "信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "首页", 
                 receipt_num: "取餐号：", receipt_time: "下单时间：", receipt_mode: "就餐选择：", receipt_name: "顾客姓名：", receipt_phone: "联系电话：", receipt_items: "商品明细：",
-                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄"
+                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄",
+                select: "选择", add_to_cart: "加入购物车", size_select: "选择规格", size_regular: "常规", size_large: "大杯 (+€1.00)", no_desc: "暂无产品介绍"
             },
             it: {
                 eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", 
                 receipt_num: "N. Ordine:", receipt_time: "Ora Ordine:", receipt_mode: "Modalità:", receipt_name: "Cliente:", receipt_phone: "Telefono:", receipt_items: "Dettagli:",
-                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito"
+                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito",
+                select: "Scegli", add_to_cart: "Aggiungi", size_select: "Scegli Formato", size_regular: "Regolare", size_large: "Grande (+€1.00)", no_desc: "Nessuna descrizione disponibile"
             },
             en: {
                 eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", 
                 receipt_num: "Order No:", receipt_time: "Order Time:", receipt_mode: "Option:", receipt_name: "Name:", receipt_phone: "Phone:", receipt_items: "Items:",
-                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out"
+                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out",
+                select: "Select", add_to_cart: "Add to Cart", size_select: "Select Size", size_regular: "Regular", size_large: "Large (+€1.00)", no_desc: "No description available"
             }
         };
 
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = ''; 
         let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = []; let currentReceiptOrder = null;
+
+        // 新增：详情弹窗用的变量
+        let currentModalProduct = null;
+        let selectedSize = 'standard';
+        let selectedSizePrice = 0;
 
         function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); }
         
@@ -236,19 +262,15 @@
             if(diningOptionKey) { document.getElementById('display-dining-mode').innerText = i18n[lang][diningOptionKey]; document.getElementById('chk-dining-mode').innerText = i18n[lang][diningOptionKey]; }
             renderMenu();
             
-            // 只要有记忆的小票，切换语言时就刷新它。但因为我们加了清理机制，回首页后这里就不执行了。
             if(currentReceiptOrder) showReceipt(currentReceiptOrder);
-            if(lastQueriedOrders.length > 0 && document.getElementById('view-history').classList.contains('active')) renderHistoryList(lastQueriedOrders); 
         };
 
-        // 核心修复 1：每次点击“退回首页”，彻底清空系统记忆的小票
         window.goHomeAndReset = () => {
             currentReceiptOrder = null; 
             liveOrderId = null;
             switchView('view-welcome');
         };
 
-        // 核心修复 2：每次重新开始点单，也强制清空一次记忆，确保干净进入菜单
         window.startOrder = (m) => { 
             currentReceiptOrder = null; 
             liveOrderId = null;
@@ -266,32 +288,149 @@
 
         window.switchCategory = (c) => { currentCat = c; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + c)); renderMenu(); }
 
+        // === 核心逻辑修改：加入规格和详情页支持 ===
         function renderMenu() {
             const list = document.getElementById('menu-list'); const items = allProducts.filter(p => p.category === currentCat);
             list.innerHTML = items.map(p => {
-                const qty = cart[p.id]?.qty || 0; 
+                // 计算当前产品的所有规格加起来的总数
+                const totalQty = Object.values(cart).filter(i => i.id === p.id).reduce((s, i) => s + i.qty, 0);
                 const price = parseFloat(p.price || 4).toFixed(2);
                 const name = p[`name_${currentLang}`] || p.name_it || p.name;
-                
                 const isPosAvailable = p.is_pos_available !== false;
 
                 let controlHtml = '';
                 if (isPosAvailable) {
-                    controlHtml = `<div class="qty-controls">${qty>0?`<button class="qty-btn" onclick="updateCart(${p.id},-1)">-</button><span class="qty-number">${qty}</span>`:''}<button class="qty-btn add" onclick="updateCart(${p.id},1)">+</button></div>`;
+                    if (p.category === 'drinks') {
+                        // 饮料：显示“选择”按钮
+                        controlHtml = `<div class="qty-controls">${totalQty>0?`<span class="qty-number" style="margin-right:5px; color:var(--brand-primary)">${totalQty}</span>`:''}<button class="qty-btn add" style="width:auto; padding:0 12px; border-radius:15px;" onclick="event.stopPropagation(); openProductModal(${p.id})">${i18n[currentLang].select}</button></div>`;
+                    } else {
+                        // 甜品：默认+-号
+                        controlHtml = `<div class="qty-controls">${totalQty>0?`<button class="qty-btn" onclick="event.stopPropagation(); updateCart(${p.id},-1)">-</button><span class="qty-number">${totalQty}</span>`:''}<button class="qty-btn add" onclick="event.stopPropagation(); updateCart(${p.id},1)">+</button></div>`;
+                    }
                 } else {
                     controlHtml = `<div class="sold-out-badge" data-i18n="sold_out">${i18n[currentLang].sold_out}</div>`;
                 }
 
-                return `<div class="product-card ${isPosAvailable ? '' : 'sold-out'}"><img src="${p.image_url || ''}" class="product-img"><div class="product-info"><div class="product-title">${name}</div><div class="product-price">€ ${price}</div></div>${controlHtml}</div>`;
+                // 点击卡片本身，直接打开详情页
+                return `
+                <div class="product-card ${isPosAvailable ? '' : 'sold-out'}" onclick="${isPosAvailable ? `openProductModal(${p.id})` : ''}">
+                    <img src="${p.image_url || ''}" class="product-img">
+                    <div class="product-info">
+                        <div class="product-title">${name}</div>
+                        <div class="product-price">€ ${price}</div>
+                    </div>
+                    ${controlHtml}
+                </div>`;
             }).join('');
         }
 
-        window.updateCart = (pid, chg) => {
+        // === 购物车更新逻辑优化：支持带 size ===
+        window.updateCart = (pid, chg, size = 'standard', sizePrice = 0) => {
             const p = allProducts.find(x=>x.id===pid); if(!p) return;
-            if(!cart[pid]) cart[pid] = { id: p.id, name: p[`name_${currentLang}`]||p.name, price: parseFloat(p.price||4), qty: 0 };
-            cart[pid].qty += chg; if(cart[pid].qty<=0) delete cart[pid];
+            const cartKey = `${pid}_${size}`;
+            
+            if(!cart[cartKey]) {
+                if (chg < 0) return; // 不存在则不减
+                cart[cartKey] = { 
+                    id: p.id, 
+                    name: p[`name_${currentLang}`]||p.name, 
+                    price: parseFloat(p.price||4) + sizePrice, 
+                    qty: 0,
+                    size: size
+                };
+            }
+            cart[cartKey].qty += chg; 
+            if(cart[cartKey].qty<=0) delete cart[cartKey];
             renderMenu(); updateUI(); renderCart();
         }
+
+        window.updateCartByKey = (cartKey, chg) => {
+            if(!cart[cartKey]) return;
+            cart[cartKey].qty += chg;
+            if(cart[cartKey].qty<=0) delete cart[cartKey];
+            renderMenu(); updateUI(); renderCart();
+        }
+
+        // === 新增：详情与规格选择逻辑 ===
+        window.openProductModal = (pid) => {
+            const p = allProducts.find(x => x.id === pid);
+            if (!p) return;
+            currentModalProduct = p;
+            selectedSize = 'standard';
+            selectedSizePrice = 0;
+
+            const name = p[`name_${currentLang}`] || p.name_it || p.name;
+            const desc = p[`description_${currentLang}`] || p.description_it || p.description || i18n[currentLang].no_desc;
+            const basePrice = parseFloat(p.price || 0);
+
+            let optionsHtml = '';
+            if (p.category === 'drinks') {
+                optionsHtml = `
+                    <div class="modal-options" style="margin-top: 20px;">
+                        <h4 style="margin-bottom:10px; font-size:1rem;">${i18n[currentLang].size_select}</h4>
+                        <div class="size-option" id="opt-Regolare" onclick="chooseSize('Regolare', 0)">
+                            <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_regular}</span>
+                            <span>€ ${basePrice.toFixed(2)}</span>
+                        </div>
+                        <div class="size-option" id="opt-Grande" onclick="chooseSize('Grande', 1.00)">
+                            <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_large}</span>
+                            <span>€ ${(basePrice + 1.00).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const html = `
+                <div style="position:relative;">
+                    <button class="modal-back-btn" onclick="closeProductModal()"><i class="fa-solid fa-chevron-down"></i></button>
+                    <img src="${p.image_url || ''}" class="modal-prod-img">
+                </div>
+                <div class="modal-prod-body">
+                    <h2 style="margin-bottom:8px; font-size:1.4rem;">${name}</h2>
+                    <p style="color:#666; font-size:0.95rem; line-height:1.5;">${desc}</p>
+                    ${optionsHtml}
+                </div>
+                <div class="modal-prod-footer">
+                    <div style="font-size:1.6rem; font-weight:900; color:var(--brand-primary);" id="modal-live-price">€ ${basePrice.toFixed(2)}</div>
+                    <button class="add-to-cart-btn" onclick="addToCartFromModal()">${i18n[currentLang].add_to_cart}</button>
+                </div>
+            `;
+            
+            document.getElementById('prod-modal').innerHTML = html;
+            document.getElementById('prod-overlay').classList.add('show');
+            document.getElementById('prod-modal').classList.add('show');
+            
+            if (p.category === 'drinks') chooseSize('Regolare', 0); // 默认选小杯
+        };
+
+        window.chooseSize = (size, priceExtra) => {
+            selectedSize = size;
+            selectedSizePrice = priceExtra;
+            
+            document.querySelectorAll('.size-option').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.size-radio').classList.replace('fa-circle-dot', 'fa-circle');
+            });
+            const activeEl = document.getElementById('opt-' + size);
+            activeEl.classList.add('active');
+            activeEl.querySelector('.size-radio').classList.replace('fa-circle', 'fa-circle-dot');
+
+            const basePrice = parseFloat(currentModalProduct.price || 0);
+            document.getElementById('modal-live-price').innerText = `€ ${(basePrice + priceExtra).toFixed(2)}`;
+        }
+
+        window.addToCartFromModal = () => {
+            if (!currentModalProduct) return;
+            updateCart(currentModalProduct.id, 1, selectedSize, selectedSizePrice);
+            closeProductModal();
+        }
+
+        window.closeProductModal = () => {
+            document.getElementById('prod-modal').classList.remove('show');
+            document.getElementById('prod-overlay').classList.remove('show');
+        }
+
+        // ==========================
 
         function updateUI() {
             const bar = document.getElementById('cart-bar'); let q=0, t=0; Object.values(cart).forEach(i=>{ q+=i.qty; t+=i.price*i.qty; });
@@ -300,17 +439,31 @@
         }
 
         window.toggleCartModal = () => { document.getElementById('cart-modal').classList.toggle('show'); document.getElementById('cart-overlay').classList.toggle('show'); };
+        
         function renderCart() { 
-            document.getElementById('cart-modal-list').innerHTML = Object.values(cart).map(i => {
+            document.getElementById('cart-modal-list').innerHTML = Object.keys(cart).map(cartKey => {
+                const i = cart[cartKey];
                 const p = allProducts.find(x => x.id === i.id);
-                const name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
-                return `<div class="modal-item"><div class="modal-item-info"><b>${name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCart(${i.id},-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCart(${i.id},1)">+</button></div></div>`
+                let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+                
+                // 拼接规格名称
+                if (i.size && i.size !== 'standard') {
+                    const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.replace(' (+€1.00)','');
+                    name += ` (${sizeLabel})`;
+                }
+
+                return `<div class="modal-item"><div class="modal-item-info"><b>${name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCartByKey('${cartKey}',-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCartByKey('${cartKey}',1)">+</button></div></div>`
             }).join(''); 
         }
 
         window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ 
             const p = allProducts.find(x => x.id === i.id);
-            const name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+            let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+            if (i.size && i.size !== 'standard') {
+                const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.replace(' (+€1.00)','');
+                name += ` (${sizeLabel})`;
+            }
+
             t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`}).join(''); document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; switchView('view-checkout'); 
         };
 
@@ -322,11 +475,19 @@
             btn.disabled = true;
 
             try {
+                // 确保数据库里存的是带了规格的名字
+                const finalCartItems = Object.values(cart).map(i => {
+                    const prod = allProducts.find(x => x.id === i.id);
+                    let fullName = prod ? (prod.name_it || prod.name) : i.name;
+                    if (i.size && i.size !== 'standard') fullName += ` (${i.size})`;
+                    return { id: i.id, name: fullName, price: i.price, qty: i.qty };
+                });
+
                 const today = new Date().toISOString().split('T')[0];
                 const { count } = await supabaseClient.from('domochi_orders').select('*', { count: 'exact', head: true }).gte('created_at', today);
                 const orderData = {
                     order_number: (count+1).toString().padStart(3,'0'),
-                    order_data: { customer_info:{name:n, phone:p, notes:document.getElementById('cust-notes').value}, dining_option:i18n.it[diningOptionKey], items:Object.values(cart) },
+                    order_data: { customer_info:{name:n, phone:p, notes:document.getElementById('cust-notes').value}, dining_option:i18n.it[diningOptionKey], items: finalCartItems },
                     total_amount: Object.values(cart).reduce((s,i)=>s+i.price*i.qty, 0),
                     status: 'pending'
                 };
@@ -368,9 +529,7 @@
             document.getElementById('rec-total').innerText=`€ ${parseFloat(o.total_amount).toFixed(2)}`;
             
             document.getElementById('receipt-items-list').innerHTML = o.order_data.items.map(i => {
-                const p = allProducts.find(x => x.id === i.id);
-                const name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
-                return `<div class="ticket-row"><span>${i.qty}x ${name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`;
+                return `<div class="ticket-row"><span>${i.qty}x ${i.name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`;
             }).join('');
 
             renderStatusBanner(o.status); 
@@ -383,24 +542,9 @@
             else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; }
         }
 
-        function renderHistoryList(orders) {
-            const container = document.getElementById('history-list');
-            container.innerHTML = orders.map(o => {
-                const d = new Date(o.created_at);
-                const t = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
-                let mk = 'eat_in'; const opt = o.order_data.dining_option;
-                if(opt === "Da asporto") mk = 'takeaway'; if(opt === "Ritiro in negozio") mk = 'pickup';
-                const sL = o.status==='pending' ? i18n[currentLang].status_making : i18n[currentLang].status_done;
-                const sC = o.status==='pending' ? 'status-tag-pending' : 'status-tag-completed';
-                return `<div class="history-card" onclick='viewOrderDetail(${JSON.stringify(o)})'><div class="history-info"><div class="history-meta">${t} | ${i18n[currentLang][mk]}</div><div class="history-title">Ordine #${o.order_number}</div><div class="history-status-tag ${sC}">${sL}</div></div><div class="history-price">€ ${parseFloat(o.total_amount).toFixed(2)}</div><div style="margin-left:10px; color:#ccc;"><i class="fa-solid fa-chevron-right"></i></div></div>`;
-            }).join('');
-        }
-
-        window.viewOrderDetail = (order) => { showReceipt(order); };
         function setupRealtime() {
             supabaseClient.channel('sync').on('postgres_changes', {event:'UPDATE', schema:'public', table:'domochi_orders'}, p => {
                 if(liveOrderId && p.new.id===liveOrderId) renderStatusBanner(p.new.status);
-                if(lastQueriedOrders.length > 0) { lastQueriedOrders = lastQueriedOrders.map(o => o.id === p.new.id ? p.new : o); if(document.getElementById('view-history').classList.contains('active')) renderHistoryList(lastQueriedOrders); }
             }).subscribe();
         }
         window.onload = init;
