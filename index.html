@@ -287,7 +287,10 @@
                 // 计算当前产品的所有规格加起来的总数
                 const totalQty = Object.values(cart).filter(i => i.id === p.id).reduce((s, i) => s + i.qty, 0);
                 const price = parseFloat(p.price || 4).toFixed(2);
-                const name = p[`name_${currentLang}`] || p.name_it || p.name;
+                
+                // 核心修复：防止多语言没有数据时，强制读取 name_it 或者 name_en
+                const name = p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto';
+                
                 const isPosAvailable = p.is_pos_available !== false;
 
                 let controlHtml = '';
@@ -325,7 +328,8 @@
                 if (chg < 0) return; // 不存在则不减
                 cart[cartKey] = { 
                     id: p.id, 
-                    name: p[`name_${currentLang}`]||p.name, 
+                    // 核心修复：就算缺少翻译也能保住意大利名字
+                    name: p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto', 
                     price: parseFloat(p.price||4) + sizePrice, 
                     qty: 0,
                     size: size
@@ -351,7 +355,7 @@
             selectedSize = 'standard';
             selectedSizePrice = 0;
 
-            const name = p[`name_${currentLang}`] || p.name_it || p.name;
+            const name = p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto';
             const desc = p[`description_${currentLang}`] || p.description_it || p.description || i18n[currentLang].no_desc;
             const basePrice = parseFloat(p.price || 0);
 
@@ -435,7 +439,7 @@
             document.getElementById('cart-modal-list').innerHTML = Object.keys(cart).map(cartKey => {
                 const i = cart[cartKey];
                 const p = allProducts.find(x => x.id === i.id);
-                let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+                let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto') : i.name;
                 
                 if (i.size && i.size !== 'standard') {
                     const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
@@ -448,7 +452,7 @@
 
         window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ 
             const p = allProducts.find(x => x.id === i.id);
-            let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name) : i.name;
+            let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto') : i.name;
             if (i.size && i.size !== 'standard') {
                 const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
                 name += ` (${sizeLabel})`;
@@ -465,10 +469,10 @@
             btn.disabled = true;
 
             try {
-                // 确保数据库里存的是带了规格的名字
+                // 确保数据库里存的是带了规格的意大利语基础名字 (确保发给厨房不乱码)
                 const finalCartItems = Object.values(cart).map(i => {
                     const prod = allProducts.find(x => x.id === i.id);
-                    let fullName = prod ? (prod.name_it || prod.name) : i.name;
+                    let fullName = prod ? (prod.name_it || prod.name_en || 'Prodotto') : i.name;
                     if (i.size && i.size !== 'standard') {
                         // 发给厨房统一用原本设定的格式，例如 (Grande)
                         fullName += ` (${i.size})`;
