@@ -135,7 +135,21 @@
             }
         }
 
-        function speakText(text) { if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'zh-CN'; window.speechSynthesis.speak(utterance); } }
+        function speakText(text) {
+    if ('speechSynthesis' in window) {
+        // 1. 强制取消之前的播报任务，确保本次请求处于“清空”状态
+        window.speechSynthesis.cancel();
+        
+        // 2. 稍微延迟 100ms 再执行，给浏览器留出“换气”时间
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 1.0; // 语速正常
+            utterance.volume = 1.0; // 音量最大
+            window.speechSynthesis.speak(utterance);
+        }, 100);
+    }
+}
         function playAlertSound() { speakText("系统测试：接单系统已就绪。"); }
 
         async function fetchOrders() {
