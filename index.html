@@ -291,12 +291,11 @@
 
                 // 2. 构造数据
                 const payload = {
-                    order_number: nextOrderNumber,
-                    table_number: tableNumber, // 可以保留这个字段用于记录是在哪桌扫的码
-                    order_data: orderItems,
-                    total_amount: totalPrice,
-                    status: 'pending'
-                };
+    order_number: nextOrderNumber,
+    order_data: orderItems,
+    total_amount: totalPrice,
+    status: 'pending'
+};
 
                 // 3. 写入数据库
                 const { error } = await supabaseClient.from('domochi_orders').insert([payload]);
