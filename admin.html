@@ -66,7 +66,12 @@
 
         .card-header { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .order-num { font-size: 1.6rem; font-weight: 900; color: #111; }
+        
         .mode-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; color: white; text-transform: uppercase; }
+        /* ⬇️ 这里加入了背景颜色控制 ⬇️ */
+        .mode-badge.eat_in { background-color: var(--color-eat-in); }
+        .mode-badge.takeaway { background-color: var(--color-takeaway); }
+        .mode-badge.pickup { background-color: var(--color-pickup); }
 
         .customer-box { padding: 12px 15px; background: #fdfaf6; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
         .cust-row { margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
@@ -226,7 +231,7 @@
 
                     const items = Array.isArray(rawData.items) ? rawData.items : [];
                     
-                    // ⬇️ 修改在这里：增加日期显示，格式：DD/MM HH:MM
+                    // 日期显示，格式：DD/MM HH:MM
                     const dateObj = new Date(order.created_at);
                     const timeStr = dateObj.toLocaleDateString('it-IT', { month: '2-digit', day: '2-digit' }) + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     
