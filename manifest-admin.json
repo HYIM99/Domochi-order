@@ -1,6 +1,6 @@
 {
-  "name": "Dōmochi ADS",
-  "short_name": "Domochi ADS",
+  "name": "Dōmochi KDS",
+  "short_name": "Domochi KDS",
   "start_url": "/admin",
   "display": "standalone",
   "background_color": "#ffffff",
