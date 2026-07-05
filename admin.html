@@ -225,14 +225,17 @@
                     }
 
                     const items = Array.isArray(rawData.items) ? rawData.items : [];
-                    const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    // ⬇️ 修改在这里：增加日期显示，格式：DD/MM HH:MM
+                    const dateObj = new Date(order.created_at);
+                    const timeStr = dateObj.toLocaleDateString('it-IT', { month: '2-digit', day: '2-digit' }) + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
                     const isHistory = currentMode === 'completed';
 
                     const diffMins = Math.floor((now - new Date(order.created_at)) / 60000);
                     let overdueClass = ''; 
                     if(diffMins >= 20 && !isHistory) overdueClass = 'overdue-flash';
 
-                    // ⬇️ 修改在这里：确保不管是不是历史订单，都显示 zhMode (堂食/打包/自提)
                     return `
                     <div class="order-card ${cssClass} ${overdueClass} ${isHistory ? 'completed-style' : ''}">
                         <div class="card-header">
