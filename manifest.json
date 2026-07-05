@@ -1,10 +1,10 @@
 {
-  "name": "Domochi Order",
-  "short_name": "Domochi Order",
+  "name": "Dōmochi Order",
+  "short_name": "Dōmochi Order",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#DF4F53",
   "icons": [
     {
       "src": "/IMG_1322.png",
