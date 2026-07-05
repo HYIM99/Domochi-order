@@ -232,11 +232,12 @@
                     let overdueClass = ''; 
                     if(diffMins >= 20 && !isHistory) overdueClass = 'overdue-flash';
 
+                    // ⬇️ 修改在这里：确保不管是不是历史订单，都显示 zhMode (堂食/打包/自提)
                     return `
                     <div class="order-card ${cssClass} ${overdueClass} ${isHistory ? 'completed-style' : ''}">
                         <div class="card-header">
                             <span class="order-num">#${order.order_number || order.id}</span>
-                            <span class="mode-badge ${cssClass}">${isHistory ? 'FINITO' : zhMode}</span>
+                            <span class="mode-badge ${cssClass}">${zhMode} ${isHistory ? '(已完成)' : ''}</span>
                         </div>
                         <div class="customer-box">
                             <div class="cust-row">
