@@ -82,7 +82,7 @@
         .modal-item-name { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;}
         .modal-item-price { color: var(--brand-primary); font-size: 0.9rem; font-weight: 600;}
 
-        /* 新增：产品详情弹窗样式 */
+        /* 产品详情弹窗样式 */
         .prod-modal { padding: 0; }
         .modal-prod-img { width: 100%; height: 260px; object-fit: cover; background: var(--brand-secondary); }
         .modal-back-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.85); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; z-index: 10; color: #333;}
@@ -111,22 +111,14 @@
         .ticket-box { background: white; border: 2px dashed #ccc; padding: 25px 20px; border-radius: 15px; margin: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .ticket-title { text-align: center; font-size: 1.4rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         .status-banner { text-align: center; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* 新增：未付款状态的样式 */
+        .status-banner.status-unpaid { background: #e6f4ff; color: #1677ff; border: 2px solid #91caff; animation: pulse 2s infinite; }
         .status-banner.status-pending { background: #fffbe6; color: #faad14; animation: pulse 2s infinite; }
         .status-banner.status-completed { background: #f6ffed; color: #52c41a; border: 2px solid #b7eb8f; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
 
-        /* VIEW 5: 历史订单页 */
-        .history-list-container { padding: 15px; }
-        .history-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--brand-primary); }
-        .history-info { flex: 1; }
-        .history-meta { font-size: 0.85rem; color: #888; margin-bottom: 4px; }
-        .history-title { font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
-        .history-status-tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; display: inline-block; margin-top: 5px; }
-        .status-tag-pending { background: #fffbe6; color: #faad14; }
-        .status-tag-completed { background: #f6ffed; color: #52c41a; }
-        .history-price { font-weight: 800; color: var(--brand-primary); font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -176,8 +168,7 @@
     </div>
 
     <div class="cart-modal-overlay" id="prod-overlay" onclick="closeProductModal()" style="z-index:1001;"></div>
-    <div class="cart-modal prod-modal" id="prod-modal" style="z-index:1002;">
-        </div>
+    <div class="cart-modal prod-modal" id="prod-modal" style="z-index:1002;"></div>
 
     <div id="view-checkout" class="view">
         <div class="nav-back" onclick="goBackToMenu()"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_menu">返回菜单</span></div>
@@ -225,30 +216,34 @@
             zh: {
                 eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "购物车", go_checkout: "结算", back_menu: "返回菜单", summary: "汇总", total: "总计", your_details: "信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "首页", 
                 receipt_num: "取餐号：", receipt_time: "下单时间：", receipt_mode: "就餐选择：", receipt_name: "顾客姓名：", receipt_phone: "联系电话：", receipt_items: "商品明细：",
-                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄",
-                select: "选择", add_to_cart: "加入购物车", size_select: "选择规格", size_regular: "常规", size_large: "大杯 (+€1.00)", no_desc: "暂无产品介绍"
+                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", status_unpaid: "💳 请前往收银台付款", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄",
+                select: "选择", add_to_cart: "加入购物车", size_select: "选择规格", size_regular: "常规", size_large: "大杯 (+€1.00)", no_desc: "暂无产品介绍",
+                temp_select: "冷热选择", temp_cold: "冷 (Freddo)", temp_hot: "热 (Caldo)"
             },
             it: {
                 eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", 
                 receipt_num: "N. Ordine:", receipt_time: "Ora Ordine:", receipt_mode: "Modalità:", receipt_name: "Cliente:", receipt_phone: "Telefono:", receipt_items: "Dettagli:",
-                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito",
-                select: "Scegli", add_to_cart: "Aggiungi", size_select: "Scegli Formato", size_regular: "Regolare", size_large: "Grande (+€1.00)", no_desc: "Nessuna descrizione disponibile"
+                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", status_unpaid: "💳 Paga alla cassa", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito",
+                select: "Scegli", add_to_cart: "Aggiungi", size_select: "Scegli Formato", size_regular: "Regolare", size_large: "Grande (+€1.00)", no_desc: "Nessuna descrizione disponibile",
+                temp_select: "Temperatura", temp_cold: "Freddo", temp_hot: "Caldo"
             },
             en: {
                 eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", 
                 receipt_num: "Order No:", receipt_time: "Order Time:", receipt_mode: "Option:", receipt_name: "Name:", receipt_phone: "Phone:", receipt_items: "Items:",
-                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out",
-                select: "Select", add_to_cart: "Add to Cart", size_select: "Select Size", size_regular: "Regular", size_large: "Large (+€1.00)", no_desc: "No description available"
+                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", status_unpaid: "💳 Please pay at cashier", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out",
+                select: "Select", add_to_cart: "Add to Cart", size_select: "Select Size", size_regular: "Regular", size_large: "Large (+€1.00)", no_desc: "No description available",
+                temp_select: "Temperature", temp_cold: "Cold", temp_hot: "Hot"
             }
         };
 
         let currentLang = 'zh'; let allProducts = []; let currentCat = 'mochi'; let cart = {}; let diningOptionKey = ''; 
         let liveOrderId = null; let liveOrderStatus = 'pending'; let lastQueriedOrders = []; let currentReceiptOrder = null;
 
-        // 新增详情弹窗变量
+        // 详情弹窗状态
         let currentModalProduct = null;
         let selectedSize = 'standard';
         let selectedSizePrice = 0;
+        let selectedTemp = '';
 
         function switchView(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); window.scrollTo(0,0); }
         
@@ -283,33 +278,25 @@
 
         window.switchCategory = (c) => { currentCat = c; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + c)); renderMenu(); }
 
-        // === 核心逻辑修改：加入规格和详情页支持 ===
         function renderMenu() {
             const list = document.getElementById('menu-list'); const items = allProducts.filter(p => p.category === currentCat);
             list.innerHTML = items.map(p => {
-                // 计算当前产品的所有规格加起来的总数
                 const totalQty = Object.values(cart).filter(i => i.id === p.id).reduce((s, i) => s + i.qty, 0);
                 const price = parseFloat(p.price || 4).toFixed(2);
-                
-                // 核心修复：防止多语言没有数据时，强制读取 name_it 或者 name_en
                 const name = p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto';
-                
                 const isPosAvailable = p.is_pos_available !== false;
 
                 let controlHtml = '';
                 if (isPosAvailable) {
-                    if (p.has_large) {
-                        // 支持大杯：显示“选择”按钮
+                    if (p.has_large || p.has_temp) {
                         controlHtml = `<div class="qty-controls">${totalQty>0?`<span class="qty-number" style="margin-right:5px; color:var(--brand-primary)">${totalQty}</span>`:''}<button class="qty-btn add" style="width:auto; padding:0 12px; border-radius:15px; font-size:0.85rem;" onclick="event.stopPropagation(); openProductModal(${p.id})">${i18n[currentLang].select}</button></div>`;
                     } else {
-                        // 普通甜品：默认+-号
                         controlHtml = `<div class="qty-controls">${totalQty>0?`<button class="qty-btn" onclick="event.stopPropagation(); updateCart(${p.id},-1)">-</button><span class="qty-number">${totalQty}</span>`:''}<button class="qty-btn add" onclick="event.stopPropagation(); updateCart(${p.id},1)">+</button></div>`;
                     }
                 } else {
                     controlHtml = `<div class="sold-out-badge" data-i18n="sold_out">${i18n[currentLang].sold_out}</div>`;
                 }
 
-                // 点击卡片本身，直接打开详情页看介绍
                 return `
                 <div class="product-card ${isPosAvailable ? '' : 'sold-out'}" onclick="${isPosAvailable ? `openProductModal(${p.id})` : ''}">
                     <img src="${p.image_url || ''}" class="product-img">
@@ -322,20 +309,19 @@
             }).join('');
         }
 
-        // === 购物车更新逻辑优化：支持带 size ===
-        window.updateCart = (pid, chg, size = 'standard', sizePrice = 0) => {
+        window.updateCart = (pid, chg, size = 'standard', sizePrice = 0, temp = '') => {
             const p = allProducts.find(x=>x.id===pid); if(!p) return;
-            const cartKey = `${pid}_${size}`;
+            const cartKey = temp ? `${pid}_${size}_${temp}` : `${pid}_${size}`;
             
             if(!cart[cartKey]) {
-                if (chg < 0) return; // 不存在则不减
+                if (chg < 0) return; 
                 cart[cartKey] = { 
                     id: p.id, 
-                    // 核心修复：就算缺少翻译也能保住意大利名字
                     name: p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto', 
                     price: parseFloat(p.price||4) + sizePrice, 
                     qty: 0,
-                    size: size
+                    size: size,
+                    temp: temp
                 };
             }
             cart[cartKey].qty += chg; 
@@ -350,13 +336,13 @@
             renderMenu(); updateUI(); renderCart();
         }
 
-        // === 新增：详情与规格选择逻辑 ===
         window.openProductModal = (pid) => {
             const p = allProducts.find(x => x.id === pid);
             if (!p) return;
             currentModalProduct = p;
             selectedSize = 'standard';
             selectedSizePrice = 0;
+            selectedTemp = '';
 
             const name = p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto';
             const desc = p[`description_${currentLang}`] || p.description_it || p.description || i18n[currentLang].no_desc;
@@ -365,7 +351,7 @@
             let optionsHtml = '';
             if (p.has_large) {
                 const lp = p.large_price || 1.0;
-                optionsHtml = `
+                optionsHtml += `
                     <div class="modal-options" style="margin-top: 20px;">
                         <h4 style="margin-bottom:10px; font-size:1rem;">${i18n[currentLang].size_select}</h4>
                         <div class="size-option" id="opt-Regolare" onclick="chooseSize('Regolare', 0)">
@@ -375,6 +361,20 @@
                         <div class="size-option" id="opt-Grande" onclick="chooseSize('Grande', ${lp})">
                             <span><i class="fa-regular fa-circle size-radio"></i> ${i18n[currentLang].size_large.replace('+€1.00', '+€'+lp.toFixed(2))}</span>
                             <span>€ ${(basePrice + lp).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (p.has_temp) {
+                optionsHtml += `
+                    <div class="modal-options" style="margin-top: 15px;">
+                        <h4 style="margin-bottom:10px; font-size:1rem;">${i18n[currentLang].temp_select}</h4>
+                        <div class="size-option temp-option" id="opt-temp-Freddo" onclick="chooseTemp('Freddo')">
+                            <span><i class="fa-regular fa-circle size-radio temp-radio-icon"></i> ${i18n[currentLang].temp_cold}</span>
+                        </div>
+                        <div class="size-option temp-option" id="opt-temp-Caldo" onclick="chooseTemp('Caldo')">
+                            <span><i class="fa-regular fa-circle size-radio temp-radio-icon"></i> ${i18n[currentLang].temp_hot}</span>
                         </div>
                     </div>
                 `;
@@ -400,14 +400,15 @@
             document.getElementById('prod-overlay').classList.add('show');
             document.getElementById('prod-modal').classList.add('show');
             
-            if (p.has_large) chooseSize('Regolare', 0); // 默认选小杯
+            if (p.has_large) chooseSize('Regolare', 0); 
+            if (p.has_temp) chooseTemp('Freddo');
         };
 
         window.chooseSize = (size, priceExtra) => {
             selectedSize = size;
             selectedSizePrice = priceExtra;
             
-            document.querySelectorAll('.size-option').forEach(el => {
+            document.querySelectorAll('[id^="opt-Regolare"], [id^="opt-Grande"]').forEach(el => {
                 el.classList.remove('active');
                 el.querySelector('.size-radio').classList.replace('fa-circle-dot', 'fa-circle');
             });
@@ -419,9 +420,20 @@
             document.getElementById('modal-live-price').innerText = `€ ${(basePrice + priceExtra).toFixed(2)}`;
         }
 
+        window.chooseTemp = (temp) => {
+            selectedTemp = temp;
+            document.querySelectorAll('.temp-option').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.temp-radio-icon').classList.replace('fa-circle-dot', 'fa-circle');
+            });
+            const activeEl = document.getElementById('opt-temp-' + temp);
+            activeEl.classList.add('active');
+            activeEl.querySelector('.temp-radio-icon').classList.replace('fa-circle', 'fa-circle-dot');
+        }
+
         window.addToCartFromModal = () => {
             if (!currentModalProduct) return;
-            updateCart(currentModalProduct.id, 1, selectedSize, selectedSizePrice);
+            updateCart(currentModalProduct.id, 1, selectedSize, selectedSizePrice, selectedTemp);
             closeProductModal();
         }
 
@@ -448,20 +460,33 @@
                     const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
                     name += ` (${sizeLabel})`;
                 }
+                if (i.temp) {
+                    const tempLabel = i.temp === 'Freddo' ? i18n[currentLang].temp_cold : i18n[currentLang].temp_hot;
+                    name += ` (${tempLabel})`;
+                }
 
                 return `<div class="modal-item"><div class="modal-item-info"><b>${name}</b><div>€ ${(i.price*i.qty).toFixed(2)}</div></div><div class="qty-controls"><button class="qty-btn" onclick="updateCartByKey('${cartKey}',-1)">-</button><span>${i.qty}</span><button class="qty-btn add" onclick="updateCartByKey('${cartKey}',1)">+</button></div></div>`
             }).join(''); 
         }
 
-        window.goToCheckout = () => { toggleCartModal(); let t=0; document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ 
-            const p = allProducts.find(x => x.id === i.id);
-            let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto') : i.name;
-            if (i.size && i.size !== 'standard') {
-                const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
-                name += ` (${sizeLabel})`;
-            }
+        window.goToCheckout = () => { 
+            toggleCartModal(); let t=0; 
+            document.getElementById('checkout-summary-list').innerHTML = Object.values(cart).map(i=>{ 
+                const p = allProducts.find(x => x.id === i.id);
+                let name = p ? (p[`name_${currentLang}`] || p.name_it || p.name_en || 'Prodotto') : i.name;
+                if (i.size && i.size !== 'standard') {
+                    const sizeLabel = i.size === 'Regolare' ? i18n[currentLang].size_regular : i18n[currentLang].size_large.split(' (')[0];
+                    name += ` (${sizeLabel})`;
+                }
+                if (i.temp) {
+                    const tempLabel = i.temp === 'Freddo' ? i18n[currentLang].temp_cold : i18n[currentLang].temp_hot;
+                    name += ` (${tempLabel})`;
+                }
 
-            t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`}).join(''); document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; switchView('view-checkout'); 
+                t+=i.price*i.qty; return `<div class="checkout-summary-item"><span>${i.qty}x ${name}</span><span>€ ${(i.price*i.qty).toFixed(2)}</span></div>`
+            }).join(''); 
+            document.getElementById('chk-total-price').innerText=`€ ${t.toFixed(2)}`; 
+            switchView('view-checkout'); 
         };
 
         window.submitFinalOrder = async () => {
@@ -472,14 +497,11 @@
             btn.disabled = true;
 
             try {
-                // 确保数据库里存的是带了规格的意大利语基础名字 (确保发给厨房不乱码)
                 const finalCartItems = Object.values(cart).map(i => {
                     const prod = allProducts.find(x => x.id === i.id);
                     let fullName = prod ? (prod.name_it || prod.name_en || 'Prodotto') : i.name;
-                    if (i.size && i.size !== 'standard') {
-                        // 发给厨房统一用原本设定的格式，例如 (Grande)
-                        fullName += ` (${i.size})`;
-                    }
+                    if (i.size && i.size !== 'standard') fullName += ` (${i.size})`;
+                    if (i.temp) fullName += ` (${i.temp})`;
                     return { id: i.id, name: fullName, price: i.price, qty: i.qty };
                 });
 
@@ -489,7 +511,8 @@
                     order_number: (count+1).toString().padStart(3,'0'),
                     order_data: { customer_info:{name:n, phone:p, notes:document.getElementById('cust-notes').value}, dining_option:i18n.it[diningOptionKey], items: finalCartItems },
                     total_amount: Object.values(cart).reduce((s,i)=>s+i.price*i.qty, 0),
-                    status: 'pending'
+                    // 订单生成时默认为 unpaid（未付款）状态
+                    status: 'unpaid'
                 };
                 const { data } = await supabaseClient.from('domochi_orders').insert([orderData]).select();
                 
@@ -538,8 +561,18 @@
 
         function renderStatusBanner(s) {
             liveOrderStatus = s; const b=document.getElementById('receipt-status-banner');
-            if(s==='pending'){ b.className="status-banner status-pending"; b.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`; }
-            else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; }
+            if (s === 'unpaid') {
+                b.className="status-banner status-unpaid"; 
+                b.innerHTML=`<i class="fa-solid fa-cash-register"></i> ${i18n[currentLang].status_unpaid}`; 
+            }
+            else if(s==='pending'){ 
+                b.className="status-banner status-pending"; 
+                b.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`; 
+            }
+            else { 
+                b.className="status-banner status-completed"; 
+                b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; 
+            }
         }
 
         function setupRealtime() {
