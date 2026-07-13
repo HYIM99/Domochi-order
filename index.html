@@ -111,14 +111,22 @@
         .ticket-box { background: white; border: 2px dashed #ccc; padding: 25px 20px; border-radius: 15px; margin: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .ticket-title { text-align: center; font-size: 1.4rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         .status-banner { text-align: center; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        /* 新增：未付款状态的样式 */
-        .status-banner.status-unpaid { background: #e6f4ff; color: #1677ff; border: 2px solid #91caff; animation: pulse 2s infinite; }
         .status-banner.status-pending { background: #fffbe6; color: #faad14; animation: pulse 2s infinite; }
         .status-banner.status-completed { background: #f6ffed; color: #52c41a; border: 2px solid #b7eb8f; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .ticket-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; color: var(--brand-primary); margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--brand-primary); }
 
+        /* VIEW 5: 历史订单页 */
+        .history-list-container { padding: 15px; }
+        .history-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--brand-primary); }
+        .history-info { flex: 1; }
+        .history-meta { font-size: 0.85rem; color: #888; margin-bottom: 4px; }
+        .history-title { font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+        .history-status-tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; display: inline-block; margin-top: 5px; }
+        .status-tag-pending { background: #fffbe6; color: #faad14; }
+        .status-tag-completed { background: #f6ffed; color: #52c41a; }
+        .history-price { font-weight: 800; color: var(--brand-primary); font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -216,21 +224,21 @@
             zh: {
                 eat_in: "堂食", takeaway: "打包", pickup: "自提", cat_mochi: "麻薯", cat_drinks: "饮品", cat_desserts: "甜点", cart_title: "购物车", view_cart: "购物车", go_checkout: "结算", back_menu: "返回菜单", summary: "汇总", total: "总计", your_details: "信息", name: "姓名", phone: "电话", notes: "备注", confirm: "确认下单", back_home: "首页", 
                 receipt_num: "取餐号：", receipt_time: "下单时间：", receipt_mode: "就餐选择：", receipt_name: "顾客姓名：", receipt_phone: "联系电话：", receipt_items: "商品明细：",
-                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", status_unpaid: "💳 请前往收银台付款", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄",
+                find_order: "查进度", prompt_phone: "输入电话查询今日单：", status_making: "⏳ 制作中...", status_done: "✅ 请取餐", no_order_found: "今日暂无单", today_orders: "今日单", history_desc: "点击查看详情", privacy_agree: "同意信息收集", err_privacy: "请勾选隐私同意", err_phone: "请填写电话", err_name: "请填写姓名", sold_out: "售罄",
                 select: "选择", add_to_cart: "加入购物车", size_select: "选择规格", size_regular: "常规", size_large: "大杯 (+€1.00)", no_desc: "暂无产品介绍",
                 temp_select: "冷热选择", temp_cold: "冷 (Freddo)", temp_hot: "热 (Caldo)"
             },
             it: {
                 eat_in: "Qui", takeaway: "Asporto", pickup: "Ritiro", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Carrello", view_cart: "Carrello", go_checkout: "Cassa", back_menu: "Menu", summary: "Riepilogo", total: "Totale", your_details: "Dati", name: "Nome", phone: "Cell", notes: "Note", confirm: "Conferma", back_home: "Home", 
                 receipt_num: "N. Ordine:", receipt_time: "Ora Ordine:", receipt_mode: "Modalità:", receipt_name: "Cliente:", receipt_phone: "Telefono:", receipt_items: "Dettagli:",
-                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", status_unpaid: "💳 Paga alla cassa", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito",
+                find_order: "Stato Ordine", prompt_phone: "Inserisci cell per oggi:", status_making: "⏳ In preparazione...", status_done: "✅ Pronto!", no_order_found: "Nessun ordine", today_orders: "Ordini Oggi", history_desc: "Tocca per dettagli", privacy_agree: "Acconsento trattamento dati", err_privacy: "Accetta privacy", err_phone: "Manca cell", err_name: "Manca nome", sold_out: "Esaurito",
                 select: "Scegli", add_to_cart: "Aggiungi", size_select: "Scegli Formato", size_regular: "Regolare", size_large: "Grande (+€1.00)", no_desc: "Nessuna descrizione disponibile",
                 temp_select: "Temperatura", temp_cold: "Freddo", temp_hot: "Caldo"
             },
             en: {
                 eat_in: "In", takeaway: "Take", pickup: "Pick", cat_mochi: "Mochi", cat_drinks: "Drink", cat_desserts: "Dessert", cart_title: "Cart", view_cart: "Cart", go_checkout: "Checkout", back_menu: "Menu", summary: "Summary", total: "Total", your_details: "Details", name: "Name", phone: "Phone", notes: "Note", confirm: "Confirm", back_home: "Home", 
                 receipt_num: "Order No:", receipt_time: "Order Time:", receipt_mode: "Option:", receipt_name: "Name:", receipt_phone: "Phone:", receipt_items: "Items:",
-                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", status_unpaid: "💳 Please pay at cashier", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out",
+                find_order: "Track", prompt_phone: "Enter phone:", status_making: "⏳ Preparing...", status_done: "✅ Ready!", no_order_found: "No orders", today_orders: "Today", history_desc: "Tap for details", privacy_agree: "Agree tracking", err_privacy: "Agree privacy", err_phone: "Phone req.", err_name: "Name req.", sold_out: "Sold Out",
                 select: "Select", add_to_cart: "Add to Cart", size_select: "Select Size", size_regular: "Regular", size_large: "Large (+€1.00)", no_desc: "No description available",
                 temp_select: "Temperature", temp_cold: "Cold", temp_hot: "Hot"
             }
@@ -288,6 +296,7 @@
 
                 let controlHtml = '';
                 if (isPosAvailable) {
+                    // 如果商品支持规格大杯 或 支持冷热，则显示“选择”按钮
                     if (p.has_large || p.has_temp) {
                         controlHtml = `<div class="qty-controls">${totalQty>0?`<span class="qty-number" style="margin-right:5px; color:var(--brand-primary)">${totalQty}</span>`:''}<button class="qty-btn add" style="width:auto; padding:0 12px; border-radius:15px; font-size:0.85rem;" onclick="event.stopPropagation(); openProductModal(${p.id})">${i18n[currentLang].select}</button></div>`;
                     } else {
@@ -511,8 +520,7 @@
                     order_number: (count+1).toString().padStart(3,'0'),
                     order_data: { customer_info:{name:n, phone:p, notes:document.getElementById('cust-notes').value}, dining_option:i18n.it[diningOptionKey], items: finalCartItems },
                     total_amount: Object.values(cart).reduce((s,i)=>s+i.price*i.qty, 0),
-                    // 订单生成时默认为 unpaid（未付款）状态
-                    status: 'unpaid'
+                    status: 'pending'
                 };
                 const { data } = await supabaseClient.from('domochi_orders').insert([orderData]).select();
                 
@@ -561,18 +569,8 @@
 
         function renderStatusBanner(s) {
             liveOrderStatus = s; const b=document.getElementById('receipt-status-banner');
-            if (s === 'unpaid') {
-                b.className="status-banner status-unpaid"; 
-                b.innerHTML=`<i class="fa-solid fa-cash-register"></i> ${i18n[currentLang].status_unpaid}`; 
-            }
-            else if(s==='pending'){ 
-                b.className="status-banner status-pending"; 
-                b.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`; 
-            }
-            else { 
-                b.className="status-banner status-completed"; 
-                b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; 
-            }
+            if(s==='pending'){ b.className="status-banner status-pending"; b.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> ${i18n[currentLang].status_making}`; }
+            else { b.className="status-banner status-completed"; b.innerHTML=`<i class="fa-solid fa-circle-check"></i> ${i18n[currentLang].status_done}`; }
         }
 
         function setupRealtime() {
